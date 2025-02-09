@@ -3,6 +3,6 @@
     color:rgb(178, 47, 156);
     border-radius: 10px;
 }
-.body{   
+*{   
     cursor: url('https://songllluv.github.io/mouse.png'), pointer;
 }
