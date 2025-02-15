@@ -4,5 +4,6 @@
     border-radius: 10px;
 }
 *{   
+    -webkit-tap-highlight-color: transparent;
     cursor: url('https://songllluv.github.io/mouse.png'), pointer;
 }
