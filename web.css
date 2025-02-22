@@ -7,3 +7,7 @@
     -webkit-tap-highlight-color: transparent;
     cursor: url('https://songllluv.github.io/mouse.png'), pointer;
 }
+a{
+    color: rgb(178, 47, 156);
+    text-decoration: none;
+}
