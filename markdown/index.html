@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css" />
+    <style>
+        #input {
+            display: block;
+            font-size: 20pt;
+            padding-top: 0.5em;
+            padding-left: 0.1em;
+            width: 45%;
+            height: 80%;
+            float: left;
+        }
+
+        #button {
+            margin-top: 1em;
+            width: 120px;
+            height: 50px;
+            font-size: 14pt;
+        }
+
+        #output {
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <textarea style="resize: none;" id="input" type="textarea" rspellcheck="false" rows="20" cols="40">
+# Maxwell's Equations
+
+
+equation | description
+----------|------------
+$\nabla \cdot \vec{\mathbf{B}}  = 0$ | divergence of $\vec{\mathbf{B}}$ is zero
+$\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t}  = \vec{\mathbf{0}}$ |  curl of $\vec{\mathbf{E}}$ is proportional to the rate of change of $\vec{\mathbf{B}}$
+$\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} = \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} = 4 \pi \rho$ | _wha?_
+    </textarea>
+    <div style="
+        border: 1px solid #ccc;
+        margin: 10px; height: 600px;overflow-y: auto;">
+        <div id="output" class="markdown-body"></div>
+    </div>
+    <script src="./bundle.js"></script>
+    <script>
+        const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+    </script>
+    <script>
+            (async function cl() {
+
+                while (true) {
+                    await sleep(10);
+                    var a = document.getElementById("output"), b = document.getElementById("input");
+                    a.innerHTML = run(b.value);
+                }
+            })()
+    </script>
+</body>
