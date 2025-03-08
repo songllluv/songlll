@@ -1,0 +1,16 @@
+@media screen {
+    .content {
+        width: 50%;
+        height: 80%;
+        resize: none;
+        overflow-y: auto;
+        border-radius: 3px;
+        box-sizing: border-box;
+        padding: 0.7em 0.8em;
+        color: #333;
+        font-size: 1.1em;
+    }
+    .print {
+        display: none;
+    }
+}
