@@ -43,10 +43,12 @@ $\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\p
     </script>
     <script>
             (async function cl() {
-
+                var c;
                 while (true) {
                     await sleep(10);
                     var a = document.getElementById("output"), b = document.getElementById("input");
+                    if (c === b.value) continue;
+                    c = b.value;
                     a.innerHTML = run(b.value);
                 }
             })()
