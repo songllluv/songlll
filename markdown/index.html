@@ -1,7 +1,8 @@
 <head>
     <meta charset="utf-8">
     <link href="abc.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+    <link href="../web.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css" />
     <style>
         #input{
@@ -22,6 +23,23 @@
 
 </head>
 <body>
+    <button id="copy" onclick="copy()" style="height: 25px; font-size:unset;">copy</button>
+    <script>
+        function copy() {
+          var copyText = document.getElementById("output");
+            var textArea = document.createElement("textarea");
+            textArea.value = `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css" />
+<div class="markdown-body">
+`+copyText.innerHTML+`</div>
+`;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("Copy");
+            textArea.remove();
+        }
+    </script>
+    <div class="bg" style="padding:1px;">
     <textarea id="input" class="content">
 # Maxwell's Equations
 
@@ -32,14 +50,29 @@ $\nabla \cdot \vec{\mathbf{B}}  = 0$ | divergence of $\vec{\mathbf{B}}$ is zero
 $\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t}  = \vec{\mathbf{0}}$ |  curl of $\vec{\mathbf{E}}$ is proportional to the rate of change of $\vec{\mathbf{B}}$
 $\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} = \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} = 4 \pi \rho$ | _wha?_
     </textarea>
- <div style="
-        border: 1px solid #ccc;
-        margin: 10px; height: 80%;overflow-y: auto;">
+ <div style="border: 1px solid #00000000;overflow-y: auto;">
         <div id="output" class="markdown-body"></div>
     </div>
+</div>
     <script src="./bundle.js"></script>
     <script>
+        var a=window.location.href;
+        a=a.split("?")[1];
+        // alert(a);
+        if(a!=null){
+            a=decodeURIComponent(a);
+            document.getElementById("copy").style.display="none";
+            document.getElementById("input").value=a;
+            document.getElementById("input").style.display="none";
+            document.getElementById("output").parentElement.style="width:100%;";
+            document.getElementById("output").parentElement.className="bg";
+        }
         const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+        window.onresize=function(){
+            document.getElementById("input").style.height=(window.innerHeight-45).toString()+"px";
+            document.getElementById("output").parentElement.style.height=(window.innerHeight-45).toString()+"px";
+        }
+        window.onresize();
     </script>
     <script>
             (async function cl() {
