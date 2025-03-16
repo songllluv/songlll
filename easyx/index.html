@@ -10,9 +10,13 @@
             font-size: 20px;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     
-    <style>
-        </style>
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    
+    <script>hljs.highlightAll();</script>
 </head>
 
 <body>
@@ -41,17 +45,16 @@
 <p data-immersive-translate-walked="8aad2afb-7e3d-42da-b5e7-848b5d467bee"><img src="./802fa235c5ba4905ac4454f9862ee111.png" alt=""></p>
 <p data-immersive-translate-walked="8aad2afb-7e3d-42da-b5e7-848b5d467bee">给你要做的程序取个名，点击创建。</p>
 <p data-immersive-translate-walked="8aad2afb-7e3d-42da-b5e7-848b5d467bee">把程序除了头文件以外的内容改成这个：</p>
-<pre data-role="codeBlock" data-info="cpp" class="language-cpp cpp"><code><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;graphics.h&gt;</span>		<span class="token comment">// 引用图形库头文件</span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;conio.h&gt;</span></span>
-<span class="token keyword keyword-int">int</span> <span class="token function">WinMain</span><span class="token punctuation">(</span>HINSTANCE hInstance<span class="token punctuation">,</span> HINSTANCE hPrevInstance<span class="token punctuation">,</span> LPSTR lpCmdLine<span class="token punctuation">,</span> <span class="token keyword keyword-int">int</span> nShowCmd<span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-	<span class="token function">initgraph</span><span class="token punctuation">(</span><span class="token number">640</span><span class="token punctuation">,</span> <span class="token number">480</span><span class="token punctuation">)</span><span class="token punctuation">;</span>	<span class="token comment">// 创建绘图窗口，大小为 640x480 像素</span>
-	<span class="token function">circle</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>	<span class="token comment">// 画圆，圆心(200, 200)，半径 100</span>
-	<span class="token keyword keyword-while">while</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token function">closegraph</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>			<span class="token comment">// 关闭绘图窗口</span>
-	<span class="token keyword keyword-return">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre>
+<pre><code class="language-cpp">#include &lt;graphics.h&gt;		// 引用图形库头文件
+#include &lt;conio.h&gt;
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
+{
+        initgraph(640, 480);	// 创建绘图窗口，大小为 640x480 像素
+        circle(200, 200, 100);	// 画圆，圆心(200, 200)，半径 100
+        while (1);
+        closegraph();			// 关闭绘图窗口
+        return 0;
+}</code></pre>
 <p data-immersive-translate-walked="8aad2afb-7e3d-42da-b5e7-848b5d467bee"><img src="./6382d66fa5524298831840633bf68f4e.png" alt=""></p>
 <p data-immersive-translate-walked="8aad2afb-7e3d-42da-b5e7-848b5d467bee">点击运行。你的窗口中将会有一个圆。</p>
 </div>
