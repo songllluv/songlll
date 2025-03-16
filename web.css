@@ -11,3 +11,12 @@ a{
     color: rgb(178, 47, 156);
     text-decoration: none;
 }
+.div-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color:rgb(178, 47, 156); /* 示例背景色 */
+    z-index: 1000; /* 确保 div 在页面顶层 */
+}
