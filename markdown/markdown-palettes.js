@@ -96357,10 +96357,11 @@ var faInfo = {
   iconName: 'info',
   icon: [192, 512, [], "f129", "M20 424.229h20V279.771H20c-11.046 0-20-8.954-20-20V212c0-11.046 8.954-20 20-20h112c11.046 0 20 8.954 20 20v212.229h20c11.046 0 20 8.954 20 20V492c0 11.046-8.954 20-20 20H20c-11.046 0-20-8.954-20-20v-47.771c0-11.046 8.954-20 20-20zM96 0C56.235 0 24 32.235 24 72s32.235 72 72 72 72-32.235 72-72S135.764 0 96 0z"]
 };
+// 复制按钮图标
 var faInfoCircle = {
   prefix: 'fas',
-  iconName: 'info-circle',
-  icon: [512, 512, [], "f05a", "M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"]
+  iconName: 'copy',
+  icon: [448, 512, [], "f0c5", "M311.26964,492.7327h-251.38195c-19.86366,0 -35.91171,-16.04804 -35.91171,-35.91171v-323.20537c0,-19.86366 16.04804,-35.91171 35.91171,-35.91171h251.38195c19.86366,0 35.91171,16.04804 35.91171,35.91171v323.20537c0,19.86366 -16.04804,35.91171 -35.91171,35.91171zM391.99009,36.51652c9.87572,0 17.95585,8.08013 17.95585,17.95585v359.11707c0,9.87572 -8.08013,17.95585 -17.95585,17.95585h-35.91171v-35.91171h17.95585v-323.20537h-251.38195v17.95585h-35.91171v-35.91171c0,-9.87572 8.08013,-17.95585 17.95585,-17.95585h269.3378z"]
 };
 var faItalic = {
   prefix: 'fas',
@@ -99975,32 +99976,13 @@ function headerFactory(level) {
 // CONCATENATED MODULE: ./src/components/ToolBarBtns/btn-info.jsx
 
 /* harmony default export */ var btn_info = ({
-  name: 'info',
-  icon: faInfoCircle,
-  title: '关于',
+    name: 'info',
+    icon: faInfoCircle,
+    title: 'copy',
 
-  action() {
-    const h = this.$createElement;
-    this.openDialog({
-      title: '关于',
-      type: 'component',
-      body: [{
-        functional: true,
-        render: (h, _ref) => {
-          let t = _ref.injections.t;
-          return h("div", {
-            "style": "text-align: center"
-          }, [h("p", [h("strong", [t('Markdown*Palettes')]), " ", t('是一个开源的 Markdown 编辑器，面向现代化网络环境。')]), h("p", [h("a", {
-            "attrs": {
-              "href": "https://github.com/luogu-dev/markdown-palettes",
-              "target": "_blank"
-            }
-          }, [t('访问 GitHub 项目地址')])])]);
-        },
-        inject: ['t']
-      }]
-    });
-  }
+    action() {
+      const h = this.$createElement;
+    }
 
 });
 // CONCATENATED MODULE: ./src/components/ToolBarBtns/toolbarBtn.js
@@ -100022,7 +100004,7 @@ function headerFactory(level) {
 
 
 const defaultBtns = [btn_bold, btn_strikethrough, btn_italic, btn_hr, divider, headerFactory(1), headerFactory(2), headerFactory(3), headerFactory(4), headerFactory(5), headerFactory(6), divider, btn_ul, btn_ol, divider, btn_img, btn_link, btn_code, btn_table, divider, btn_hide, btn_fullscreen, btn_scrollsync, divider, btn_info];
-const defaultSimpleBtns = [btn_bold, btn_strikethrough, btn_italic, btn_hr, headerFactory(1), headerFactory(2), headerFactory(3), btn_ul, btn_ol, btn_img, btn_link, btn_table, btn_hide, btn_fullscreen, btn_info];
+const defaultSimpleBtns = [btn_bold, btn_strikethrough, btn_italic, btn_hr, headerFactory(1), headerFactory(2), headerFactory(3), btn_ul, btn_ol, btn_img, btn_link, btn_table, btn_hide, btn_fullscreen];
 
 function getDefaultBtnsMap() {
   const btnsMap = {};
