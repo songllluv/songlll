@@ -1,96 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <link href="./favicon.ico" rel="icon">
-    <link href="abc.css" rel="stylesheet">
-    <link href="../web.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css" />
-    <style>
-        #input{
-            float: left;
-	}
-
-        #button {
-            margin-top: 1em;
-            width: 120px;
-            height: 50px;
-            font-size: 14pt;
-        }
-
-        #output {
-            margin: 20px;
-        }
-    </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    
-<!-- and it's easy to individually load additional languages -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
-
-<script>hljs.highlightAll();</script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="markdown-palettes.min.js"></script>
+    <link rel="stylesheet" href="markdown-palettes.css">
 </head>
-<body style="  overflow: hidden">
-    <button id="copy" onclick="copy()" style="height: 25px; font-size:unset;">copy</button>
-    <script>
-        function copy() {
-          var copyText = document.getElementById("output");
-            var textArea = document.createElement("textarea");
-            textArea.value = `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css" />
-<div class="markdown-body">
-`+copyText.innerHTML+`</div>
-`;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand("Copy");
-            textArea.remove();
-        }
-    </script>
-    <div class="bg" style="padding:1px;">
-    <textarea id="input" class="content">
-# Maxwell's Equations
-
-
-equation | description
-----------|------------
-$\nabla \cdot \vec{\mathbf{B}}  = 0$ | divergence of $\vec{\mathbf{B}}$ is zero
-$\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t}  = \vec{\mathbf{0}}$ |  curl of $\vec{\mathbf{E}}$ is proportional to the rate of change of $\vec{\mathbf{B}}$
-$\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} = \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} = 4 \pi \rho$ | _what?_
-    </textarea>
- <div style="border: 1px solid #00000000;overflow-y: auto;" class="markdown-body">
-        <div id="output" class="bg"></div>
+<body>
+    <div style="height: 800px">
+        <div id="editor"></div>
     </div>
-</div>
-    <script src="./bundle.js"></script>
-    
+
     <script>
-        var a=window.location.href;
-        a=a.split("?")[1];
-        // alert(a);
-        if(a!=null){
-            a=decodeURIComponent(a);
-            document.getElementById("copy").style.display="none";
-            document.getElementById("input").value=a;
-            document.getElementById("input").style.display="none";
-            document.getElementById("output").parentElement.style="width:100%;";
-            document.getElementById("output").parentElement.className="bg";
-        }
-        const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
-        window.onresize=function(){
-            document.getElementById("input").style.height=(window.innerHeight-45).toString()+"px";
-            document.getElementById("output").parentElement.style.height=(window.innerHeight-45).toString()+"px";
-        }
-        window.onresize();
-    </script>
-    <script>
-            (async function cl() {
-                var c;
-                while (true) {
-                    await sleep(10);
-                    var a = document.getElementById("output"), b = document.getElementById("input");
-                    if (c === b.value) continue;
-                    c = b.value;
-                    a.innerHTML = run(b.value);
-                }
-            })()
+        var editor = new MarkdownPalettes('#editor');
     </script>
 </body>
+</html>
