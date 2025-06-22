@@ -1,22 +1,79 @@
-.bg{
-    background-color: orange;
-    color:rgb(47, 97, 178);
-    border-radius: 10px;
+img{
+    -webkit-user-drag: none;
 }
-*{   
-    -webkit-tap-highlight-color: transparent;
-    cursor: url('https://songllluv.github.io/mouse.png'), pointer;
+.bg {
+  --spacing-md: 24px; 
+  --spacing-lg: 36px;
 }
-a{
-    color: rgb(47, 97, 178);
-    text-decoration: none;
+
+/* 块级元素间距 */
+body > * + * {
+  margin-top: var(--spacing-md); /* 所有直接子元素之间添加间隔 */
 }
-.div-fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background-color:rgb(47, 97, 178); /* 示例背景色 */
-    z-index: 1000; /* 确保 div 在页面顶层 */
+
+.bg {
+  background: linear-gradient(135deg, #ff9a44, #ff6b6b);
+  color: white;
+  border-radius: 12px;
+  padding: 16px 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  margin-bottom: var(--spacing-md); /* 增加底部间距 */
+}
+
+/* 卡片容器增加内间距 */
+.card-container {
+  display: grid;
+  gap: var(--spacing-md); /* 网格布局间隙 */
+  padding: var(--spacing-md);
+}
+
+/* 段落和标题间距优化 */
+p, h1, h2, h3, h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+/* 列表项间距 */
+li + li {
+  margin-top: 8px;
+}
+
+/* 表单元素间距 */
+input, button, textarea {
+  margin-bottom: 16px;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  cursor: url('https://songllluv.github.io/mouse.png'), pointer;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  box-sizing: border-box; /* 确保内边距不影响总尺寸 */
+}
+
+a {
+  color: #3a86ff;
+  text-decoration: none;
+  position: relative;
+  font-weight: 500;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #3a86ff;
+  transition: width 0.3s ease;
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 20px; /* 滚动时保留顶部空间 */
 }
