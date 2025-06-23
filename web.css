@@ -1,6 +1,19 @@
 img{
-    -webkit-user-drag: none;
+    -webkit-user-drag: none; /* 禁止拖动图片 */
+  max-width: 100%;    /* 宽度不超过容器 */
+  max-height: 60vh;   /* 高度限制为视口的60% */
+  height: auto;       /* 保持原始宽高比 */
+  width: auto;        /* 避免宽度失真 */
+  display: block;     /* 消除行内元素间隙 */
+  margin: 1.5rem auto;/* 居中显示并添加间距 */
+  object-fit: contain;/* 完整显示图片 */
 }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  img {
+    max-height: 50vh; /* 小屏幕高度限制更小 */
+  }
 .bg {
   --spacing-md: 24px; 
   --spacing-lg: 36px;
