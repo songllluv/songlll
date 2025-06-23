@@ -1,5 +1,5 @@
 img{
-    -webkit-user-drag: none; /* 禁止拖动图片 */
+  -webkit-user-drag: none; /* 禁止拖动图片 */
   max-width: 100%;    /* 宽度不超过容器 */
   max-height: 60vh;   /* 高度限制为视口的60% */
   height: auto;       /* 保持原始宽高比 */
@@ -14,6 +14,7 @@ img{
   img {
     max-height: 50vh; /* 小屏幕高度限制更小 */
   }
+}
 .bg {
   --spacing-md: 24px; 
   --spacing-lg: 36px;
