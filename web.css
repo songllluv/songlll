@@ -60,7 +60,7 @@ input, button, textarea {
 
 * {
   -webkit-tap-highlight-color: transparent;
-  cursor: url('https://songllluv.github.io/mouse.png'), pointer;
+  cursor: url('https://songlll.pages.dev/mouse.png'), pointer;
   font-family: 'Segoe UI', system-ui, sans-serif;
   box-sizing: border-box; /* 确保内边距不影响总尺寸 */
 }
