@@ -8,9 +8,11 @@ img{
   margin: 1.5rem auto;/* 居中显示并添加间距 */
   object-fit: contain;/* 完整显示图片 */
 }
-
 /* 移动端适配 */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
+  html {
+    font-size: 50px;
+  }
   img {
     max-height: 50vh; /* 小屏幕高度限制更小 */
   }
