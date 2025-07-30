@@ -1,30 +1,21 @@
 img{
-  -webkit-user-drag: none; /* 禁止拖动图片 */
-  max-width: 100%;    /* 宽度不超过容器 */
-  max-height: 60vh;   /* 高度限制为视口的60% */
-  height: auto;       /* 保持原始宽高比 */
-  width: auto;        /* 避免宽度失真 */
-  display: block;     /* 消除行内元素间隙 */
-  margin: 1.5rem auto;/* 居中显示并添加间距 */
-  object-fit: contain;/* 完整显示图片 */
-}
-/* 移动端适配 */
-@media (max-width: 1200px) {
-  html {
-    font-size: 50px;
-  }
-  img {
-    max-height: 50vh; /* 小屏幕高度限制更小 */
-  }
+  -webkit-user-drag: none;
+  max-width: 100%;
+  max-height: 60vh;
+  height: auto;
+  width: auto;
+  display: block;
+  margin: 1.5rem auto;
+  object-fit: contain;
+  border-radius: 8px;
 }
 .bg {
   --spacing-md: 24px; 
   --spacing-lg: 36px;
 }
 
-/* 块级元素间距 */
 body > * + * {
-  margin-top: var(--spacing-md); /* 所有直接子元素之间添加间隔 */
+  margin-top: var(--spacing-md);
 }
 
 .bg {
@@ -91,5 +82,5 @@ a:hover::after {
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 20px; /* 滚动时保留顶部空间 */
+  scroll-padding-top: 20px;
 }
