@@ -1,16 +1,20 @@
-img{
-  -webkit-user-drag: none;
-  max-width: 100%;
-  max-height: 60vh;
-  height: auto;
-  width: auto;
-  display: block;
-  margin: 1.5rem auto;
-  object-fit: contain;
-  border-radius: 8px;
+/* ===== 基础重置与全局样式 ===== */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-drag: none; /* 禁止图片拖动 */
+  cursor: url('https://songlll.pages.dev/mouse.png'), pointer;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', system-ui, sans-serif;
 }
-.bg {
-  --spacing-md: 24px; 
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 20px;
+}
+
+/* ===== 间距系统 ===== */
+:root {
+  --spacing-md: 24px;
   --spacing-lg: 36px;
 }
 
@@ -18,6 +22,27 @@ body > * + * {
   margin-top: var(--spacing-md);
 }
 
+/* ===== 图片优化方案 ===== */
+img {
+  display: block;
+  margin: 1.5rem auto;
+  
+  /* 尺寸控制 */
+  max-width: 100%;
+  max-height: 60vh;
+  width: auto;
+  height: auto;
+  
+  /* 新增：动态圆角解决方案 */
+  border-radius: clamp(8px, 1.5vw, 16px); /* 响应式圆角 */
+  aspect-ratio: attr(width) / attr(height); /* 保持原始比例 */
+  
+  /* 图片渲染优化 */
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* ===== 卡片与背景样式 ===== */
 .bg {
   background: linear-gradient(135deg, #ff9a44, #ff6b6b);
   color: white;
@@ -25,39 +50,30 @@ body > * + * {
   padding: 16px 24px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
-  margin-bottom: var(--spacing-md); /* 增加底部间距 */
+  margin-bottom: var(--spacing-md);
 }
 
-/* 卡片容器增加内间距 */
 .card-container {
   display: grid;
-  gap: var(--spacing-md); /* 网格布局间隙 */
+  gap: var(--spacing-md);
   padding: var(--spacing-md);
 }
 
-/* 段落和标题间距优化 */
+/* ===== 排版系统 ===== */
 p, h1, h2, h3, h4 {
   margin-top: 0;
   margin-bottom: 1rem;
 }
 
-/* 列表项间距 */
 li + li {
   margin-top: 8px;
 }
 
-/* 表单元素间距 */
 input, button, textarea {
   margin-bottom: 16px;
 }
 
-* {
-  -webkit-tap-highlight-color: transparent;
-  cursor: url('https://songlll.pages.dev/mouse.png'), pointer;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  box-sizing: border-box; /* 确保内边距不影响总尺寸 */
-}
-
+/* ===== 链接特效 ===== */
 a {
   color: #3a86ff;
   text-decoration: none;
@@ -78,9 +94,4 @@ a::after {
 
 a:hover::after {
   width: 100%;
-}
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 20px;
 }
