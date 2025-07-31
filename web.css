@@ -22,6 +22,11 @@ body > * + * {
   margin-top: var(--spacing-md);
 }
 
+body{
+  overflow-x:hidden;
+  max-width: 100vw;
+}
+
 /* ===== 图片优化方案 ===== */
 img {
   display: block;
