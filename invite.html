@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+  <link rel="stylesheet" href="https://songlll.pages.dev/web.css">
+  <meta charset="utf-8">
+  <title>跳转中...</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script>
+    // 读取 URL 参数
+    function getParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+
+    window.onload = () => {
+      const encUrl = getParam("url"); // AES 加密的 URL
+      const key = getParam("key");    // 解密密钥
+
+      if (!encUrl || !key) {
+        // 显示加密工具页面
+        document.body.innerHTML = 
+        ' <h2 class="bg">邀请链接加密生成器</h2> <div class="bg"> <label>原始邀请链接：</label> <br> <input id="originalUrl" placeholder="https://..."> </div> <div class="bg"> <label>自定义密钥：</label> <input id="secretKey" placeholder="输入密钥"> </div> <button onclick="generateLink()">生成加密链接</button> <div class="bg"> <label>加密后的 URL 参数：</label> <br> <textarea id="encryptedUrl" readonly></textarea> </div> <div class="bg"> <label>完整访问链接：</label> <br> <textarea id="fullLink" readonly></textarea> </div>';
+        // 生成加密链接的函数需要在主脚本中定义
+        window.generateLink = function() {
+          const url = document.getElementById("originalUrl").value.trim();
+          const key = document.getElementById("secretKey").value.trim();
+          const domain = "https://songlll.pages.dev";
+          if (!url || !key || !domain) {
+            alert("请填写完整信息！");
+            return;
+          }
+          const encrypted = CryptoJS.AES.encrypt(url, key).toString();
+          const encoded = encodeURIComponent(encrypted);
+          document.getElementById("encryptedUrl").value = encoded;
+          document.getElementById("fullLink").value = domain + "/invite.html?url=" + encoded + "&key=" + encodeURIComponent(key);
+        };
+        return;
+      }
+
+      try {
+        // AES 解密
+        const bytes = CryptoJS.AES.decrypt(encUrl, key);
+        const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+
+        if (!/^https?:\/\//.test(decrypted)) {
+          document.body.innerHTML = "<h2>⚠️ 解密失败或无效链接</h2>";
+          return;
+        }
+
+        location.replace(decrypted); // 跳转
+      } catch (e) {
+        document.body.innerHTML = "<h2>⚠️ 解密失败</h2>";
+      }
+    };
+  </script>
+</head>
+
+<body>
+  <div class="bg">
+    <h2>正在跳转，请稍等...</h2>
+  </div>
+</body>
+
+</html>

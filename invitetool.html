@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <title>邀请链接加密工具</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link rel="stylesheet" href="https://songlll.pages.dev/web.css">
+</head>
+
+<body>
+    <h2 class="bg">邀请链接加密生成器</h2>
+    <div class="bg">
+
+        <label>原始邀请链接：</label>
+        <br>
+        <input id="originalUrl" placeholder="https://...">
+    </div>
+    <div class="bg">
+        <label>自定义密钥：</label>
+        <input id="secretKey" placeholder="输入密钥">
+    </div>
+
+    <button onclick="generateLink()">生成加密链接</button>
+    <div class="bg">
+        <label>加密后的 URL 参数：</label>
+        <br>
+        <textarea id="encryptedUrl" readonly></textarea>
+    </div>
+    <div class="bg">
+        <label>完整访问链接：</label>
+        <br>
+        <textarea id="fullLink" readonly></textarea>
+    </div>
+    <script>
+        function generateLink() {
+            const url = document.getElementById("originalUrl").value.trim();
+            const key = document.getElementById("secretKey").value.trim();
+            const domain = "https://songlll.pages.dev";
+
+            if (!url || !key || !domain) {
+                alert("请填写完整信息！");
+                return;
+            }
+
+            // AES 加密
+            const encrypted = CryptoJS.AES.encrypt(url, key).toString();
+            const encoded = encodeURIComponent(encrypted);
+
+            document.getElementById("encryptedUrl").value = encoded;
+            document.getElementById("fullLink").value = `${domain}/invite.html?url=${encoded}&key=${encodeURIComponent(key)}`;
+        }
+    </script>
+</body>
+
+</html>
