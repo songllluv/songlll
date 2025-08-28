@@ -5,29 +5,24 @@
     <meta charset="utf-8">
     <title>邀请链接加密工具</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <link rel="stylesheet" href="https://songlll.pages.dev/web.css">
+    <link rel="stylesheet" href="./web.css">
 </head>
 
 <body>
-    <h2 class="bg">邀请链接加密生成器</h2>
+    <h1>邀请链接加密生成器</h1>
     <div class="bg">
 
         <label>原始邀请链接：</label>
         <br>
         <input id="originalUrl" placeholder="https://...">
-    </div>
-    <div class="bg">
         <label>自定义密钥：</label>
+        <br>
         <input id="secretKey" placeholder="输入密钥">
-    </div>
-
-    <button onclick="generateLink()">生成加密链接</button>
-    <div class="bg">
+        <button onclick="generateLink()">生成加密链接</button>
+        <br>
         <label>加密后的 URL 参数：</label>
         <br>
         <textarea id="encryptedUrl" readonly></textarea>
-    </div>
-    <div class="bg">
         <label>完整访问链接：</label>
         <br>
         <textarea id="fullLink" readonly></textarea>
