@@ -78,7 +78,10 @@ input, button, textarea {
   margin-bottom: 16px;
 }
 
-/* ===== 链接特效 ===== */
+input, textarea{
+  background-color: #3a86ff;
+}
+
 a {
   color: #3a86ff;
   text-decoration: none;
