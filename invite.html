@@ -20,7 +20,24 @@
       if (!encUrl || !key) {
         // 显示加密工具页面
         document.body.innerHTML = 
-        ' <h2 class="bg">邀请链接加密生成器</h2> <div class="bg"> <label>原始邀请链接：</label> <br> <input id="originalUrl" placeholder="https://..."> </div> <div class="bg"> <label>自定义密钥：</label> <input id="secretKey" placeholder="输入密钥"> </div> <button onclick="generateLink()">生成加密链接</button> <div class="bg"> <label>加密后的 URL 参数：</label> <br> <textarea id="encryptedUrl" readonly></textarea> </div> <div class="bg"> <label>完整访问链接：</label> <br> <textarea id="fullLink" readonly></textarea> </div>';
+        `<h1>邀请链接加密生成器</h1>
+    <div class="bg">
+
+        <label>原始邀请链接：</label>
+        <br>
+        <input id="originalUrl" placeholder="https://...">
+        <label>自定义密钥：</label>
+        <br>
+        <input id="secretKey" placeholder="输入密钥">
+        <button onclick="generateLink()">生成加密链接</button>
+        <br>
+        <label>加密后的 URL 参数：</label>
+        <br>
+        <textarea id="encryptedUrl" readonly></textarea>
+        <label>完整访问链接：</label>
+        <br>
+        <textarea id="fullLink" readonly></textarea>
+    </div>`;
         // 生成加密链接的函数需要在主脚本中定义
         window.generateLink = function() {
           const url = document.getElementById("originalUrl").value.trim();
