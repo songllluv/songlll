@@ -12,6 +12,14 @@ html {
   scroll-padding-top: 20px;
 }
 
+blockquote {
+    padding-left: 10px;
+    border-left: 5px solid #333;
+    margin-left: 0;
+    font-style: italic;
+    background-color: #bb7f4aa1;
+}
+
 /* ===== 间距系统 ===== */
 :root {
   --spacing-md: 24px;
@@ -90,8 +98,32 @@ input:focus, button:focus, textarea:focus {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.623);
 }
 
+ul {
+    list-style: none;
+    padding: 0%;
+}
+
+li{
+  list-style-type:circle;
+  list-style: none;
+}
+
+li::before {
+  content: "•";
+  color: #fff;
+  margin-right: 10px;
+}
+
 input,textarea{
   width: 100%;
+}
+
+code{
+  background-color: #bd681daa;
+  border-radius: 5px;
+  border-style:solid;
+  border-color: #000000;
+  border-width: 1px;
 }
 
 textarea{

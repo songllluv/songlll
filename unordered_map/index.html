@@ -6,7 +6,7 @@
       crossorigin="anonymous">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="https://songlll.pages.dev/web.css">
+  <link rel="stylesheet" type="text/css" href="../web.css">
   <link rel="icon" href="https://songlll.pages.dev/favicon.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.5.0/styles/atom-one-dark.css">
 
@@ -74,7 +74,7 @@ int main(){
 <p>我们会发现有一个问题。</p>
 <p>正常来说，<code>unordered_map</code> 是线性时间复杂度（即 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>），这是因为基本来说，桶是一个萝卜一个坑，只要找到对应的桶，因为桶内只有一个元素，我们直接就找到对应值了。</p>
 <p>可是，邪恶的 <code>_fairytale_</code> 居然预测了 <code>unordered_map</code> 的哈希函数，并制造了大量哈希函数值相同的数。这使得大量的数都填充到了相同的桶内。对于所有桶内元素，我们都要一个一个找到我们需要的键值，真的是太坏了。</p>
-<p>所以，我们一定要让 <code>_fairytale_</code> 无法才到我们的哈希函数，所以，我们要使用相对随机的哈希函数，这样他（<code>_fairytale_</code> 没说代词要用什么）就没有办法了。</p>
+<p>所以，我们一定要让 <code>_fairytale_</code> 无法猜到我们的哈希函数，所以，我们要使用相对随机的哈希函数，这样他（<code>_fairytale_</code> 没说代词要用什么）就没有办法了。</p>
 <p>于是，我们就换一个更加强大的哈希函数！</p>
 <pre><code class="language-cpp">//抄袭可耻
 #include&lt;bits/stdc++.h&gt;
