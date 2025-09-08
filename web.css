@@ -1,7 +1,8 @@
 /* ===== 基础重置与全局样式 ===== */
 * {
   -webkit-tap-highlight-color: transparent;
-  -webkit-user-drag: none; /* 禁止图片拖动 */
+  -webkit-user-drag: none;
+  /* 禁止图片拖动 */
   cursor: url('https://songlll.pages.dev/mouse.png'), pointer;
   box-sizing: border-box;
   font-family: 'Segoe UI', system-ui, sans-serif;
@@ -13,11 +14,11 @@ html {
 }
 
 blockquote {
-    padding-left: 10px;
-    border-left: 5px solid #333;
-    margin-left: 0;
-    font-style: italic;
-    background-color: #bb7f4aa1;
+  padding-left: 10px;
+  border-left: 5px solid #333;
+  margin-left: 0;
+  font-style: italic;
+  background-color: #bb7f4aa1;
 }
 
 /* ===== 间距系统 ===== */
@@ -26,12 +27,12 @@ blockquote {
   --spacing-lg: 36px;
 }
 
-body > * + * {
+body>*+* {
   margin-top: var(--spacing-md);
 }
 
-body{
-  overflow-x:hidden;
+body {
+  overflow-x: hidden;
   max-width: 100vw;
 }
 
@@ -39,17 +40,19 @@ body{
 img {
   display: block;
   margin: 1.5rem auto;
-  
+
   /* 尺寸控制 */
   max-width: 100%;
   max-height: 60vh;
   width: auto;
   height: auto;
-  
+
   /* 新增：动态圆角解决方案 */
-  border-radius: clamp(8px, 1.5vw, 16px); /* 响应式圆角 */
-  aspect-ratio: attr(width) / attr(height); /* 保持原始比例 */
-  
+  border-radius: clamp(8px, 1.5vw, 16px);
+  /* 响应式圆角 */
+  aspect-ratio: attr(width) / attr(height);
+  /* 保持原始比例 */
+
   /* 图片渲染优化 */
   object-fit: contain;
   image-rendering: -webkit-optimize-contrast;
@@ -61,7 +64,7 @@ img {
   color: white;
   border-radius: 12px;
   padding: 16px 24px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   margin-bottom: var(--spacing-md);
 }
@@ -73,17 +76,22 @@ img {
 }
 
 /* ===== 排版系统 ===== */
-p, h1, h2, h3, h4 {
+p,
+h1,
+h2,
+h3,
+h4 {
   margin-top: 0;
   margin-bottom: 1rem;
 }
 
-li + li {
+li+li {
   margin-top: 8px;
 }
 
-input, button, textarea {
-  margin-top:10px;
+input,
+button{
+  margin-top: 10px;
   margin-bottom: 16px;
   background-color: #5b99fc;
   border-radius: 10px;
@@ -92,19 +100,50 @@ input, button, textarea {
   color: #000;
 }
 
-input:focus, button:focus, textarea:focus {
+textarea{
+  margin-top: 10px;
+  margin-bottom: 16px;
+  background-color: #5b99fc;
+  border-radius: 10px;
+  border: 5px solid #5193fe;
+  color: #000;
+  height: 100px;
+  padding: 10px;
+}
+
+loader {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+input:focus,
+button:focus,
+textarea:focus {
   outline: none;
-  border-color:#5193fe;
+  border-color: #5193fe;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.623);
 }
 
 ul {
-    list-style: none;
-    padding: 0%;
+  list-style: none;
+  padding: 0%;
 }
 
-li{
-  list-style-type:circle;
+li {
+  list-style-type: circle;
   list-style: none;
 }
 
@@ -114,20 +153,21 @@ li::before {
   margin-right: 10px;
 }
 
-input,textarea{
+input,
+textarea {
   width: 100%;
 }
 
-code{
+code {
   background-color: #bd681daa;
   border-radius: 5px;
-  border-style:solid;
+  border-style: solid;
   border-color: #000000;
   border-width: 1px;
 }
 
-textarea{
-  resize:none;
+textarea {
+  resize: none;
 }
 
 a {
