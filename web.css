@@ -89,6 +89,10 @@ li+li {
   margin-top: 8px;
 }
 
+main {
+  padding-top: var(--header-height);
+}
+
 header {
   z-index: 10000;
   right: 0;
