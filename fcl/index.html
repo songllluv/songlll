@@ -1,62 +1,64 @@
+<!doctype html>
 <html>
-    <head>
-        <link rel="icon" href="https://songlll.pages.dev/favicon.png">
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>下载fold craft launcher</title>
-        <link rel="stylesheet" href="https://songlll.pages.dev/web.css">
-    </head>
-    <body>
-        
-  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/styles/default.min.css">
-  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/highlight.min.js"></script>
 
-  <script>
-    function init(){
-        $.ajax({
-            type:"get",
-            url:"https://raw.githubusercontent.com/FCL-Team/FoldCraftLauncher/main/version_map.json",
-            dataType:"html",
-            success:function(res) {
-              var jsonStr = res;
-              var jsonObj = JSON.parse(jsonStr);
-              var html_text = "";
-              for(let i = 0; i < jsonObj.length; i++) {
-                var obj = jsonObj[i];
-                html_text += 
-                    "<div " + 
-                    "class=\"card mdui-ripple mdui-card-media-covered-gradient\" " + 
-                    ">" + 
-                    "<a " + 
-                    "href=\"" + 
-                    obj.url + 
-                    "\"" + 
-                    ">" + 
-                    "<h2>" + 
-                    "Fold Craft Launcher" + 
-                    "</h2>" + 
-                    "<h3>" + 
-                    obj.versionName + 
-                    "</h3>" + 
-                    "<p>" + 
-                    "Type: " +
-                    obj.type + 
-                    "</p>" + 
-                    "</a>" + 
-                    "</div>";
-              }
-              $("#version_list").html(html_text);
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://songlll.pages.dev/web.css">
+    <title>Fold Craft Launcher</title>
+    <style>
+        .version-card .desc {
+            white-space: pre-line;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg" id="version_list"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/highlight.min.js"></script>
+
+    <script>
+        async function init() {
+            try {
+                const res = await fetch(
+                    "https://gh-proxy.com/github.com/FCL-Team/FoldCraftLauncher/raw/refs/heads/main/version_map.json"
+                );
+                const jsonObj = await res.json();
+
+                const html_text = jsonObj.map(obj => {
+                    // 安全获取描述
+                    let mdText = "暂无描述";
+                    if (Array.isArray(obj.description)) {
+                        const descItem = obj.description.find(d => d.lang === "zh_CN")
+                            || obj.description.find(d => d.lang === "en");
+                        if (descItem && descItem.text) mdText = descItem.text;
+                    }
+
+                    const descHtml = marked.parse(mdText.replace(/\n/g, "\n\n"));
+
+
+                    return `
+                <div class="version-card">
+                    <h1><a href="${obj.url.replace("https://", "https://gh-proxy.com/")}">版本：${obj.versionName}</a></h1>
+                    <h1>描述：</h1><div>${descHtml}</div>
+                    <h1>更新时间：${obj.date}</h1>
+                </div>
+            `;
+                }).join("");
+
+                document.getElementById("version_list").innerHTML = html_text;
+            } catch (e) {
+                console.error("加载版本列表失败：", e);
             }
-        })
-    }
-    $(function() {
-      init();
-    })
-  </script>
-        <div class="bg">
-            <h2>下载fold craft launcher</h2>
-        </div>
-    </body>
+        }
+
+        window.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script>hljs.highlightAll();</script>
+
+
+</body>
+
 </html>
