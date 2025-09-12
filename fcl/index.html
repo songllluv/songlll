@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <link rel="icon" href="https://songlll.pages.dev/favicon.png">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>下载fold craft launcher</title>
+        <link rel="stylesheet" href="https://songlll.pages.dev/web.css">
+    </head>
+    <body>
+        
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/styles/default.min.css">
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/highlight.min.js"></script>
+
+  <script>
+    function init(){
+        $.ajax({
+            type:"get",
+            url:"https://raw.githubusercontent.com/FCL-Team/FoldCraftLauncher/main/version_map.json",
+            dataType:"html",
+            success:function(res) {
+              var jsonStr = res;
+              var jsonObj = JSON.parse(jsonStr);
+              var html_text = "";
+              for(let i = 0; i < jsonObj.length; i++) {
+                var obj = jsonObj[i];
+                html_text += 
+                    "<div " + 
+                    "class=\"card mdui-ripple mdui-card-media-covered-gradient\" " + 
+                    ">" + 
+                    "<a " + 
+                    "href=\"" + 
+                    obj.url + 
+                    "\"" + 
+                    ">" + 
+                    "<h2>" + 
+                    "Fold Craft Launcher" + 
+                    "</h2>" + 
+                    "<h3>" + 
+                    obj.versionName + 
+                    "</h3>" + 
+                    "<p>" + 
+                    "Type: " +
+                    obj.type + 
+                    "</p>" + 
+                    "</a>" + 
+                    "</div>";
+              }
+              $("#version_list").html(html_text);
+            }
+        })
+    }
+    $(function() {
+      init();
+    })
+  </script>
+        <div class="bg">
+            <h2>下载fold craft launcher</h2>
+        </div>
+    </body>
+</html>
