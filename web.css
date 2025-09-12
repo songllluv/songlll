@@ -90,6 +90,7 @@ li+li {
 }
 
 header {
+  z-index: 10000;
   right: 0;
   top: 0;
   position: fixed;
