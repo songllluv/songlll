@@ -82859,6 +82859,6 @@ const Ame = {
 }
   , $me = Fme(Ume, [["__scopeId", "data-v-266304e2"]]);
 jU.registerLanguage("latex", n9);
-// const k5 = s8($me);
-// k5.use(JU);
-// k5.mount("#app");
+const k5 = s8($me);
+k5.use(JU);
+k5.mount("#app");
