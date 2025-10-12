@@ -82861,4 +82861,4 @@ const Ame = {
 jU.registerLanguage("latex", n9);
 const k5 = s8($me);
 k5.use(JU);
-k5.mount("#app");
+// k5.mount("#app");
