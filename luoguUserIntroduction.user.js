@@ -6,6 +6,8 @@
 // @author       songlll
 // @match        https://www.luogu.com.cn/user/*
 // @grant        none
+// @downloadURL  https://songlll.pages.dev/luoguUserIntroduction.user.js
+// @updateURL    https://songlll.pages.dev/luoguUserIntroduction.user.js
 // @require      https://songlll.pages.dev/markdown.js
 // @require      https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.js
 // @require      https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-python.min.js
