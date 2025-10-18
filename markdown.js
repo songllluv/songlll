@@ -4,6 +4,7 @@ const katex = require('@luogu-dev/markdown-it-katex');
 
 module.exports = function runMarkdown(mdtxt) {
   const md = new MarkdownIt();
+  md.use(katex);
   return md.render(mdtxt);
 };
 },{"@luogu-dev/markdown-it-katex":2,"markdown-it":13}],2:[function(require,module,exports){
