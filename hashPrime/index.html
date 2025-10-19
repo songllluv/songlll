@@ -15,8 +15,8 @@
                     <label>
                         位数（十进制下）：
                         <input type="number" id="bits" value="9" min="5" max="15">
-                        种子
-                        <input type="text" id="srand" value="默认">
+                        种子（不填为默认）：
+                        <input type="text" id="srand" value="">
                     </label>
                     <button onclick="generateHashPrime()">生成</button>
                     <div id="result" class="waitting">请点击生成</div>
@@ -49,7 +49,7 @@
                     }
 
                     // Use provided srand; treat "默认" or empty as time-based seed (varying)
-                    const seedStr = (srand === undefined || srand === '' || srand === '默认') ? String(Date.now()) : String(srand);
+                    const seedStr = (srand === undefined || srand === '' ) ? String(Date.now()) : String(srand);
                     const seedFn = xmur3(seedStr);
                     const rng = mulberry32(seedFn());
 
