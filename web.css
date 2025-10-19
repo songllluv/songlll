@@ -134,6 +134,13 @@ textarea {
   padding: 10px;
 }
 
+.watting{
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #7e7e7e;
+}
+
 loader {
   display: inline-block;
   width: 16px;

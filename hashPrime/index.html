@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>生成哈希模数</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../web.css">
+        <script src="../web.js"></script>
+    </head>
+    <body>
+        <div class="bg">
+            <div class="content">
+                <h1>生成哈希模数</h1>
+                <p>生成适用于字符串哈希时使用的素模数</p>
+                <div id="form">
+                    <label>
+                        位数（十进制下）：
+                        <input type="number" id="bits" value="9" min="5" max="15">
+                    </label>
+                    <button onclick="generateHashPrime()">生成</button>
+                    <div id="result" class="waitting">请点击生成</div>
+                </div>
+            </div>
+            <script>
+                function randomBigInt(min, max) {
+                    const range = max - min + BigInt(1);
+                    const rand = BigInt(Math.floor(Math.random() * Number(range)));
+                    return min + rand;
+                }
+                function generateHashPrime() {
+                    const bits = parseInt(document.getElementById('bits').value);
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.innerHTML = '<div class="watting"><loader></loader> 生成中...</div>';
+                    setTimeout(() => {
+                        const lowerBound = BigInt(10) ** BigInt(bits - 1);
+                        const upperBound = BigInt(10) ** BigInt(bits) - BigInt(1);
+                        let prime = randomBigInt(lowerBound, upperBound);
+                        function isPrime(n) {
+                            if (n < 2n) return false;
+                            for (let i = 2n; i * i <= n; i++) {
+                                if (n % i === 0n) return false;
+                            }
+                            return true;
+                        }
+                        while (prime <= upperBound) {
+                            if (isPrime(prime)) {
+                                resultDiv.textContent = `生成的哈希模数为：${prime.toString()}`;
+                                return;
+                            }
+                            prime++;
+                        }
+                        resultDiv.textContent = '未找到合适的素数，请增加位数。';
+                    }, 100); // 模拟异步操作
+                }
+            </script>
+        </div>
+    </body>
+</html>
