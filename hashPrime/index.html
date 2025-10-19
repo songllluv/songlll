@@ -29,7 +29,8 @@
                 function generateHashPrime() {
                     const bits = parseInt(document.getElementById('bits').value);
                     const resultDiv = document.getElementById('result');
-                    resultDiv.innerHTML = '<div class="watting"><loader></loader> 生成中...</div>';
+                    resultDiv.innerHTML = '<div class=""><loader></loader> 生成中...</div>';
+                    resultDiv.className="";
                     setTimeout(() => {
                         const lowerBound = BigInt(10) ** BigInt(bits - 1);
                         const upperBound = BigInt(10) ** BigInt(bits) - BigInt(1);

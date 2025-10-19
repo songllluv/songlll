@@ -134,10 +134,9 @@ textarea {
   padding: 10px;
 }
 
-.watting{
+.waitting{
   display: flex;
   align-items: center;
-  font-size: 14px;
   color: #7e7e7e;
 }
 
