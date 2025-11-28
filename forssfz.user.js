@@ -9,8 +9,8 @@
 // @run-at       document-body
 // @grant        none
 // @license      GPL-3.0
-// @downloadURL  
-// @updateURL    
+// @downloadURL  https://songlll.pages.dev/forssfz.user.js
+// @updateURL    https://songlll.pages.dev/forssfz.user.js
 // ==/UserScript==
 
 
