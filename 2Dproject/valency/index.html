@@ -224,6 +224,9 @@
                     y+=lineWidth/2;
                     width-=lineWidth;
                     height-=lineWidth;
+                    if(width<2*radius) radius=width/2;
+                    if(height<2*radius) radius=height/2;
+                    if(height<=0 || width<=0) return;
                     ctx.lineWidth = lineWidth;
                     ctx.beginPath();
                     ctx.moveTo(x + radius, y);
@@ -259,6 +262,7 @@
                         ctx.fillStyle = 'black';
                         let text = playBluePuzzle[i][j].name;
                         const btnSize = Math.min(buttonHeight, buttonWidth) - 5;
+                        if(btnSize<=0) {console.log("什么阳间比例？");continue;}
                         let fontSize = (btnSize) / text.length;
                         ctx.font = `${fontSize}px Arial`;
                         let textWidth = ctx.measureText(text).width;
@@ -288,6 +292,7 @@
                         ctx.fillStyle = 'black';
                         let text = playRedPuzzle[i][j].name;
                         const btnSize = Math.min(buttonHeight, buttonWidth) - 5;
+                        if(btnSize<=0) continue;
                         let fontSize = (btnSize) / text.length;
                         ctx.font = `${fontSize}px Arial`;
                         let textWidth = ctx.measureText(text).width;
