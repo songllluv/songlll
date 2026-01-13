@@ -1,0 +1,38 @@
+---
+import "../styles/index.css";
+import { marked } from 'marked';
+
+const aboutmd=`
+关于 [我](./aboutme)
+`
+const about:string = await marked(aboutmd);
+---
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Songlll 导航页</title>
+		<script class="show" defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+        <script class="show" defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+        <script type="module" class="show">hljs.highlightAll();</script>
+        <script class="show">
+            MathJax = {
+                tex: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)']]
+                },
+                svg: {
+                    fontCache: 'global'
+                }
+            };
+            MathJax.typesetPromise()
+        </script>
+        <script type="module">
+            import { showDialog } from '/index.js';
+        </script>
+	</head>
+	<body>
+		<header>导航页</header>
+		<div class="card" set:html={about}>
+		</div>
+	</body>
+</html>

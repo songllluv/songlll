@@ -1,0 +1,82 @@
+---
+import Head from "../../components/Head.astro"
+---
+<html lang="zh-CN">
+    <head>
+        <Head enableMath enableHighlight />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>社区</title>
+        <script type="module">
+            import { showDialog } from '/index.js';
+        </script>
+    </head>
+    <body>
+        <header>
+            社区
+            <div style="float: right;">
+                <a href="./login">登录</a>
+                <a href="./signin">注册</a>
+            </div>
+        </header>
+        <div class="card show display" id="content">
+            <h2>欢迎来到社区页面！</h2>
+            <p>这里是与其他成员交流和分享想法的地方。</p>
+            <p>请遵守社区规则，保持友好和尊重。</p>
+        </div>
+        <div id="discuss">
+        </div>
+        <div id="sendComments" style="display: none;">
+            <textarea id="commentContent" rows="4" cols="50" placeholder="在此输入您的评论..."></textarea><br/>
+        </div>
+        <div class="card" id="comments">
+            <br>
+            <h3 style="display:inline;margin-top:10px;">加载评论中...</h3>
+            <loader-spinner></loader-spinner>
+            <div style="visibility: hidden;">占位</div>
+        </div>
+        <script>
+            async function fetchWithTimeout(resource: string | URL | Request, options = {timeout: 8000}) {
+                const { timeout } = options;
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), timeout);
+
+                try {
+                const response = await fetch(resource, {
+                ...options,
+                signal: controller.signal
+                });
+                return response;
+                } finally {
+                clearTimeout(id);
+                }
+            }
+            async function test(url: string | URL | Request) {
+                try {
+                    const res = await fetchWithTimeout(url,{timeout: 1000});
+                    return true;
+                } catch (e: any) {
+                    if(404 === e?.status) {
+                        return true;
+                    }
+                    console.error(e?.status);
+                    return false;
+                }
+            }
+
+            const baseDiscussUrl = await test("https://songllluv-edgemockser-41.deno.dev/")?"https://songllluv-edgemockser-41.deno.dev/":"https://ljrfkrxwkqnruheucstl.supabase.co/functions/v1/songlllEdgeService/";
+
+            console.log("Using discuss URL: " + baseDiscussUrl);
+
+            var commentsElement = document.getElementById("comments");
+            var commentsData = await fetch(baseDiscussUrl + "getComments");
+            var commentsJson = await commentsData.json();
+            console.log(commentsJson);
+            var commentsHTML = "<h3>评论区</h3>";
+            for (var comment of commentsJson) {
+                commentsHTML += "<div class='comment-card'><p><strong>" + comment.name + "</strong> 说:</p><p>" + comment.content + "</p></div>";
+            }
+            commentsElement!.innerHTML = commentsHTML;
+        </script>
+    </body>
+</html>

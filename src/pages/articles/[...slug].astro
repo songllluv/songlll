@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Head from '../../components/Head.astro';
+
+// 生成所有文章的静态路径
+export async function getStaticPaths() {
+  const posts = await getCollection('articles');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+<html lang="zh">
+	<head>
+    <meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{post.data.title + ' - Songlll'}</title>
+    <Head enableMath/>
+    <script type="module">
+      import { showDialog } from '/index.js';
+    </script>
+  </head>
+	<body>
+		<header>{post.data.title}</header>
+		<div class="card show display" id="content">
+      <Content />
+    </div>
+	</body>
+</html>
