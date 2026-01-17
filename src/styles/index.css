@@ -1,15 +1,15 @@
 :root {
-    --bg-1: rgb(146 189 255);
-    --bg-2: rgb(136 162 255);
+    --bg-1: rgb(235 242 255);
+    --bg-2: rgb(210 225 255);
 
-    --primary: rgb(64 141 255);
-    --primary-strong: rgb(64 141 255 / 0.95);
+    --primary: rgb(70 120 220);
+    --primary-strong: rgb(55 100 200);
 
-    --card-bg: rgb(255 255 255 / 0.75);
-    --card-bg-hover: rgb(255 255 255 / 0.9);
+    --card-bg: rgb(255 255 255 / 0.9);
+    --card-bg-hover: rgb(255 255 255);
 
-    --shadow-sm: 0 2px 4px rgb(0 0 0 / 0.15);
-    --shadow-md: 0 4px 8px rgb(0 0 0 / 0.25);
+    --shadow-sm: 0 2px 6px rgb(0 0 0 / 0.12);
+    --shadow-md: 0 6px 14px rgb(0 0 0 / 0.18);
 }
 
 html,
