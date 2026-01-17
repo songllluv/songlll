@@ -1,6 +1,6 @@
 :root {
-    --background-color1: #91b3dc;
-    --background-color2: #a499e3;
+    --background-color1: rgba(146, 189, 255, 0.8);
+    --background-color2: rgba(136, 162, 255, 0.8);
 }
 
 html {
@@ -12,19 +12,19 @@ header {
     position: sticky;
     margin-top: -10px;
     top: 0px;
-    background-color: #6675ff80;
+    background-color: rgba(64, 141, 255, 0.8);
     font-size: 24px;
     font-weight: 500;
     padding: 10px;
     z-index: 100;
     border-radius: 10px;
-    box-shadow: 1px 2px 4px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 2px 4px 2px rgba(64, 141, 255, 0.3);
     color: rgba(0, 0, 0, 0.8);
     cursor: default;
 }
 
 header:hover {
-    background-color: #6675ffe0;
+    background-color: rgba(64, 141, 255,0.95);
     color: rgb(24, 24, 24);
 }
 
