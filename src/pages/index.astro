@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 const postList = await getCollection('articles');
 
 const aboutmd=`
-关于 [我](./aboutme)
+关于 [我](./articles/aboutme)
 `
 const about:string = await marked(aboutmd);
 
