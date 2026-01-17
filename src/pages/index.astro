@@ -1,11 +1,14 @@
 ---
 import "../styles/index.css";
 import { marked } from 'marked';
+import { getCollection } from "astro:content";
+const postList = await getCollection('articles');
 
 const aboutmd=`
 关于 [我](./aboutme)
 `
 const about:string = await marked(aboutmd);
+
 ---
 <html lang="zh">
 	<head>
@@ -32,6 +35,17 @@ const about:string = await marked(aboutmd);
 	</head>
 	<body>
 		<header>导航页</header>
+        <div class="card">
+            <h1>文章列表</h1>
+            <ul>
+                {postList.map((post) => (
+                    <li>
+                        <a href={`/articles/${post.slug}/`}>{post.data.title}</a>
+                    </li>
+                ))}
+            </ul>
+            <br />
+        </div>
 		<div class="card" set:html={about}>
 		</div>
 	</body>
