@@ -1,179 +1,228 @@
 :root {
-    --background-color1: rgba(146, 189, 255, 0.8);
-    --background-color2: rgba(136, 162, 255, 0.8);
+    --bg-1: rgb(146 189 255);
+    --bg-2: rgb(136 162 255);
+
+    --primary: rgb(64 141 255);
+    --primary-strong: rgb(64 141 255 / 0.95);
+
+    --card-bg: rgb(255 255 255 / 0.75);
+    --card-bg-hover: rgb(255 255 255 / 0.9);
+
+    --shadow-sm: 0 2px 4px rgb(0 0 0 / 0.15);
+    --shadow-md: 0 4px 8px rgb(0 0 0 / 0.25);
 }
 
-html {
-    background: linear-gradient(to right, var(--background-color1), var(--background-color2));
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
 }
+
+body {
+    background: linear-gradient(to right, var(--bg-1), var(--bg-2));
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: rgb(0 0 0 / 0.85);
+}
+
+/* ===== Header ===== */
 
 header {
-    transition: all 0.2s ease-in-out;
+    margin: 0;
     position: sticky;
-    margin-top: -10px;
-    top: 0px;
-    background-color: rgba(64, 141, 255, 0.8);
+    top: 0;
+    z-index: 100;
+
+    padding: 10px;
+
+    background-color: var(--primary);
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+
     font-size: 24px;
     font-weight: 500;
-    padding: 10px;
-    z-index: 100;
-    border-radius: 10px;
-    box-shadow: 1px 2px 4px 2px rgba(64, 141, 255, 0.3);
-    color: rgba(0, 0, 0, 0.8);
-    cursor: default;
+
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        color 0.2s ease;
 }
 
 header:hover {
-    background-color: rgba(64, 141, 255,0.95);
-    color: rgb(24, 24, 24);
+    background-color: var(--primary-strong);
+    box-shadow: var(--shadow-md);
+    color: rgb(24 24 24);
 }
 
+/* ===== Cards ===== */
+
 .card {
-    transition: all 0.2s ease-in-out;
-    margin: auto;
-    margin-top: 20px;
-    margin-left: 1vw;
-    margin-right: 1vw;
-    background-color: #ffffff70;
+    margin: 20px 1vw;
+    padding: 0 1vw;
+
+    background-color: var(--card-bg);
     border-radius: 10px;
-    padding: 0px 1vw;
-    box-shadow: 1px 2px 4px 2px rgba(0, 0, 0, 0.2);
-    border: 1px solid #cccccc50;
+    border: 1px solid rgb(204 204 204 / 0.3);
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .card:hover {
-    box-shadow: 3px 4px 6px 2px rgba(0, 0, 0, 0.3);
-    background-color: #ffffff90;
+    background-color: var(--card-bg-hover);
+    box-shadow: var(--shadow-md);
 }
 
-.base {
-    display: none;
+/* ===== Typography ===== */
+
+p > code,
+pre {
+    font-family: "Courier New", Courier, monospace;
 }
 
-p>code {
-    background-color: #cfcfcf4e;
+p > code {
+    background-color: rgb(207 207 207 / 0.3);
     padding: 2px 4px;
     border-radius: 4px;
-    font-family: 'Courier New', Courier, monospace;
 }
 
 pre {
     padding: 10px;
-    border-radius: 6px;
-    font-family: 'Courier New', Courier, monospace;
-    overflow-x: auto;
     margin: 10px;
+    border-radius: 6px;
+    overflow-x: auto;
+    background-color: rgb(240 240 240 / 0.6);
 }
 
 blockquote {
-    border-left: 4px solid #7a7a7a88;
     margin: 10px;
     padding-left: 10px;
-    color: #555555;
-    background-color: #dadada27;
+
+    border-left: 4px solid rgb(122 122 122 / 0.5);
+    background-color: rgb(218 218 218 / 0.2);
+
+    color: rgb(85 85 85);
 }
 
-#dialog {
-    z-index: 200;
-    position: fixed;
-    top: 20px;
-    left: 10%;
-    width: 80%;
-    transition: all 0.2s ease-in-out;
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-    background-color: #ffd12cc2;
-    border-radius: 10px;
-    padding: 2px;
-    box-shadow: 1px 2px 4px 2px rgba(0, 0, 0, 0.2);
-}
+/* ===== Images ===== */
 
 img {
-    max-width: 100%;
-    margin: auto;
-    height: auto;
-    border-radius: 6px;
     display: block;
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+
+    border-radius: 6px;
+    user-select: none;
     -webkit-user-drag: none;
 }
 
+/* ===== Image Viewer ===== */
+
 #img-viewer {
-    z-index: 300;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.8);
+    inset: 0;
+    z-index: 300;
+
     display: flex;
     justify-content: center;
     align-items: center;
+
+    background-color: rgb(0 0 0 / 0.8);
 }
 
 .img-container {
-    position: fixed;
     width: 90%;
     height: 90%;
 }
 
-.img-container>img {
+.img-container > img {
+    width: 100%;
+    height: 100%;
     object-fit: contain;
-    display: block;
+
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 20px rgb(255 255 255 / 0.2);
+
     cursor: pointer;
-    user-select: none;
 }
 
-#close-btn {
-    font-size: 30px;
-    color: white;
-    cursor: pointer;
-    user-select: none;
-    border-radius: 50px;
+/* ===== Dialog ===== */
+
+#dialog {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+
+    width: min(80%, 900px);
+    padding: 6px;
+
+    background-color: rgb(255 209 44 / 0.8);
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+
+    transition: transform 0.2s ease, opacity 0.2s ease;
 }
+
+/* ===== Links ===== */
 
 a {
     color: #0044b1;
     text-decoration: none;
-    background-image: linear-gradient(#0044b1, #0044b1);
+
+    background-image: linear-gradient(currentColor, currentColor);
     background-size: 0% 2px;
-    background-position: 0px 100%;
+    background-position: 0 100%;
     background-repeat: no-repeat;
-    transition: background-size 0.3s ease;
+
+    transition: background-size 0.25s ease;
 }
 
 a:hover {
     background-size: 100% 2px;
 }
 
+/* ===== Comments ===== */
+
 .comment-card {
-    transition: all 0.2s ease-in-out;
-    background-color: #ffffff80;
-    border-radius: 8px;
     padding: 10px;
     margin-bottom: 10px;
-    box-shadow: 1px 2px 4px 1px rgba(0, 0, 0, 0.1);
+
+    background-color: rgb(255 255 255 / 0.8);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease;
 }
 
 .comment-card:hover {
     transform: translateY(-2px);
-    background-color: #ffffffa0;
+    background-color: rgb(255 255 255 / 0.95);
 }
 
-loader-spinner {
+/* ===== Loader ===== */
+
+.loader-spinner {
     display: inline-block;
-    top: 15px;
-    width: 7px;
-    height: 7px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3498db;
+
+    width: 14px;
+    height: 14px;
+
+    border: 3px solid rgb(243 243 243);
+    border-top-color: #3498db;
     border-radius: 50%;
+
     animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
