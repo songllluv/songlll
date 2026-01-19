@@ -36,8 +36,11 @@ const about:string = await marked(aboutmd);
 	<body>
 		<header>导航页</header>
         <div class="card">
+            <ul id="pages">
+                
+            </ul>
             <h1>文章列表</h1>
-            <ul>
+            <ul id="list">
                 {postList.map((post) => (
                     <li>
                         <a href={`/articles/${post.slug}/`} style={`${post.id==`aboutme.md` ? "display:none;" : ''}`}>{post.data.title}</a>
@@ -46,6 +49,19 @@ const about:string = await marked(aboutmd);
             </ul>
             <br />
         </div>
+        <script>
+            const showPages = Number(localStorage.getItem('showPages')) || 1;
+            const list = document.getElementById('list');
+            const items = list?.getElementsByTagName('li')||[];
+            var count = 0;
+            const showCountBegin = (showPages - 1) * 10, showCountEnd = showPages * 10 - 1;
+            for (const item of items) {
+                count++;
+                if (count > showCountEnd || count <= showCountBegin) {
+                    item.style.display = 'none';
+                }
+            }
+        </script>
 		<div class="card" set:html={about}>
 		</div>
 	</body>
