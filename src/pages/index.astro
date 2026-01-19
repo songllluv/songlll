@@ -40,7 +40,7 @@ const about:string = await marked(aboutmd);
             <ul>
                 {postList.map((post) => (
                     <li>
-                        <a href={`/articles/${post.slug}/`}>{post.data.title}</a>
+                        <a href={`/articles/${post.slug}/`} style={`${post.id==`aboutme.md` ? "display:none;" : ''}`}>{post.data.title}</a>
                     </li>
                 ))}
             </ul>
