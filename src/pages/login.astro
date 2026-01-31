@@ -1,0 +1,119 @@
+---
+import Head from "../components/Head.astro";
+---
+
+<html>
+    <head>
+        <Head />
+        <title>登录 - Songlll</title>
+        <script
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback"
+            async
+            defer></script>
+    </head>
+    <body>
+        <header>登录</header>
+        <h1>正在开发ing</h1>
+        <script
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+            async
+            defer></script>
+
+        <form id="loginForm" method="POST">
+            <label for="username">用户名:</label>
+            <input type="text" id="username" name="username" required />
+            <br />
+            <label for="password">密码:</label>
+            <input type="password" id="password" name="password" required />
+            <br />
+            <div
+                class="cf-turnstile"
+                data-sitekey="0x4AAAAAACV-gPQgGAAoMj9A"
+                data-callback="onTurnstileSuccess"
+            >
+            </div>
+            <button type="submit">登录</button>
+        </form>
+
+        <script>
+            let turnstileToken: string | null = null;
+
+            function onTurnstileSuccess(token: string) {
+                turnstileToken = token;
+            }
+
+            // 这里保留你原来的 baseDiscussUrl 逻辑
+            async function fetchWithTimeout(
+                resource: string | URL,
+                options: { timeout?: number } = {},
+            ) {
+                const { timeout = 8000 } = options;
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), timeout);
+
+                try {
+                    const response = await fetch(resource, {
+                        ...options,
+                        signal: controller.signal,
+                    });
+                    return response;
+                } finally {
+                    clearTimeout(id);
+                }
+            }
+
+            async function test(url: string) {
+                try {
+                    await fetchWithTimeout(url, { timeout: 1000 });
+                    return true;
+                } catch {
+                    return false;
+                }
+            }
+
+            const baseDiscussUrl = (await test(
+                "https://songllluv-edgemockser-41.deno.dev/ping",
+            ))
+                ? "https://songllluv-edgemockser-41.deno.dev/"
+                : "https://ljrfkrxwkqnruheucstl.supabase.co/functions/v1/songlllEdgeService/";
+
+            document
+                .getElementById("loginForm")
+                ?.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    if (!turnstileToken) {
+                        alert("请完成验证码验证");
+                        return;
+                    }
+
+                    const form = e.target as HTMLFormElement;
+                    const formData = new FormData(form);
+                    const data = {
+                        name: formData.get("username")?.toString() || "",
+                        password: formData.get("password")?.toString() || "",
+                        captchaToken: turnstileToken, // 对应后端 cf_captcha_verify
+                    };
+
+                    try {
+                        const res = await fetch(baseDiscussUrl + "login", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(data),
+                        });
+
+                        const resData = await res.json();
+                        if (res.ok && resData.success) {
+                            alert("登录成功！");
+                            localStorage.setItem("token", resData.token);
+                            window.location.href = "/community";
+                        } else {
+                            alert("登录失败：" + (resData.error || "未知错误"));
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert("登录请求失败");
+                    }
+                });
+        </script>
+    </body>
+</html>
