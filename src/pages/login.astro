@@ -35,10 +35,15 @@ import Head from "../components/Head.astro";
             onTurnstileSuccess(null);
         </script>
 
-        <script type="text/javascript">
+        <script>
+            declare global {
+                interface Window {
+                    turnstileToken: string | null;
+                }
+            }
             async function fetchWithTimeout(
-                resource,
-                options,
+                resource: string | URL,
+                options: { timeout?: number } = {},
             ) {
                 const { timeout = 8000 } = options;
                 const controller = new AbortController();
@@ -55,7 +60,7 @@ import Head from "../components/Head.astro";
                 }
             }
 
-            async function test(url) {
+            async function test(url: string) {
                 try {
                     await fetchWithTimeout(url, { timeout: 1000 });
                     return true;
@@ -79,7 +84,7 @@ import Head from "../components/Head.astro";
                         return;
                     }
 
-                    const form = e.target;
+                    const form = e.target as HTMLFormElement;
                     const formData = new FormData(form);
                     const data = {
                         name: formData.get("username")?.toString() || "",
