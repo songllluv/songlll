@@ -26,13 +26,13 @@ import Head from "../components/Head.astro";
             <button type="submit">登录</button>
         </form>
 
-        <script type="">
+        <script type="text/javascript">
             window.turnstileToken = null;
             function onTurnstileSuccess(token) {
                 window.turnstileToken = token;
                 console.log("Turnstile token:", token);
             }
-            onTurnstileSuccess;
+            onTurnstileSuccess(null);
         </script>
 
         <script>
