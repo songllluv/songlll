@@ -12,6 +12,12 @@
     --shadow-md: 0 6px 14px rgb(0 0 0 / 0.18);
 }
 
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 html,
 body {
     margin: 0;
