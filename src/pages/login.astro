@@ -30,6 +30,7 @@ import Head from "../components/Head.astro";
             window.turnstileToken = null;
             function onTurnstileSuccess(token) {
                 window.turnstileToken = token;
+                console.log("Turnstile token:", token);
             }
         </script>
 
