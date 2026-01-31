@@ -26,14 +26,9 @@ import Head from "../components/Head.astro";
             <button type="submit">登录</button>
         </form>
 
-        <script>
-            declare global {
-                interface Window {
-                    turnstileToken: string | null;
-                }
-            }
+        <script type="">
             window.turnstileToken = null;
-            function onTurnstileSuccess(token: string) {
+            function onTurnstileSuccess(token) {
                 window.turnstileToken = token;
             }
         </script>
