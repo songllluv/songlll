@@ -6,19 +6,10 @@ import Head from "../components/Head.astro";
     <head>
         <Head />
         <title>登录 - Songlll</title>
-        <script
-            src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback"
-            async
-            defer></script>
     </head>
     <body>
         <header>登录</header>
         <h1>正在开发ing</h1>
-        <script
-            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-            async
-            defer></script>
-
         <form id="loginForm" method="POST">
             <label for="username">用户名:</label>
             <input type="text" id="username" name="username" required />
@@ -40,9 +31,9 @@ import Head from "../components/Head.astro";
 
             function onTurnstileSuccess(token: string) {
                 turnstileToken = token;
+                console.log("Turnstile 验证成功，Token:", token);
             }
 
-            // 这里保留你原来的 baseDiscussUrl 逻辑
             async function fetchWithTimeout(
                 resource: string | URL,
                 options: { timeout?: number } = {},
@@ -115,5 +106,10 @@ import Head from "../components/Head.astro";
                     }
                 });
         </script>
+        
+        <script
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+            async
+            defer></script>
     </body>
 </html>
