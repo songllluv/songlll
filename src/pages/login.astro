@@ -27,12 +27,19 @@ import Head from "../components/Head.astro";
         </form>
 
         <script>
-            let turnstileToken: string | null = null;
-
-            function onTurnstileSuccess(token: string) {
-                turnstileToken = token;
-                console.log("Turnstile 验证成功，Token:", token);
+            declare global {
+                interface Window {
+                    turnstileToken: string | null;
+                }
             }
+            window.turnstileToken = null;
+            function onTurnstileSuccess(token: string) {
+                window.turnstileToken = token;
+            }
+        </script>
+
+        <script>
+            let turnstileToken: string | null = null;
 
             async function fetchWithTimeout(
                 resource: string | URL,
@@ -106,7 +113,7 @@ import Head from "../components/Head.astro";
                     }
                 });
         </script>
-        
+
         <script
             src="https://challenges.cloudflare.com/turnstile/v0/api.js"
             async
