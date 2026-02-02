@@ -2,8 +2,8 @@
 import Html from "/src/layouts/Html.astro";
 ---
 
-<Html title="登录">
-    <form id="loginForm" method="POST">
+<Html title="注册">
+    <form id="signinForm" method="POST">
         <label for="username">用户名:</label>
         <input type="text" id="username" name="username" required />
         <br />
@@ -19,7 +19,7 @@ import Html from "/src/layouts/Html.astro";
             data-callback="onTurnstileSuccess"
         >
         </div>
-        <button type="submit">登录</button>
+        <button type="submit">注册</button>
     </form>
 
     <script type="text/javascript">
@@ -72,7 +72,7 @@ import Html from "/src/layouts/Html.astro";
             : "https://ljrfkrxwkqnruheucstl.supabase.co/functions/v1/songlllEdgeService/";
 
         document
-            .getElementById("loginForm")
+            .getElementById("signinForm")
             ?.addEventListener("submit", async (e) => {
                 e.preventDefault();
                 if (!window.turnstileToken) {
@@ -85,7 +85,7 @@ import Html from "/src/layouts/Html.astro";
                 const data = {
                     name: formData.get("username")?.toString() || "",
                     password: formData.get("password")?.toString() || "",
-                    inviteKey: formData.get("invitekey")?.toString() || "",
+                    key: formData.get("invitekey")?.toString() || "",
                     captchaToken: window.turnstileToken, // 对应后端 cf_captcha_verify
                 };
 
