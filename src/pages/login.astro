@@ -2,16 +2,14 @@
 import Html from "/src/layouts/Html.astro";
 ---
 
-<Html title="登录">
+<Html title="注册">
+    <h1>正在开发ing</h1>
     <form id="loginForm" method="POST">
         <label for="username">用户名:</label>
         <input type="text" id="username" name="username" required />
         <br />
         <label for="password">密码:</label>
         <input type="password" id="password" name="password" required />
-        <br />
-        <label for="invitekey">邀请码:</label>
-        <input type="text" id="invitekey" name="invitekey" required />
         <br />
         <div
             class="cf-turnstile"
@@ -85,12 +83,11 @@ import Html from "/src/layouts/Html.astro";
                 const data = {
                     name: formData.get("username")?.toString() || "",
                     password: formData.get("password")?.toString() || "",
-                    inviteKey: formData.get("invitekey")?.toString() || "",
                     captchaToken: window.turnstileToken, // 对应后端 cf_captcha_verify
                 };
 
                 try {
-                    const res = await fetch(baseDiscussUrl + "register", {
+                    const res = await fetch(baseDiscussUrl + "login", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(data),
@@ -98,14 +95,15 @@ import Html from "/src/layouts/Html.astro";
 
                     const resData = await res.json();
                     if (resData.token) {
-                        alert("注册成功！");
-                        window.location.href = "/login";
+                        alert("登录成功！");
+                        localStorage.setItem("token", resData.token);
+                        window.location.href = "/community";
                     } else {
-                        alert("注册失败：" + (resData.error || "未知错误"));
+                        alert("登录失败：" + (resData.error || "未知错误"));
                     }
                 } catch (err) {
                     console.error(err);
-                    alert("注册请求失败");
+                    alert("登录请求失败");
                 }
             });
     </script>
