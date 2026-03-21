@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中和反应微观实质 · 大屏加强版 | 初中化学</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #0b4b66 0%, #043546 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            padding: 15px;
+        }
+        .card {
+            max-width: 1400px;
+            width: 100%;
+            background: #dff2fc;
+            border-radius: 80px;
+            padding: 35px 35px 45px;
+            box-shadow: 0 40px 60px -18px #02121b, inset 3px 3px 15px #ffffff;
+            border: 5px solid white;
+        }
+        h1 {
+            text-align: center;
+            font-weight: 600;
+            font-size: 3.2rem;
+            color: #00334b;
+            margin: 0 0 5px;
+            text-shadow: 4px 4px 0 #c2ebff;
+            letter-spacing: -0.5px;
+        }
+        .sub {
+            text-align: center;
+            font-size: 1.6rem;
+            color: #015276;
+            border-bottom: 4px solid #aad0e9;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            font-style: italic;
+            font-weight: 600;
+        }
+        .microscope {
+            background: #c5e3f5;
+            border-radius: 100px 100px 50px 50px;
+            padding: 30px 15px 20px;
+            border: 5px solid white;
+            box-shadow: inset 0 0 0 4px #9fc7e0, 0 20px 30px -10px #04384b;
+        }
+        .canvas-wrapper {
+            display: flex;
+            justify-content: center;
+            background: #ffffff;
+            border-radius: 80px;
+            padding: 20px;
+            border: 5px solid white;
+            box-shadow: inset 0 0 30px #b8dfff;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            max-width: 1300px;
+            height: auto;
+            background: #ffffff;
+            border-radius: 60px;
+            box-shadow: 0 15px 25px #0a3d57;
+            cursor: pointer;
+            border: 4px solid #d3f0ff;
+        }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px 70px;
+            justify-content: center;
+            margin: 35px 0 25px;
+            padding: 20px 30px;
+            background: #ceeafe;
+            border-radius: 90px;
+            border: 4px solid white;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #00344a;
+        }
+        .ion-badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.9rem;
+            font-weight: bold;
+            box-shadow: 0 6px 0 #0a3e53;
+            border: 3px solid white;
+        }
+        .na-badge { background: #5fb85f; color: #103010; }      /* Na⁺ 绿色 */
+        .cl-badge { background: #ffa726; color: #3b2d00; }      /* Cl⁻ 橙色 */
+        .h-badge { background: #f06292; color: #4d0033; }       /* H⁺ 粉色 */
+        .oh-badge { background: #4fc3f7; color: #014155; }      /* OH⁻ 亮蓝 */
+        .h2o-badge { background: #b0bec5; color: #173d4d; }     /* H₂O 灰蓝 */
+        .action-area {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin: 35px 0 20px;
+        }
+        .play-pause {
+            background: #2d86ac;
+            border: none;
+            color: white;
+            font-size: 2.6rem;
+            padding: 15px 60px;
+            border-radius: 70px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            box-shadow: 0 12px 0 #065577, 0 8px 22px black;
+            cursor: pointer;
+            transition: 0.07s;
+            border: 4px solid #caf0ff;
+        }
+        .play-pause:active {
+            transform: translateY(8px);
+            box-shadow: 0 4px 0 #065577;
+        }
+        .speed-control {
+            background: #b3def5;
+            border-radius: 70px;
+            padding: 10px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #003c55;
+            border: 4px solid white;
+        }
+        .speed-control input {
+            width: 280px;
+            height: 14px;
+        }
+        .status {
+            font-size: 1.9rem;
+            background: #ffe68f;
+            padding: 16px 40px;
+            border-radius: 70px;
+            font-weight: 700;
+            color: #023f58;
+            border: 4px solid white;
+            box-shadow: inset 0 4px 12px #b3943a;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 35px;
+            background: #c2e2f5;
+            border-radius: 80px;
+            padding: 22px 25px;
+            color: #003249;
+            font-size: 1.7rem;
+            font-weight: 600;
+            border: 5px solid white;
+        }
+        .reaction-equation {
+            font-size: 2.2rem;
+            background: #003e57;
+            color: white;
+            padding: 20px 25px;
+            border-radius: 80px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 4px solid #c2ecff;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>🔬 中和反应 · 微观粒子大屏演示</h1>
+    <div class="sub">NaOH + HCl → NaCl + H₂O &nbsp;&nbsp;&nbsp; H⁺ + OH⁻ → H₂O</div>
+
+    <div class="reaction-equation">
+        ⚡ 氢离子 (H⁺)  +  氢氧根 (OH⁻)  →  水分子 (H₂O)
+    </div>
+
+    <div class="microscope">
+        <div class="canvas-wrapper">
+            <canvas id="ionCanvas" width="1300" height="550"></canvas>
+        </div>
+    </div>
+
+    <!-- 图例说明 (大图标) -->
+    <div class="legend">
+        <div class="legend-item"><span class="ion-badge na-badge">Na⁺</span> 钠离子</div>
+        <div class="legend-item"><span class="ion-badge cl-badge">Cl⁻</span> 氯离子</div>
+        <div class="legend-item"><span class="ion-badge h-badge">H⁺</span> 氢离子</div>
+        <div class="legend-item"><span class="ion-badge oh-badge">OH⁻</span> 氢氧根</div>
+        <div class="legend-item"><span class="ion-badge h2o-badge">H₂O</span> 水分子</div>
+    </div>
+
+    <!-- 控制区 (加大加粗) -->
+    <div class="action-area">
+        <button class="play-pause" id="playPauseBtn">▶ 开始</button>
+        <div class="speed-control">
+            <span>🐢</span>
+            <input type="range" id="speedSlider" min="10" max="200" value="100">
+            <span>🐇</span>
+        </div>
+        <div class="status" id="reactionStatus">结合 0 次 ⚡</div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const canvas = document.getElementById('ionCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width, height = canvas.height;
+
+        // ----- 粒子数量 (明显增多，适应大屏) -----
+        const NA_COUNT = 15;      // Na⁺  绿色
+        const CL_COUNT = 15;      // Cl⁻  橙色
+        const H_COUNT = 15;       // H⁺   粉色 (增多)
+        const OH_COUNT = 15;      // OH⁻  蓝色 (增多)
+        const INIT_H2O = 6;       // 初始水分子
+
+        let particles = [];
+
+        // 动画控制
+        let animationId = null;
+        let isPlaying = true;     
+        let speedFactor = 1.0;     // 对应滑条 100/100
+
+        let combineCounter = 0;
+
+        // ----- 粒子类 (半径调大, 视觉明显) -----
+        class Ion {
+            constructor(type, x, y, vx, vy) {
+                this.type = type;   
+                this.x = x;
+                this.y = y;
+                // 初始速度适当增加，让反应更活跃
+                this.vx = vx || (Math.random() - 0.5) * 2.2;
+                this.vy = vy || (Math.random() - 0.5) * 2.2;
+                this.radius = 22;    // 从14→22 粒子更大，大屏清晰
+            }
+
+            move() {
+                this.x += this.vx * speedFactor;
+                this.y += this.vy * speedFactor;
+
+                // 边界反弹 (保留边缘距离)
+                if (this.x < 35) { this.x = 35; this.vx *= -0.9; }
+                if (this.x > width - 35) { this.x = width - 35; this.vx *= -0.9; }
+                if (this.y < 45) { this.y = 45; this.vy *= -0.9; }
+                if (this.y > height - 45) { this.y = height - 45; this.vy *= -0.9; }
+            }
+        }
+
+        // ----- 初始化所有粒子 (分布更散，充满画布)-----
+        function initParticles() {
+            particles = [];
+            // 辅助函数随机生成坐标，避免过于聚集
+            const randX = () => 70 + Math.random() * (width - 140);
+            const randY = () => 70 + Math.random() * (height - 140);
+
+            // Na⁺
+            for (let i = 0; i < NA_COUNT; i++) {
+                particles.push(new Ion('Na+', randX(), randY(), (Math.random()-0.5)*1.8, (Math.random()-0.5)*1.8));
+            }
+            // Cl⁻
+            for (let i = 0; i < CL_COUNT; i++) {
+                particles.push(new Ion('Cl-', randX(), randY(), (Math.random()-0.5)*1.8, (Math.random()-0.5)*1.8));
+            }
+            // H⁺ (酸)
+            for (let i = 0; i < H_COUNT; i++) {
+                particles.push(new Ion('H+', randX(), randY(), (Math.random()-0.5)*2.4, (Math.random()-0.5)*2.4));
+            }
+            // OH⁻ (碱)
+            for (let i = 0; i < OH_COUNT; i++) {
+                particles.push(new Ion('OH-', randX(), randY(), (Math.random()-0.5)*2.4, (Math.random()-0.5)*2.4));
+            }
+            // 初始水分子
+            for (let i = 0; i < INIT_H2O; i++) {
+                particles.push(new Ion('H2O', randX(), randY(), (Math.random()-0.5)*1.5, (Math.random()-0.5)*1.5));
+            }
+        }
+
+        // ----- 绘制 (粒子更大，描边加粗) -----
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            // 画极浅网格 (微观背景)
+            ctx.strokeStyle = '#d0e3f0';
+            ctx.lineWidth = 1.5;
+            for (let i = 0; i < width; i += 50) {
+                ctx.beginPath();
+                ctx.strokeStyle = '#d8e9f5';
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, height);
+                ctx.stroke();
+            }
+            for (let i = 0; i < height; i += 50) {
+                ctx.beginPath();
+                ctx.strokeStyle = '#d8e9f5';
+                ctx.moveTo(0, i);
+                ctx.lineTo(width, i);
+                ctx.stroke();
+            }
+
+            // 绘制所有粒子
+            particles.forEach(p => {
+                ctx.shadowColor = 'rgba(0,30,60,0.6)';
+                ctx.shadowBlur = 16;
+                ctx.shadowOffsetY = 5;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI);
+
+                // 填充色
+                switch (p.type) {
+                    case 'Na+': ctx.fillStyle = '#5fb85f'; break;
+                    case 'Cl-': ctx.fillStyle = '#ffa726'; break;
+                    case 'H+': ctx.fillStyle = '#f06292'; break;
+                    case 'OH-': ctx.fillStyle = '#4fc3f7'; break;
+                    case 'H2O': ctx.fillStyle = '#b0bec5'; break;
+                    default: ctx.fillStyle = '#aaa';
+                }
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 5;
+                ctx.stroke();
+
+                // 符号字体调大
+                ctx.font = 'bold 26px "Segoe UI", "Arial", sans-serif';
+                ctx.fillStyle = '#052e3b';
+                ctx.shadowBlur = 0;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(p.type, p.x, p.y);
+            });
+        }
+
+        // ----- 检查 H+ 与 OH- 结合 -----
+        function checkCombine() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const pA = particles[i];
+                if (pA.type !== 'H+' && pA.type !== 'OH-') continue;
+
+                for (let j = particles.length - 1; j >= 0; j--) {
+                    if (i === j) continue;
+                    const pB = particles[j];
+
+                    if (!((pA.type === 'H+' && pB.type === 'OH-') || (pA.type === 'OH-' && pB.type === 'H+'))) continue;
+
+                    const dx = pA.x - pB.x;
+                    const dy = pA.y - pB.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < (pA.radius + pB.radius) * 1.1) {  // 接触阈值稍微放大，更容易结合
+                        // 移除H+ 和 OH-
+                        const idxA = i;
+                        const idxB = j;
+                        if (idxA > idxB) {
+                            particles.splice(idxA, 1);
+                            particles.splice(idxB, 1);
+                        } else {
+                            particles.splice(idxB, 1);
+                            particles.splice(idxA, 1);
+                        }
+
+                        // 中点生成H2O
+                        const midX = (pA.x + pB.x) / 2;
+                        const midY = (pA.y + pB.y) / 2;
+                        particles.push(new Ion('H2O', midX, midY, (Math.random()-0.5)*1.2, (Math.random()-0.5)*1.2));
+
+                        combineCounter++;
+                        document.getElementById('reactionStatus').innerText = `结合 ${combineCounter} 次 ⚡`;
+                        return true; // 发生结合，重新扫描
+                    }
+                }
+            }
+            return false;
+        }
+
+        // ----- 更新动画 -----
+        function update() {
+            if (!isPlaying) {
+                draw();
+                return;
+            }
+
+            // 移动所有粒子
+            particles.forEach(p => p.move());
+
+            // 反复检查结合 (快速多次，让反应更密集)
+            let maxLoop = 35; // 提高每帧结合次数上限，让反应更剧烈
+            while (checkCombine() && maxLoop-- > 0) {}
+
+            draw();
+        }
+
+        function animate() {
+            update();
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // 启动动画
+        animate();
+        // 初始化
+        initParticles();
+        draw();
+
+        window.inited=0;
+        isPlaying=0;
+
+        // ----- 事件绑定 (大屏友好) -----
+        const playBtn = document.getElementById('playPauseBtn');
+        playBtn.addEventListener('click', () => {
+            if(!window.inited){
+                animate();
+                window.inited=1;
+            }
+            isPlaying = !isPlaying;
+            playBtn.innerHTML = isPlaying ? '⏸️ 暂停' : '▶ 开始';
+        });
+
+        const speedSlider = document.getElementById('speedSlider');
+        speedSlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value, 10);
+            // 速度范围 0.4 ~ 3.5，让最快更快
+            speedFactor = 0.4 + (val / 200) * 3.1;
+        });
+
+        // 双击画布重置
+        canvas.addEventListener('dblclick', () => {
+            initParticles();
+            combineCounter = 0;
+            document.getElementById('reactionStatus').innerText = '结合 0 次 ⚡';
+            draw();
+        });
+
+        // 提示
+        canvas.title = '双击画布重置粒子';
+
+        window.addEventListener('beforeunload', () => {
+            if (animationId) cancelAnimationFrame(animationId);
+        });
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+---
+import Html from '../../layouts/Html.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// 获取 public/2Dproject 目录的绝对路径
+const publicDir = path.join(process.cwd(), 'public', '2Dproject');
+
+// 读取目录下的所有文件（排除子目录，只取文件）
+let files: string[] = [];
+try {
+  const entries = fs.readdirSync(publicDir, { withFileTypes: true });
+  files = entries
+    .filter(entry => entry.isFile())    // 只保留文件，不包含子目录
+    .map(entry => entry.name);
+} catch (error) {
+  console.error('读取目录失败:', error);
+  files = [];
+}
+---
+<Html title="2D 项目">
+    <div class="card show display">
+        <h1>2D 项目介绍：</h1>
+        <div>
+            <p>这个页面的起因是因为我的化学老师，她经常使用 AI 生成各种 2D 动画和游戏，以辅助教学。</p>
+            <p>我觉得这些项目非常有趣，所以我决定创建一个专门的页面来展示这些 2D 项目。</p>
+            <p>在这个页面上，不仅有化学老师生成的原生 2D 项目，还有一些我自己的改动。</p>
+        </div>
+    </div>
+    <div class="card show display">
+        <h2>链接导航：</h2>
+        {files.length === 0 ? (
+        <p>该目录下没有文件。</p>
+        ) : (
+        <ul>
+        {files.map(file => (
+            <li>
+            <a href={`/2Dproject/${file}`}>{file}</a>
+            </li>
+        ))}
+        </ul>
+        )}
+    </div>
+</Html>
