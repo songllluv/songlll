@@ -70,6 +70,7 @@ header:hover {
 .card {
     margin: 20px 1vw;
     padding: 0 1vw;
+    padding-bottom: 10px;
 
     background-color: var(--card-bg);
     border-radius: 10px;
