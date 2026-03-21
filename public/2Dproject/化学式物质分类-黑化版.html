@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>化学式分类挑战 - 初中化学</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon"
+        href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNjQwIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDcuMS4wIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjUgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZD0iTTE4NC42IDQ3NS41QzE4MS41IDQ4Mi44IDE3OS4yIDQ5MC40IDE3Ny44IDQ5OC4xQzE2My4zIDUwNi45IDE0Ni4zIDUxMiAxMjggNTEyQzc1IDUxMiAzMiA0NjkgMzIgNDE2TDMyIDEyOEMxNC4zIDEyOCAwIDExMy43IDAgOTZDMCA3OC4zIDE0LjMgNjQgMzIgNjRMMjI0IDY0QzI0MS43IDY0IDI1NiA3OC4zIDI1NiA5NkMyNTYgMTEzLjcgMjQxLjcgMTI4IDIyNCAxMjhMMjI0IDM4My42TDE4NC42IDQ3NS41ek05NiAxMjhMOTYgMjU2TDE2MCAyNTZMMTYwIDEyOEw5NiAxMjh6TTM1MiA2NEw1MTIgNjRDNTI5LjcgNjQgNTQ0IDc4LjMgNTQ0IDk2QzU0NCAxMTMuNyA1MjkuNyAxMjggNTEyIDEyOEw1MTIgMjgxLjRMNjAzLjMgNDk0LjRDNjA1LjYgNDk5LjggNjA3LjEgNTA1LjUgNjA3LjcgNTExLjRMNjA4IDUxMkw2MDcuNyA1MTJDNjA3LjkgNTEzLjggNjA4IDUxNS42IDYwOCA1MTcuNEM2MDggNTQ5LjcgNTgxLjggNTc2IDU0OS40IDU3NkwyODIuNSA1NzZDMjUwLjIgNTc2IDIyMy45IDU0OS44IDIyMy45IDUxNy40QzIyMy45IDUxNS42IDIyNCA1MTMuOCAyMjQuMiA1MTJMMjIzLjkgNTEyTDIyNC4yIDUxMS40QzIyNC44IDUwNS42IDIyNi4zIDQ5OS44IDIyOC42IDQ5NC40TDMyMCAyODEuNEwzMjAgMTI4QzMwMi4zIDEyOCAyODggMTEzLjcgMjg4IDk2QzI4OCA3OC4zIDMwMi4zIDY0IDMyMCA2NEwzNTIgNjR6TTQ1My4yIDMwNi42QzQ0OS44IDI5OC42IDQ0OCAyOTAuMSA0NDggMjgxLjRMNDQ4IDEyOEwzODQgMTI4TDM4NCAyODEuNEMzODQgMjkwLjEgMzgyLjIgMjk4LjYgMzc4LjggMzA2LjZMMzQ1LjYgMzg0TDQ4Ni4zIDM4NEw0NTMuMSAzMDYuNnoiLz48L3N2Zz4=">
+    <style>
+        * {
+            -webkit-user-drag: none;
+            /* Chrome, Safari */
+            -moz-user-drag: none;
+            /* Firefox */
+            -ms-user-drag: none;
+            /* Internet Explorer */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(98, 141, 228, 0.12);
+            border: 1px solid rgba(98, 141, 228, 0.1);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #4a90e2, #63b3ed);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+            color: #5a6c7d;
+        }
+
+        .teacher-info {
+            background: rgba(74, 144, 226, 0.08);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            display: inline-block;
+            border-left: 4px solid #4a90e2;
+            color: #4a90e2;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(98, 141, 228, 0.1);
+            border: 1px solid rgba(98, 141, 228, 0.1);
+        }
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.3rem;
+            color: #5a6c7d;
+        }
+
+        .timer {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4a90e2;
+            text-shadow: 0 2px 4px rgba(74, 144, 226, 0.2);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 12px 28px;
+            border-radius: 12px;
+            min-width: 140px;
+            text-align: center;
+            border: 2px solid rgba(74, 144, 226, 0.2);
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 22px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(98, 141, 228, 0.15);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .remaining {
+            color: #4a90e2;
+        }
+
+        .correct {
+            color: #38a169;
+        }
+
+        .incorrect {
+            color: #e53e3e;
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-start {
+            background: linear-gradient(145deg, #38a169, #2f855a);
+            color: white;
+        }
+
+        .btn-reset {
+            background: linear-gradient(145deg, #4a90e2, #357abd);
+            color: white;
+        }
+
+        .btn-clean {
+            background: linear-gradient(145deg, #e53e3e, #c53030);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .categories-area {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 18px;
+            margin-bottom: 35px;
+            min-height: 160px;
+        }
+
+        .category {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 22px 15px;
+            text-align: center;
+            border: 2px dashed rgba(98, 141, 228, 0.3);
+            transition: all 0.3s ease;
+            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .category.drag-over {
+            border-color: #f6ad55;
+            background: rgba(246, 173, 85, 0.08);
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(246, 173, 85, 0.15);
+        }
+
+        .category.correct-drop {
+            border-color: #38a169;
+            background: rgba(56, 161, 105, 0.08);
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #4a90e2;
+        }
+
+        .category-count {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 5px;
+        }
+
+        .category-examples {
+            font-size: 0.85rem;
+            color: #a0aec0;
+            margin-top: 5px;
+        }
+
+        .formula-area-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 35px;
+            box-shadow: 0 8px 25px rgba(98, 141, 228, 0.1);
+            border: 1px solid rgba(98, 141, 228, 0.1);
+            position: relative;
+            overflow: hidden;
+            min-height: 450px;
+        }
+
+        .formula-area-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #4a90e2;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(74, 144, 226, 0.1);
+        }
+
+        .formula-area {
+            min-height: 380px;
+            position: relative;
+            border-radius: 12px;
+            background: rgba(245, 247, 250, 0.7);
+            padding: 15px;
+            overflow: hidden;
+        }
+
+        .formula-card {
+            background: linear-gradient(145deg, #63b3ed, #4a90e2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            border-radius: 12px;
+            padding: 20px 15px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 5px 12px rgba(74, 144, 226, 0.2);
+            text-align: center;
+            min-width: 130px;
+            position: absolute;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .formula-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 18px rgba(74, 144, 226, 0.3);
+            background: linear-gradient(145deg, #7bc1f5, #5a9be6);
+        }
+
+        .formula-card.dragging {
+            opacity: 0.9;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(74, 144, 226, 0.5);
+            z-index: 1000;
+        }
+
+        .formula-card.correct {
+            animation: correctAnimation 0.6s ease forwards;
+        }
+
+        .formula-card.incorrect {
+            animation: incorrectAnimation 0.5s ease;
+        }
+
+        @keyframes correctAnimation {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 0.8;
+                background: linear-gradient(145deg, #38a169, #2f855a);
+            }
+
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes incorrectAnimation {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-12px);
+                background: linear-gradient(145deg, #e53e3e, #d32f2f);
+            }
+
+            50% {
+                transform: translateX(12px);
+            }
+
+            75% {
+                transform: translateX(-12px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .game-message {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 12px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .message-correct {
+            background: rgba(56, 161, 105, 0.12);
+            color: #2f855a;
+            border: 2px solid #38a169;
+            display: block;
+        }
+
+        .message-incorrect {
+            background: rgba(229, 62, 62, 0.12);
+            color: #c53030;
+            border: 2px solid #e53e3e;
+            display: block;
+        }
+
+        .game-result {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 25px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            color: #4a90e2;
+            display: none;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(74, 144, 226, 0.2);
+        }
+
+        .ranking {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 18px;
+            padding: 25px;
+            display: none;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(74, 144, 226, 0.1);
+        }
+
+        .ranking h3 {
+            color: #4a90e2;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(74, 144, 226, 0.1);
+        }
+
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .ranking-table th {
+            background: rgba(74, 144, 226, 0.1);
+            padding: 14px;
+            text-align: left;
+            border-bottom: 2px solid rgba(74, 144, 226, 0.2);
+            color: #4a90e2;
+            font-weight: 600;
+        }
+
+        .ranking-table td {
+            padding: 14px;
+            border-bottom: 1px solid rgba(74, 144, 226, 0.1);
+            color: #4a5568;
+        }
+
+        .ranking-table tr:nth-child(even) {
+            background: rgba(74, 144, 226, 0.04);
+        }
+
+        .ranking-table tr:hover {
+            background: rgba(74, 144, 226, 0.08);
+        }
+
+        .rank-1 {
+            color: #d69e2e;
+            font-weight: bold;
+        }
+
+        .rank-2 {
+            color: #718096;
+        }
+
+        .rank-3 {
+            color: #ed8936;
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 18px;
+            padding: 25px;
+            margin-top: 30px;
+            line-height: 1.6;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(74, 144, 226, 0.1);
+        }
+
+        .instructions h3 {
+            color: #4a90e2;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(74, 144, 226, 0.1);
+        }
+
+        .instructions ul {
+            padding-left: 22px;
+            margin-bottom: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+
+        .highlight {
+            color: #4a90e2;
+            font-weight: 600;
+        }
+
+        .special-note {
+            background: rgba(246, 173, 85, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid #f6ad55;
+            color: #d69e2e;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #718096;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(74, 144, 226, 0.1);
+        }
+
+        @media (max-width: 1200px) {
+            .categories-area {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .categories-area {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .game-info {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .stats {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            h1 {
+                font-size: 2.3rem;
+            }
+
+            .formula-card {
+                font-size: 1.3rem;
+                min-width: 110px;
+                padding: 18px 12px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .categories-area {
+                grid-template-columns: 1fr;
+            }
+
+            .formula-card {
+                font-size: 1.2rem;
+                min-width: 100px;
+                padding: 16px 10px;
+            }
+
+            .game-controls {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-flask"></i> 化学式分类挑战</h1>
+            <p class="subtitle">将化学式卡片拖动到正确的物质类别中，学习化学物质的分类知识！</p>
+            <div class="teacher-info">
+                <i class="fas fa-chalkboard-teacher"></i> 教学提示：通过分类游戏帮助学生掌握单质、氧化物、酸、碱、盐、有机物的区别。
+            </div>
+        </header>
+
+        <div class="game-info">
+            <div class="timer-container">
+                <i class="fas fa-clock" style="color: #4a90e2;"></i>
+                <div class="timer" id="timer">00:00</div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <div>剩余卡片</div>
+                    <div class="stat-value remaining" id="remaining-count">30</div>
+                </div>
+                <div class="stat-box">
+                    <div>正确</div>
+                    <div class="stat-value correct" id="correct-count">0</div>
+                </div>
+                <div class="stat-box">
+                    <div>错误</div>
+                    <div class="stat-value incorrect" id="incorrect-count">0</div>
+                </div>
+            </div>
+
+            <div class="game-controls">
+                <button class="btn btn-start" id="start-btn">
+                    <i class="fas fa-play"></i> 开始游戏
+                </button>
+                <button class="btn btn-reset" id="reset-btn">
+                    <i class="fas fa-redo"></i> 重新开始
+                </button>
+                <button class="btn btn-clean" id="clean-btn">
+                    <i class="fas fa-trash-alt"></i>
+                    清除排行榜
+                </button>
+            </div>
+        </div>
+
+        <!-- 类别区域 -->
+        <div class="categories-area" id="categories-area">
+            <div class="category" data-category="单质" id="category-单质">
+                <div class="category-title">单质</div>
+                <div class="category-count" id="count-单质">0/5</div>
+                <div class="category-examples" id="example-单质">P、O₂、H₂、Fe、Au</div>
+            </div>
+            <div class="category" data-category="氧化物" id="category-氧化物">
+                <div class="category-title">氧化物</div>
+                <div class="category-count" id="count-氧化物">0/6</div>
+                <div class="category-examples" id="example-氧化物">Ga₂O₃、PbO、Sb₂O₃</div>
+            </div>
+            <div class="category" data-category="酸" id="category-酸">
+                <div class="category-title">酸</div>
+                <div class="category-count" id="count-酸">0/5</div>
+                <div class="category-examples" id="example-酸">H₂SO₄、HNO₃、H₃PO₄</div>
+            </div>
+            <div class="category" data-category="碱" id="category-碱">
+                <div class="category-title">碱</div>
+                <div class="category-count" id="count-碱">0/3</div>
+                <div class="category-examples" id="example-碱">NaOH、Ca(OH)₂、Fe(OH)₂</div>
+            </div>
+            <div class="category" data-category="盐" id="category-盐">
+                <div class="category-title">盐</div>
+                <div class="category-count" id="count-盐">0/8</div>
+                <div class="category-examples" id="example-盐">NbCl₅、SbCl₃、NaSbO₃</div>
+            </div>
+            <div class="category" data-category="有机物" id="category-有机物">
+                <div class="category-title">有机物</div>
+                <div class="category-count" id="count-有机物">0/3</div>
+                <div class="category-examples" id="example-有机物">Sb(CH₃)₃、C₂H₅OH</div>
+            </div>
+        </div>
+
+        <!-- 化学式卡片区域 -->
+        <div class="formula-area-container">
+            <div class="formula-area-title">将化学式拖动到上方对应类别中</div>
+            <div class="formula-area" id="formula-area">
+                <div class="formula-grid" id="formula-grid">
+                    <!-- 化学式卡片将通过JS生成 -->
+                </div>
+            </div>
+        </div>
+
+        <div class="game-message" id="game-message"></div>
+
+        <div class="game-result" id="game-result"></div>
+
+        <div class="ranking" id="ranking">
+            <h3><i class="fas fa-trophy"></i> 排行榜</h3>
+            <table class="ranking-table">
+                <thead>
+                    <tr>
+                        <th>排名</th>
+                        <th>用时</th>
+                        <th>正确数</th>
+                        <th>错误数</th>
+                        <th>日期</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-body">
+                    <!-- 排行榜数据将通过JS生成 -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> 游戏规则</h3>
+            <ul>
+                <li><span class="highlight">操作方式</span>：将下方的化学式卡片拖动到上方的对应类别区域中</li>
+                <li><span class="highlight">分类规则</span>：
+                    <ul>
+                        <li><strong>单质</strong>：由同种元素组成的纯净物（如P、O₂、H₂）</li>
+                        <li><strong>氧化物</strong>：由两种元素组成，其中一种是氧元素的化合物（如Fe₂O₃、CO₂）</li>
+                        <li><strong>酸</strong>：电离时产生的阳离子全部是氢离子的化合物（如HNO₃、HCl、CH₃COOH）</li>
+                        <li><strong>碱</strong>：电离时产生的阴离子全部是氢氧根离子的化合物（如Fe(OH)₂、Ca(OH)₂）</li>
+                        <li><strong>盐</strong>：由金属离子（或铵根离子）和酸根离子组成的化合物（如NaCl、CaCO₃）</li>
+                        <li><strong>有机物</strong>：含碳元素的化合物（除CO、CO₂、碳酸盐等外）（如CH₄、C₆H₁₂O₆）</li>
+                    </ul>
+                </li>
+                <div class="special-note">
+                    <i class="fas fa-lightbulb"></i>
+                    <strong>特别注意</strong>：没有任何一个物质属于多重分类，每个化学式卡片只能放入一个类别中。如果你发现有物质不符合上述分类规则，说明你属于锑。
+                </div>
+                <li><span class="highlight">游戏计时</span>：从开始游戏到全部分类完成的时间</li>
+                <li>根据用时长短进行排名，用时越短排名越高</li>
+                <li>全部卡片分类完成后，会显示本次游戏用时和排行榜</li>
+                <li>拖动到错误位置会显示"错误"提示，卡片会返回原处</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>初中化学式分类挑战 | 设计用于化学课堂教学辅助 | 清新淡雅风格</p>
+        </footer>
+    </div>
+
+    <script>
+        const chemicals = [
+            // 单质
+            // 单质（元素梗）
+            { formula: "Sb", categories: ["单质"], display: "Sb" },
+            { formula: "Ga", categories: ["单质"], display: "Ga" },
+            { formula: "Nb", categories: ["单质"], display: "Nb" },
+            { formula: "Os", categories: ["单质"], display: "Os" },
+            { formula: "Pt", categories: ["单质"], display: "Pt" },
+
+            // 氧化物（组合梗）
+            { formula: "Sb2O3", categories: ["氧化物"], display: "Sb₂O₃" },
+            { formula: "Nb2O5", categories: ["氧化物"], display: "Nb₂O₅" },
+            { formula: "OsO4", categories: ["氧化物"], display: "OsO₄" },
+            { formula: "Ga2O3", categories: ["氧化物"], display: "Ga₂O₃" },
+            { formula: "PtO2", categories: ["氧化物"], display: "PtO₂" },
+            { formula: "Sb2O5", categories: ["氧化物"], display: "Sb₂O₅" },
+
+            // 酸（谐音/缩写梗）
+            { formula: "HSbF6", categories: ["酸"], display: "HSbF₆" },
+            { formula: "H3PO4", categories: ["酸"], display: "H₃PO₄" },
+            { formula: "HClO4", categories: ["酸"], display: "HClO₄" },
+            { formula: "H2SO4", categories: ["酸"], display: "H₂SO₄" },
+            { formula: "HNO3", categories: ["酸"], display: "HNO₃" },
+
+            // 碱
+            { formula: "Fe(OH)2", categories: ["碱"], display: "Fe(OH)₂" },
+            { formula: "Al(OH)3", categories: ["碱"], display: "Al(OH)₃" },
+            { formula: "Ca(OH)2", categories: ["碱"], display: "Ca(OH)₂" },
+
+            // 盐（组合梗）
+            { formula: "NaSbO3", categories: ["盐"], display: "NaSbO₃" },
+            { formula: "NaSbF6", categories: ["盐"], display: "NaSbF₆" },
+            { formula: "NbCl5", categories: ["盐"], display: "NbCl₅" },
+            { formula: "SbCl3", categories: ["盐"], display: "SbCl₃" },
+            { formula: "SbCl5", categories: ["盐"], display: "SbCl₅" },
+            { formula: "Na3AsO4", categories: ["盐"], display: "Na₃AsO₄" },
+            { formula: "Na2SiO3", categories: ["盐"], display: "Na₂SiO₃" },
+            { formula: "Na2SO4", categories: ["盐"], display: "Na₂SO₄" },
+
+            // 有机物
+            { formula: "Sb(CH3)3", categories: ["有机物"], display: "Sb(CH₃)₃" },
+            { formula: "Sb(C6H5)3", categories: ["有机物"], display: "Sb(C₆H₅)₃" },
+            { formula: "C2H5OH", categories: ["有机物"], display: "C₂H₅OH" },
+        ];
+
+        const categoryCounts = {
+            "单质": 5,
+            "氧化物": 6,
+            "酸": 5,
+            "碱": 3,
+            "盐": 8,
+            "有机物": 3
+        };
+
+        // 游戏状态
+        const gameState = {
+            remaining: chemicals.length,
+            correct: 0,
+            incorrect: 0,
+            gameActive: false,
+            startTime: 0,
+            elapsedTime: 0,
+            timerInterval: null,
+            draggedCard: null,
+            placedCards: {} // 记录已放置的卡片，防止重复计数
+        };
+
+        // 排行榜数据
+        let rankingData = JSON.parse(localStorage.getItem('chemicalClassificationRanking')) || [];
+
+        // DOM元素
+        const startBtn = document.getElementById('start-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const cleanBtn = document.getElementById('clean-btn');
+        const timerElement = document.getElementById('timer');
+        const remainingElement = document.getElementById('remaining-count');
+        const correctElement = document.getElementById('correct-count');
+        const incorrectElement = document.getElementById('incorrect-count');
+        const gameMessageElement = document.getElementById('game-message');
+        const gameResultElement = document.getElementById('game-result');
+        const rankingElement = document.getElementById('ranking');
+        const rankingBodyElement = document.getElementById('ranking-body');
+        const formulaArea = document.getElementById('formula-area');
+
+
+        displayRanking();
+
+        // 初始化游戏
+        function initGame() {
+            // 重置游戏状态
+            gameState.remaining = chemicals.length;
+            gameState.correct = 0;
+            gameState.incorrect = 0;
+            gameState.gameActive = false;
+            gameState.startTime = 0;
+            gameState.elapsedTime = 0;
+            gameState.placedCards = {};
+
+            // 清除计时器
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+                gameState.timerInterval = null;
+            }
+
+            // 创建化学式卡片
+            createFormulaCards();
+
+            // 重置类别区域
+            resetCategories();
+
+            // 更新显示
+            updateDisplay();
+
+            // 重置游戏结果和排行榜显示
+            gameResultElement.style.display = 'none';
+            gameResultElement.textContent = '';
+
+            // 清空游戏消息
+            gameMessageElement.textContent = '';
+            gameMessageElement.className = 'game-message';
+
+            // 启用开始按钮
+            startBtn.disabled = false;
+
+            // 更新计时器显示
+            updateTimerDisplay();
+        }
+
+        // 创建化学式卡片
+        function createFormulaCards() {
+            const formulaGrid = document.getElementById('formula-grid');
+            formulaGrid.innerHTML = '';
+
+            // 打乱化学式顺序
+            const shuffledChemicals = [...chemicals].sort(() => Math.random() - 0.5);
+
+            // 获取公式区域的尺寸
+            const areaRect = formulaArea.getBoundingClientRect();
+            const areaWidth = areaRect.width - 150; // 减去卡片宽度
+            const areaHeight = areaRect.height - 100; // 减去卡片高度
+
+            // 为每个化学式创建卡片
+            shuffledChemicals.forEach((chemical, index) => {
+                const card = document.createElement('div');
+                card.className = 'formula-card';
+                card.id = `card-${chemical.formula}`;
+                card.textContent = chemical.display;
+                card.draggable = false; // 初始不可拖动
+                card.dataset.formula = chemical.formula;
+                card.dataset.categories = JSON.stringify(chemical.categories);
+
+                // 随机位置（确保在区域内）
+                const randomLeft = Math.random() * areaWidth;
+                const randomTop = Math.random() * areaHeight;
+
+                card.style.left = `${randomLeft}px`;
+                card.style.top = `${randomTop}px`;
+
+                // 添加拖动事件
+                addDragEvents(card);
+
+                formulaGrid.appendChild(card);
+            });
+        }
+
+        // 重置类别区域
+        function resetCategories() {
+            // 重置所有类别计数显示
+            Object.keys(categoryCounts).forEach(category => {
+                document.getElementById(`count-${category}`).textContent = `0/${categoryCounts[category]}`;
+            });
+
+            // 移除所有类别的特殊样式
+            document.querySelectorAll('.category').forEach(category => {
+                category.classList.remove('drag-over', 'correct-drop');
+            });
+        }
+
+        // 添加拖动事件
+        function addDragEvents(card) {
+            // 开始拖动
+            card.addEventListener('mousedown', startDrag);
+            card.addEventListener('touchstart', startDragTouch);
+
+            // 移动设备触摸事件
+            function startDragTouch(e) {
+                if (!gameState.gameActive) return;
+
+                e.preventDefault();
+                gameState.draggedCard = card;
+                card.classList.add('dragging');
+
+                // 添加触摸移动和结束事件
+                document.addEventListener('touchmove', moveDragTouch);
+                document.addEventListener('touchend', endDrag);
+            }
+
+            // 桌面设备鼠标事件
+            function startDrag(e) {
+                if (!gameState.gameActive) return;
+
+                gameState.draggedCard = card;
+                card.classList.add('dragging');
+
+                // 添加鼠标移动和释放事件
+                document.addEventListener('mousemove', moveDrag);
+                document.addEventListener('mouseup', endDrag);
+            }
+        }
+
+        // 移动设备触摸移动
+        function moveDragTouch(e) {
+            if (!gameState.draggedCard) return;
+
+            e.preventDefault();
+            const touch = e.touches[0];
+            moveCard(touch.clientX, touch.clientY);
+        }
+
+        // 桌面设备鼠标移动
+        function moveDrag(e) {
+            if (!gameState.draggedCard) return;
+
+            moveCard(e.clientX, e.clientY);
+        }
+
+        // 移动卡片
+        function moveCard(x, y) {
+            if (!gameState.draggedCard) return;
+
+            // 更新卡片位置（跟随鼠标/手指）
+            gameState.draggedCard.style.left = `${x - 65}px`;
+            gameState.draggedCard.style.top = `${y - 35}px`;
+            gameState.draggedCard.style.position = 'fixed';
+            gameState.draggedCard.style.zIndex = '1000';
+
+            // 检查是否在类别区域上方
+            const categories = document.querySelectorAll('.category');
+            categories.forEach(category => {
+                const rect = category.getBoundingClientRect();
+                const isOver = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+
+                if (isOver) {
+                    category.classList.add('drag-over');
+                } else {
+                    category.classList.remove('drag-over');
+                }
+            });
+        }
+
+        // 结束拖动
+        function endDrag(e) {
+            if (!gameState.draggedCard) return;
+
+            // 移除拖动样式
+            gameState.draggedCard.classList.remove('dragging');
+
+            // 检查是否在类别区域上方
+            const categories = document.querySelectorAll('.category');
+            let droppedOnCategory = null;
+
+            // 获取卡片位置
+            const cardRect = gameState.draggedCard.getBoundingClientRect();
+            const cardCenterX = cardRect.left + cardRect.width / 2;
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+
+            categories.forEach(category => {
+                const rect = category.getBoundingClientRect();
+                const isOver = cardCenterX >= rect.left && cardCenterX <= rect.right &&
+                    cardCenterY >= rect.top && cardCenterY <= rect.bottom;
+
+                if (isOver) {
+                    droppedOnCategory = category;
+                    category.classList.remove('drag-over');
+                } else {
+                    category.classList.remove('drag-over');
+                }
+            });
+
+            // 处理放置
+            if (droppedOnCategory) {
+                const targetCategory = droppedOnCategory.dataset.category;
+                const cardCategories = JSON.parse(gameState.draggedCard.dataset.categories);
+
+                // 检查卡片是否已经被放置过
+                const cardId = gameState.draggedCard.dataset.formula;
+
+                if (cardCategories.includes(targetCategory) && !gameState.placedCards[cardId]) {
+                    // 正确分类且未放置过
+                    handleCorrectClassification(gameState.draggedCard, droppedOnCategory, targetCategory);
+                } else if (gameState.placedCards[cardId]) {
+                    // 卡片已经被放置过
+                    showMessage('该卡片已经分类完成！', 'incorrect');
+                    resetCardPosition(gameState.draggedCard);
+                    displayRanking();
+                } else {
+                    // 错误分类
+                    handleIncorrectClassification(gameState.draggedCard);
+                }
+            } else {
+                // 未放置在类别区域，返回原处
+                resetCardPosition(gameState.draggedCard);
+            }
+
+            // 移除事件监听器
+            document.removeEventListener('mousemove', moveDrag);
+            document.removeEventListener('mouseup', endDrag);
+            document.removeEventListener('touchmove', moveDragTouch);
+            document.removeEventListener('touchend', endDrag);
+
+            // 重置拖动卡片
+            gameState.draggedCard = null;
+        }
+
+        // 处理正确分类
+        function handleCorrectClassification(card, categoryElement, targetCategory) {
+            // 记录卡片已放置
+            const cardId = card.dataset.formula;
+            gameState.placedCards[cardId] = true;
+
+            // 增加正确计数
+            gameState.correct++;
+            gameState.remaining--;
+
+            // 更新显示
+            updateDisplay();
+
+            // 更新类别计数
+            const countElement = document.getElementById(`count-${targetCategory}`);
+            const currentCount = parseInt(countElement.textContent.split('/')[0]) + 1;
+            const totalCount = categoryCounts[targetCategory];
+            countElement.textContent = `${currentCount}/${totalCount}`;
+
+            // 添加正确样式
+            categoryElement.classList.add('correct-drop');
+
+            // 显示正确消息
+            const cardCategories = JSON.parse(card.dataset.categories);
+            let message = `正确！${card.textContent}属于${targetCategory}`;
+            if (cardCategories.length > 1) {
+                message += `（该物质也可以属于${cardCategories.filter(c => c !== targetCategory).join('或')}）`;
+            }
+            showMessage(message, 'correct');
+
+            // 播放正确动画并移除卡片
+            card.classList.add('correct');
+            setTimeout(() => {
+                card.style.display = 'none';
+
+                // 检查游戏是否完成
+                checkGameCompletion();
+            }, 600);
+        }
+
+        // 处理错误分类
+        function handleIncorrectClassification(card) {
+            // 增加错误计数
+            gameState.incorrect++;
+
+            // 更新显示
+            updateDisplay();
+
+            // 显示错误消息
+            showMessage('错误！请重新尝试', 'incorrect');
+
+            // 播放错误动画
+            card.classList.add('incorrect');
+
+            // 重置卡片位置
+            setTimeout(() => {
+                card.classList.remove('incorrect');
+                resetCardPosition(card);
+            }, 500);
+        }
+
+        // 重置卡片位置
+        function resetCardPosition(card) {
+            // 返回随机位置（确保在区域内）
+            const areaRect = formulaArea.getBoundingClientRect();
+            const areaWidth = areaRect.width - 150;
+            const areaHeight = areaRect.height - 100;
+
+            const randomLeft = Math.random() * areaWidth;
+            const randomTop = Math.random() * areaHeight;
+
+            card.style.position = 'absolute';
+            card.style.left = `${randomLeft}px`;
+            card.style.top = `${randomTop}px`;
+            card.style.zIndex = '1';
+        }
+
+        // 显示消息
+        function showMessage(message, type) {
+            gameMessageElement.textContent = message;
+            gameMessageElement.className = `game-message message-${type}`;
+
+            // 3秒后隐藏消息
+            setTimeout(() => {
+                gameMessageElement.className = 'game-message';
+            }, 2500);
+        }
+
+        // 更新显示
+        function updateDisplay() {
+            remainingElement.textContent = gameState.remaining;
+            correctElement.textContent = gameState.correct;
+            incorrectElement.textContent = gameState.incorrect;
+        }
+
+        // 检查游戏是否完成
+        function checkGameCompletion() {
+            if (gameState.remaining === 0) {
+                endGame();
+            }
+        }
+
+        // 开始游戏
+        function startGame() {
+            if (gameState.gameActive) return;
+
+            gameState.gameActive = true;
+            gameState.startTime = Date.now();
+            gameState.elapsedTime = 0;
+
+            // 禁用开始按钮
+            startBtn.disabled = true;
+
+            // 启用所有卡片的拖动
+            document.querySelectorAll('.formula-card').forEach(card => {
+                card.draggable = true;
+            });
+
+            // 显示开始消息
+            showMessage('游戏开始！将化学式拖动到正确的类别中', 'correct');
+
+            // 开始计时器
+            gameState.timerInterval = setInterval(() => {
+                gameState.elapsedTime = Date.now() - gameState.startTime;
+                updateTimerDisplay();
+            }, 10); // 每10毫秒更新一次
+        }
+
+        // 结束游戏
+        function endGame() {
+            gameState.gameActive = false;
+
+            // 清除计时器
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+                gameState.timerInterval = null;
+            }
+
+            // 禁用所有卡片的拖动
+            document.querySelectorAll('.formula-card').forEach(card => {
+                card.draggable = false;
+            });
+
+            // 计算用时（秒）
+            const timeInSeconds = gameState.elapsedTime / 1000;
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = (timeInSeconds % 60).toFixed(2);
+
+            // 显示游戏结果
+            let timeString;
+            if (minutes > 0) {
+                timeString = `${minutes}分${seconds}秒`;
+            } else {
+                timeString = `${seconds}秒`;
+            }
+
+            gameResultElement.textContent = `🎉 恭喜！你已完成所有分类！用时: ${timeString}，正确: ${gameState.correct}，错误: ${gameState.incorrect}`;
+            gameResultElement.style.display = 'block';
+
+            // 保存到排行榜
+            saveToRanking(timeInSeconds);
+
+            // 显示排行榜
+            displayRanking();
+
+            // 显示完成消息
+            showMessage(`分类完成！用时${timeString}`, 'correct');
+        }
+
+        // 保存到排行榜
+        function saveToRanking(timeInSeconds) {
+            const now = new Date();
+            const dateString = now.toLocaleDateString('zh-CN');
+
+            rankingData.push({
+                time: timeInSeconds,
+                correct: gameState.correct,
+                incorrect: gameState.incorrect,
+                date: dateString
+            });
+
+            // 按用时排序（用时越短排名越高）
+            rankingData.sort((a, b) => a.time - b.time);
+
+            // 只保留前10名
+            if (rankingData.length > 10) {
+                rankingData = rankingData.slice(0, 10);
+            }
+
+            // 保存到本地存储
+            localStorage.setItem('chemicalClassificationRanking', JSON.stringify(rankingData));
+        }
+
+        function cleanRanking() {
+            localStorage.setItem('chemicalClassificationRanking', null);
+        }
+
+        // 显示排行榜
+        function displayRanking() {
+            let rankingData = JSON.parse(localStorage.getItem('chemicalClassificationRanking')) || [];
+
+            rankingBodyElement.innerHTML = '';
+
+            if (rankingData.length === 0) {
+                rankingElement.innerHTML = '<h3><i class="fas fa-trophy"></i> 排行榜</h3><p>暂无记录，快来挑战吧！</p>';
+            }
+
+            rankingData.forEach((record, index) => {
+                const row = document.createElement('tr');
+
+                // 设置排名样式
+                let rankClass = '';
+                if (index === 0) rankClass = 'rank-1';
+                else if (index === 1) rankClass = 'rank-2';
+                else if (index === 2) rankClass = 'rank-3';
+
+                // 格式化时间
+                const minutes = Math.floor(record.time / 60);
+                const seconds = (record.time % 60).toFixed(2);
+                let timeString;
+                if (minutes > 0) {
+                    timeString = `${minutes}分${seconds}秒`;
+                } else {
+                    timeString = `${seconds}秒`;
+                }
+
+                row.innerHTML = `
+                    <td class="${rankClass}">${index + 1}</td>
+                    <td>${timeString}</td>
+                    <td>${record.correct}</td>
+                    <td>${record.incorrect}</td>
+                    <td>${record.date}</td>
+                `;
+
+                rankingBodyElement.appendChild(row);
+            });
+
+            rankingElement.style.display = 'block';
+        }
+
+        // 更新计时器显示
+        function updateTimerDisplay() {
+            const timeInSeconds = gameState.elapsedTime / 1000;
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = (timeInSeconds % 60).toFixed(2);
+
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.padStart(5, '0')}`;
+        }
+
+        // 事件监听
+        startBtn.addEventListener('click', startGame);
+        resetBtn.addEventListener('click', initGame);
+        cleanBtn.addEventListener('click', cleanRanking);
+
+        // 页面加载时初始化游戏
+        document.addEventListener('DOMContentLoaded', initGame);
+
+        // 防止默认拖放行为
+        document.addEventListener('dragover', function (e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('drop', function (e) {
+            e.preventDefault();
+        });
+
+        // 窗口大小变化时重新计算卡片位置
+        window.addEventListener('resize', function () {
+            if (!gameState.gameActive) return;
+
+            // 确保所有卡片都在区域内
+            document.querySelectorAll('.formula-card:not(.correct)').forEach(card => {
+                if (card.style.display !== 'none') {
+                    const areaRect = formulaArea.getBoundingClientRect();
+                    const cardRect = card.getBoundingClientRect();
+
+                    // 检查卡片是否在区域外
+                    if (cardRect.left < areaRect.left || cardRect.right > areaRect.right ||
+                        cardRect.top < areaRect.top || cardRect.bottom > areaRect.bottom) {
+                        resetCardPosition(card);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
