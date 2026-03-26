@@ -24,7 +24,7 @@ try {
         <div>
             <p>这个页面的起因是因为我的化学老师，她经常使用 AI 生成各种 2D 动画和游戏，以辅助教学。</p>
             <p>我觉得这些项目非常有趣，所以我决定创建一个专门的页面来展示这些 2D 项目。</p>
-            <p>在这个页面上，不仅有化学老师生成的原生 2D 项目，还有一些我自己的改动。</p>
+            <p>在这个页面上，不仅有化学老师生成的原生 2D 项目，还有一些我自己的改动，有些甚至是我自己手动生成的。</p>
         </div>
     </div>
     <div class="card show display">
@@ -35,7 +35,7 @@ try {
         <ul>
         {files.map(file => (
             <li>
-            <a href={`/2Dproject/${file}`}>{file}</a>
+            <a href={`/2Dproject/${file}`}>{file.replaceAll(".html",'')}</a>
             </li>
         ))}
         </ul>

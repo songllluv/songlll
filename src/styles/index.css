@@ -238,3 +238,7 @@ a:hover {
         transform: rotate(360deg);
     }
 }
+
+li{
+    margin: 10px;
+}
