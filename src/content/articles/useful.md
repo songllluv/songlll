@@ -1,6 +1,3 @@
----
-title: 机房常用
----
 # 机房常用
 [google chrome下载地址](https://google.cn/chrome)
 
@@ -39,3 +36,11 @@ https://github.com/zsdefG/super_pin 可以使极域窗口化。可以在 [代理
 
 # Some Game
 ## [MineCraft java版](https://v6.gh-proxy.org/https://raw.githubusercontent.com/Meloong-Git/PCL/refs/heads/main/%E6%9C%80%E6%96%B0%E6%AD%A3%E5%BC%8F%E7%89%88.zip)
+
+在某些电脑运行钠要更新驱动： https://www.intel.cn/content/www/cn/zh/download/18606/intel-graphics-driver-for-windows-15-33.html
+
+驱动安装启动时会卡一会，**不要反复打开程序** ！
+
+在安装时屏幕突然黑屏是正常情况，不要惊慌，过1~5秒后就会恢复。
+
+安装之后选择以后重启计算机即可。
