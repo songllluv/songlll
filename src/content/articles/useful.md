@@ -1,4 +1,6 @@
-# 机房常用
+---
+title: 机房常用
+---
 
 [google chrome下载地址](https://google.cn/chrome)
 
