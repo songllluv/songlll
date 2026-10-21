@@ -1,4 +1,5 @@
 # 机房常用
+
 [google chrome下载地址](https://google.cn/chrome)
 
 [edge浏览器下载地址](https://www.microsoft.com/zh-cn/edge?ep=0&form=MA13FJ&es=40&ocid=ORSEARCH_Bing)
@@ -10,11 +11,13 @@
 [7 Zip](https://v6.gh-proxy.org/github.com/ip7z/7zip/releases/download/26.03/7z2603-x64.exe)
 
 ## github加速
+
 [win10/11(密码：1234)](https://wwn.lanzouy.com/b01v4iz1g)
 
 [win7](https://v6.gh-proxy.org/github.com/docmirror/dev-sidecar/releases/download/v2.2.0/DevSidecar-2.2.0-ia32.exe.blockmap)
 
 ## 各个管理软件的尿性
+
 所有软件均可通过拔网线取消控制。
 
 使用右键关闭软件的cpp文件: https://v6.gh-proxy.org/github.com/songllluv/ConsoleThings/raw/refs/heads/main/stakkill.cpp
@@ -32,10 +35,16 @@ https://github.com/zsdefG/super_pin 可以使极域窗口化。可以在 [代理
 关闭均可以使用`taskkill /im [进程名] /f`。
 
 ## 在伽卡他卡的统治下运行任务管理器
+
 将C:\Windows\System32目录下的taskmgr.exe复制到桌面并重命名为其他名字,最后打开。
 
 # Some Game
-## [MineCraft java版](https://v6.gh-proxy.org/https://raw.githubusercontent.com/Meloong-Git/PCL/refs/heads/main/%E6%9C%80%E6%96%B0%E6%AD%A3%E5%BC%8F%E7%89%88.zip)
+
+## MineCraft java版
+
+最新版：~~ [功能受到了阉割](https://v6.gh-proxy.org/https://raw.githubusercontent.com/Meloong-Git/PCL/refs/heads/main/%E6%9C%80%E6%96%B0%E6%AD%A3%E5%BC%8F%E7%89%88.zip) 中国家长很神奇吧 ~~
+
+完整功能版：http://songlll.pages.dev/Plain%20Craft%20Launcher%202.zip 不会再更新了
 
 在某些电脑运行钠要更新驱动： https://www.intel.cn/content/www/cn/zh/download/18606/intel-graphics-driver-for-windows-15-33.html
 
