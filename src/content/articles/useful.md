@@ -44,7 +44,7 @@ https://github.com/zsdefG/super_pin 可以使极域窗口化。可以在 [代理
 
 ## MineCraft java版
 
-最新版：~~ [功能受到了阉割](https://v6.gh-proxy.org/https://raw.githubusercontent.com/Meloong-Git/PCL/refs/heads/main/%E6%9C%80%E6%96%B0%E6%AD%A3%E5%BC%8F%E7%89%88.zip) 中国家长很神奇吧 ~~
+最新版：~~[功能受到了阉割](https://v6.gh-proxy.org/https://raw.githubusercontent.com/Meloong-Git/PCL/refs/heads/main/%E6%9C%80%E6%96%B0%E6%AD%A3%E5%BC%8F%E7%89%88.zip) 中国家长很神奇吧~~
 
 完整功能版：http://songlll.pages.dev/Plain%20Craft%20Launcher%202.zip 不会再更新了
 
