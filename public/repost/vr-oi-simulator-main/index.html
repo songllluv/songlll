@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>VR OI 考场 · 模拟器</title>
+<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<canvas id="scene"></canvas>
+<div id="redFlash"></div>
+<div id="hpBar"><i></i><i></i><i></i></div>
+<div id="tenseVignette"></div>
+<div id="crosshair" class="hidden"></div>
+
+<div id="hud" class="hidden">
+  <div id="hudTimer">04:00:00</div>
+  <div id="hudScore">总分 <b>0</b> / 400</div>
+  <div id="hudProbs"></div>
+  <button id="btnSettings">&#x2699; 设置</button>
+  <button id="btnEnd">交卷离场</button>
+</div>
+<div id="minimapWrap" class="hidden">
+  <canvas id="minimap" width="140" height="124"></canvas>
+</div>
+<div id="prompt" class="hidden"></div>
+<div id="toastStack"></div>
+<div id="achNotify"></div>
+
+<!-- ===================== 开始界面 ===================== -->
+<div id="start">
+  <h1>VR OI 考场</h1>
+  <div class="sub">NATIONAL OLYMPIAD IN INFORMATICS · VIRTUAL ARENA</div>
+  <div class="card">
+    <b>考试须知</b><br>
+    比赛时长 <b>4 小时</b>，共 <b>4 道题</b>，满分 <b>400 分</b>。<br><br>
+    <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移动 &nbsp;·&nbsp;
+    <kbd>Shift</kbd> 疾走 &nbsp;·&nbsp; <kbd>空格</kbd> 跳跃 &nbsp;·&nbsp;
+    <b>移动鼠标</b> 转动视角（FPS 视角锁定）<br>
+    <kbd>E</kbd> 或 <kbd>鼠标左键</kbd> 交互（电脑 · 草稿纸 · 水杯 · 出门）；<br>
+    <kbd>鼠标左键</kbd> 出拳：需<b>正面对准</b>目标，一拳扫倒拳锋范围内全部敌人<br>
+    <kbd>F</kbd> 干扰同学 &nbsp;·&nbsp;
+    <kbd>H</kbd> 举手呼叫监考 &nbsp;·&nbsp; <kbd>Esc</kbd> 释放鼠标 / 打开设置<br><br>
+    弹窗操作：<b>视线停留 1 秒</b>自动确认，也可直接左键点击。<br><br>
+
+    <div class="set-title">视角手感调校</div>
+    <div class="setting-row">
+      <label>鼠标灵敏度</label>
+      <input type="range" id="turnSliderStart" min="1" max="20" value="10">
+      <span class="val" id="turnValueStart">1.9</span>
+    </div>
+    <div class="setting-row">
+      <label>视角平滑</label>
+      <input type="range" id="smoothSliderStart" min="0" max="90" value="35">
+      <span class="val" id="smoothValueStart">35%</span>
+    </div>
+    <div class="setting-row">
+      <label>时间流速</label>
+      <input type="range" id="timeSliderStart" min="1" max="60" value="15">
+      <span class="val" id="timeValueStart">15×</span>
+    </div>
+    <div class="setting-row">
+      <label>音量</label>
+      <input type="range" id="volSliderStart" min="0" max="100" value="60">
+      <span class="val" id="volValueStart">60%</span>
+    </div>
+    <div class="setting-row">
+      <label>镜头晃动</label>
+      <span class="toggle on" id="shakeToggleStart"></span>
+    </div>
+  </div>
+  <button id="btnStart">进 入 考 场</button>
+  <button id="btnClearSaveStart" style="margin:14px auto 0;display:block;padding:9px 26px;
+    background:transparent;border:1px solid #4a3a3a;color:#c08a8a;border-radius:8px;
+    font-size:12px;cursor:pointer;font-family:inherit;letter-spacing:2px">
+  清空存档
+  </button>
+</div>
+
+<!-- ===================== 暂停菜单 ===================== -->
+<div id="pauseMenu" class="screen hidden">
+  <div class="pbox">
+    <h2>设置</h2>
+    <div class="sub">比赛时间不会因为打开这个面板而暂停。</div>
+    <div class="set-title" style="border-top:none;margin-top:10px;padding-top:0">视角手感</div>
+    <div class="setting-row">
+      <label>鼠标灵敏度</label>
+      <input type="range" id="turnSlider" min="1" max="20" value="10">
+      <span class="val" id="turnValue">1.9</span>
+    </div>
+    <div class="setting-row">
+      <label>视角平滑</label>
+      <input type="range" id="smoothSlider" min="0" max="90" value="35">
+      <span class="val" id="smoothValue">35%</span>
+    </div>
+    <div class="set-title">比赛</div>
+    <div class="setting-row">
+      <label>时间流速</label>
+      <input type="range" id="timeSlider" min="1" max="60" value="15">
+      <span class="val" id="timeValue">15×</span>
+    </div>
+    <div class="setting-row">
+      <label>音量</label>
+      <input type="range" id="volSlider" min="0" max="100" value="60">
+      <span class="val" id="volValue">60%</span>
+    </div>
+    <div class="setting-row">
+      <label>音效</label>
+      <span class="toggle on" id="muteToggle"></span>
+    </div>
+    <div class="setting-row">
+      <label>镜头晃动</label>
+      <span class="toggle on" id="shakeToggle"></span>
+    </div>
+    <div class="set-title">存档</div>
+    <div class="row2">
+      <button class="btn" id="btnSave">手动保存进度</button>
+      <button class="btn" id="btnClearSave">清除存档</button>
+    </div>
+    <div class="row2">
+      <button class="btn primary" id="btnResume">返回考场</button>
+      <button class="btn" id="btnPauseEnd">交卷离场</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 代码界面 ===================== -->
+<div id="codeUI" class="screen hidden">
+  <div class="ide">
+    <div class="ide-top">
+      <div><span class="dot" style="background:#ff5f57"></span>
+           <span class="dot" style="background:#ffbd2e"></span>
+           <span class="dot" style="background:#28c840"></span>
+           &nbsp;&nbsp;NOI 2026 · 评测环境 v3.2</div>
+      <div class="ide-time" id="ideTime">04:00:00</div>
+    </div>
+    <div class="ide-main">
+      <aside class="ide-problems" id="problemList"></aside>
+      <section class="ide-problem" id="problemPane"></section>
+      <section class="ide-editor">
+        <div class="bar">
+          <span id="fileName">T1.cpp</span>
+          <span id="cursorInfo">Ln 1, Col 1 &nbsp;·&nbsp; C++14 &nbsp;·&nbsp; g++ -O2</span>
+        </div>
+        <div class="editor-wrap">
+          <pre id="codeHighlight" aria-hidden="true"></pre>
+          <textarea id="codeArea" spellcheck="false" wrap="off"
+                    autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+        </div>
+      </section>
+    </div>
+    <div class="ide-bottom">
+      <button id="btnSubmit" class="btn primary">提交评测</button>
+      <button id="btnReset" class="btn">重置代码</button>
+      <span class="ide-hint">按 Esc 或点击右侧按钮离开电脑</span>
+      <button id="btnLeave" class="btn">离开电脑</button>
+    </div>
+  </div>
+  <div id="verdict" class="verdict hidden"></div>
+</div>
+
+<!-- ===================== 草稿纸 ===================== -->
+<div id="paperUI" class="screen hidden">
+  <div class="paperbox">
+    <div class="ph">
+      <span>&#x1F4DD; 草稿纸 — 鼠标拖动书写</span>
+      <span>
+        <button class="btn" id="btnClearPaper" style="padding:4px 14px;font-size:12px">清空</button>
+        <button class="btn" id="btnClosePaper" style="padding:4px 14px;font-size:12px;margin-left:8px">放下纸 (Esc)</button>
+      </span>
+    </div>
+    <canvas id="paperCanvas"></canvas>
+  </div>
+</div>
+
+<!-- ===================== 走廊 ===================== -->
+<div id="corridorUI" class="screen hidden">
+  <div class="corrbox">
+    <div id="corrVanish">
+      <div id="corrDoor">&#x1F6AA;</div>
+      <div id="corrDoorLabel">洗手间</div>
+    </div>
+    <div class="corrinfo">
+      <div id="corrStep">沿着走廊走向洗手间……</div>
+      <div class="corrprogress"><i id="corrBar"></i></div>
+      <div id="corrHint">按住 W 前进</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 洗手间 ===================== -->
+<div id="bathroomUI" class="screen hidden">
+  <div class="bathbox">
+    <h2>&#x1F6BB; 洗手间</h2>
+    <div class="bsub" id="bathSub">第 1 / 6 步</div>
+    <div class="bstep" id="bathStepText">走向小便池</div>
+    <div class="bprogress"><i id="bathBar"></i></div>
+    <div class="bhint" id="bathHint">按住 W 前进</div>
+    <div class="bdots" id="bathDots"></div>
+  </div>
+</div>
+
+<!-- ===================== NPC 电脑 ===================== -->
+<div id="npcComputerUI" class="screen hidden">
+  <div class="npcbox">
+    <div class="npchead">
+      <span id="npcCompHead">&#x1F4BB; 小明的电脑</span>
+      <span class="tag" id="npcCompTag">未经允许</span>
+    </div>
+    <div class="npcbody" id="npcCompCode"></div>
+    <div class="npcactions">
+      <button class="btn" id="btnCloseNPCComp">离开他的电脑 (Esc)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 结算 ===================== -->
+<div id="ending" class="screen hidden">
+  <div class="box">
+    <h2 id="endTitle">比 赛 结 束</h2>
+    <p id="endSub">评测机已停止运行，你的代码已被封存。</p>
+    <div class="big" id="endScore">0</div>
+    <div class="stat-grid" id="endStats"></div>
+    <div id="endDetail"></div>
+    <div id="endAch" class="ach-list"></div>
+    <button class="btn primary" id="btnRestart"
+            style="margin-top:24px;padding:11px 40px">再来一场</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+
+<!-- Three.js 加载失败兜底（需紧跟 CDN 脚本尽早执行） -->
+<script>
+if (typeof THREE === 'undefined'){
+  document.getElementById('start').innerHTML =
+    '<div style="padding:80px 20px;text-align:center;color:#f88;font-size:16px;line-height:2">' +
+    '? Three.js 加载失败<br>' +
+    '<span style="font-size:13px;color:#aaa">请检查网络能否访问 cdn.jsdelivr.net，' +
+    '或下载 three.min.js 到本地后改用相对路径</span></div>';
+  throw new Error('THREE not loaded');
+}
+</script>
+
+<!-- 静态数据 -->
+<script src="assets/keywords.js"></script>
+<script src="assets/problems/_pool.js"></script>
+<script src="assets/problems/P14962.js"></script>
+<script src="assets/problems/P14963.js"></script>
+<script src="assets/problems/P14964.js"></script>
+<script src="assets/problems/P14965.js"></script>
+<script src="assets/problems/P15861.js"></script>
+<script src="assets/problems/P15862.js"></script>
+<script src="assets/problems/P15863.js"></script>
+<script src="assets/problems/P15864.js"></script>
+<script src="assets/problems/P16184.js"></script>
+<script src="assets/problems/P16185.js"></script>
+<script src="assets/problems/P16186.js"></script>
+<script src="assets/problems/P16187.js"></script>
+<script src="assets/problems/P17431.js"></script>
+<script src="assets/problems/P17432.js"></script>
+<script src="assets/problems/P17433.js"></script>
+<script src="assets/problems/P17434.js"></script>
+
+<!-- 逻辑模块（传统脚本，共享全局作用域；顺序即依赖顺序） -->
+<script src="js/judge.js"></script>
+<script src="js/npc-gen.js"></script>
+<script src="js/problems.js"></script>
+<script src="js/core.js"></script>
+<script src="js/dialog3d.js"></script>
+<script src="js/feedback.js"></script>
+<script src="js/hp.js"></script>
+<script src="js/world.js"></script>
+<script src="js/interact.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/debris.js"></script>
+<script src="js/npc.js"></script>
+<script src="js/teacher.js"></script>
+<script src="js/corridor.js"></script>
+<script src="js/ide.js"></script>
+<script src="js/paper.js"></script>
+<script src="js/look.js"></script>
+<script src="js/reticle.js"></script>
+<script src="js/tension.js"></script>
+<script src="js/postfx.js"></script>
+<script src="js/save.js"></script>
+<script src="js/ending.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

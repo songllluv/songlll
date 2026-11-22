@@ -1,0 +1,6 @@
+{
+  "name": "信奥生的高考复健之路",
+  "description": "信奥生的高考复健模拟器！在特有的算法执念与文化课压力中极限拉扯，自由定制每周日程，应对丰富的突发随机事件。内置10种迥异结局与多项挑战成就，开启属于你的逆袭之路。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

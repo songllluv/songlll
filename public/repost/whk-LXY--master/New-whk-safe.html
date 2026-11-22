@@ -1,0 +1,2286 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>whk班主任模拟器V1.2</title>
+    <style>
+        /* ===== 完整样式表 ===== */
+        :root {
+            --bg-primary: #f1f5f9;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-sidebar: #ffffff;
+            --bg-log: #f8fafc;
+            --bg-input: #f8fafc;
+            --bg-hover: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --text-log: #1e293b;
+            --border-color: #cbd5e1;
+            --shadow-color: rgba(0,0,0,0.05);
+            --shadow-heavy: rgba(0,0,0,0.15);
+            --overlay-bg: rgba(15,23,42,0.9);
+            --scrollbar-track: #e2e8f0;
+            --scrollbar-thumb: #94a3b8;
+            --tag-pos-bg: #dcfce7;
+            --tag-pos-border: #bbf7d0;
+            --tag-pos-text: #15803d;
+            --tag-neg-bg: #fee2e2;
+            --tag-neg-border: #fecaca;
+            --tag-neg-text: #b91c1c;
+            --btn-primary: #1e293b;
+            --btn-primary-hover: #334155;
+            --btn-danger: #e63946;
+            --btn-danger-hover: #c62828;
+            --btn-success: #10b981;
+            --btn-success-hover: #059669;
+            --btn-accent: #3b82f6;
+            --btn-accent-hover: #2563eb;
+            --chart-grid: #cbd5e1;
+            --chart-text: #64748b;
+            --modal-bg: #ffffff;
+            --exam-header: #1e293b;
+            --exam-row-even: #f8fafc;
+            --exam-row-odd: #ffffff;
+            --weather-bg: #ffffff;
+            --dropdown-bg: #f8fafc;
+            --cost-bg: #fef3c7;
+            --cost-text: #d97706;
+            --log-border: #e2e8f0;
+            --gold-color: #f59e0b;
+            --log-time: #94a3b8;
+        }
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --bg-sidebar: #1e293b;
+            --bg-log: #0f172a;
+            --bg-input: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --text-log: #f8fafc;
+            --border-color: #334155;
+            --shadow-heavy: rgba(0,0,0,0.5);
+            --overlay-bg: rgba(0,0,0,0.92);
+            --scrollbar-track: #1e293b;
+            --scrollbar-thumb: #475569;
+            --tag-pos-bg: #065f46;
+            --tag-pos-border: #047857;
+            --tag-pos-text: #6ee7b7;
+            --tag-neg-bg: #7f1d1d;
+            --tag-neg-border: #991b1b;
+            --tag-neg-text: #fca5a5;
+            --btn-primary: #334155;
+            --btn-danger: #dc2626;
+            --btn-success: #059669;
+            --btn-accent: #3b82f6;
+            --chart-grid: #475569;
+            --chart-text: #94a3b8;
+            --modal-bg: #1e293b;
+            --exam-header: #0f172a;
+            --exam-row-even: #1e293b;
+            --exam-row-odd: #0f172a;
+            --weather-bg: #1e293b;
+            --dropdown-bg: #334155;
+            --cost-bg: #78350f;
+            --cost-text: #fbbf24;
+            --log-border: rgba(255,255,255,0.1);
+            --gold-color: #fbbf24;
+            --log-time: #64748b;
+        }
+        * { box-sizing: border-box; font-family: 'Segoe UI','Microsoft YaHei',sans-serif; transition: background-color .3s, color .3s, border-color .3s, box-shadow .3s; }
+        body { background: var(--bg-primary); color: var(--text-primary); margin:0; display:flex; justify-content:center; min-height:100vh; overflow:hidden; }
+        #app-wrapper { width:100vw; max-width:1920px; height:100vh; background:var(--bg-secondary); box-shadow:0 0 30px var(--shadow-heavy); display:flex; flex-direction:column; position:relative; overflow:hidden; }
+        .theme-toggle { position:fixed; bottom:30px; right:30px; width:48px; height:48px; border-radius:50%; background:var(--bg-card); border:2px solid var(--border-color); color:var(--text-primary); font-size:22px; cursor:pointer; z-index:1000; box-shadow:0 4px 20px var(--shadow-heavy); display:flex; align-items:center; justify-content:center; }
+        .theme-toggle:hover { transform:scale(1.1); background:var(--bg-hover); }
+        button { cursor:pointer; border:none; outline:none; border-radius:6px; font-weight:bold; }
+        button:disabled { opacity:.5; cursor:not-allowed; filter:grayscale(1); }
+        .hidden { display:none !important; }
+        ::-webkit-scrollbar { width:6px; height:6px; }
+        ::-webkit-scrollbar-track { background:var(--scrollbar-track); border-radius:4px; }
+        ::-webkit-scrollbar-thumb { background:var(--scrollbar-thumb); border-radius:4px; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        .overlay { position:fixed; inset:0; background:var(--overlay-bg); z-index:9999; display:flex; justify-content:center; align-items:center; flex-direction:column; backdrop-filter:blur(8px); }
+        .modal-box { background:var(--modal-bg); border-radius:16px; padding:30px; width:90%; max-width:650px; box-shadow:0 20px 40px var(--shadow-heavy); max-height:90vh; overflow-y:auto; color:var(--text-primary); }
+        .modal-title { font-size:1.8em; color:var(--text-primary); margin-top:0; border-bottom:2px solid var(--btn-accent); padding-bottom:10px; }
+        header { height:56px; min-height:56px; background:var(--bg-card); border-bottom:3px solid var(--btn-danger); display:flex; align-items:center; justify-content:space-between; padding:0 16px; box-shadow:0 2px 10px var(--shadow-color); z-index:10; flex-wrap:nowrap; gap:8px; flex-shrink:0; }
+        .header-left { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .header-left .title { font-size:1.05em; font-weight:900; color:var(--text-primary); white-space:nowrap; }
+        .header-left .diff-badge { font-size:.65em; padding:2px 10px; border-radius:12px; font-weight:700; background:var(--btn-accent); color:white; }
+        .diff-badge.easy { background:var(--btn-success); }
+        .diff-badge.hard { background:var(--btn-danger); }
+        .btn-back { padding:4px 12px; background:var(--border-color); color:var(--text-primary); border-radius:16px; font-size:.75em; font-weight:700; }
+        .btn-back:hover { background:var(--btn-danger); color:white; }
+        .stat-group { display:flex; gap:8px; flex-wrap:nowrap; align-items:center; }
+        .stat-pill { background:var(--bg-input); padding:4px 10px; border-radius:6px; border:1px solid var(--border-color); font-weight:bold; display:flex; align-items:center; gap:4px; color:var(--text-secondary); font-size:.8em; white-space:nowrap; }
+        .stat-pill b { color:var(--btn-accent); font-size:1em; }
+        #btn-next-turn { padding:5px 16px; font-size:.8em; border-radius:20px; }
+        #countdown { background:var(--btn-danger); color:white; padding:2px 12px; border-radius:12px; font-size:.75em; font-weight:700; white-space:nowrap; }
+        .app-body { display:grid; grid-template-columns:260px 1fr 220px; gap:10px; padding:10px; flex:1; min-height:0; overflow:hidden; }
+        @media (max-width:1400px) { .app-body { grid-template-columns:220px 1fr 180px; gap:8px; padding:8px; } }
+        @media (max-width:1100px) { .app-body { grid-template-columns:1fr; grid-template-rows:auto 1fr auto; gap:8px; overflow-y:auto; } .sidebar { order:1; max-height:300px; } .main-view { order:2; min-height:300px; } .right-panel { order:3; display:grid; grid-template-columns:1fr 1fr; gap:8px; } .log-panel { min-height:80px; } }
+        @media (max-width:768px) { .app-body { padding:6px; gap:6px; } .right-panel { grid-template-columns:1fr; } header { height:auto; padding:8px 12px; flex-wrap:wrap; } .stat-group { flex-wrap:wrap; } .theme-toggle { bottom:15px; right:15px; width:42px; height:42px; font-size:18px; } .mode-selector { grid-template-columns:1fr; } #chart-page { padding:10px 15px; } .stu-card { min-height:140px; padding:8px 10px; } }
+        .sidebar { background:var(--bg-sidebar); border-radius:10px; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 2px 6px var(--shadow-color); border:1px solid var(--border-color); min-height:0; }
+        .nav-tabs { display:flex; background:var(--btn-primary); flex-shrink:0; }
+        .tab-btn { flex:1; padding:8px 10px; background:transparent; color:rgba(255,255,255,0.7); font-weight:bold; font-size:.82em; }
+        .tab-btn.active { background:var(--bg-card); color:var(--text-primary); }
+        .panel-content { flex:1; overflow-y:auto; padding:10px; display:none; }
+        .panel-content.active { display:block; animation:fadeIn .3s; }
+        .btn-action { width:100%; text-align:left; padding:6px 10px; border:1px solid var(--border-color); border-radius:6px; background:var(--bg-card); margin-bottom:4px; position:relative; color:var(--text-secondary); font-size:.78em; }
+        .btn-action:hover:not(:disabled) { border-color:var(--btn-accent); transform:translateY(-1px); box-shadow:0 2px 6px rgba(59,130,246,0.12); }
+        .cost-tag { position:absolute; right:8px; top:6px; font-size:.6em; color:var(--cost-text); background:var(--cost-bg); padding:1px 5px; border-radius:3px; font-weight:bold; }
+        .btn-action h5 { margin:0; color:var(--text-primary); font-size:.85em; display:flex; align-items:center; gap:4px; }
+        .btn-action p { margin:1px 0 0 0; font-size:.6em; color:var(--text-muted); line-height:1.2; }
+        .sub-menu { display:none; grid-template-columns:1fr 1fr; gap:3px; background:var(--dropdown-bg); padding:5px; border-radius:6px; border:1px dashed var(--border-color); margin-bottom:4px; }
+        .sub-menu.active { display:grid; }
+        .btn-mini { padding:4px 6px; font-size:.7em; border:1px solid var(--border-color); border-radius:4px; background:var(--bg-card); font-weight:bold; color:var(--text-secondary); }
+        .btn-mini:hover { background:var(--btn-accent); color:white; border-color:var(--btn-accent); }
+        .main-view { background:var(--bg-card); border-radius:10px; box-shadow:0 2px 6px var(--shadow-color); padding:12px 16px; border:1px solid var(--border-color); display:flex; flex-direction:column; min-height:0; overflow:hidden; flex:1; }
+        .main-view .view-header { display:flex; justify-content:space-between; align-items:center; margin:0 0 8px 0; border-bottom:2px solid var(--btn-accent); padding-bottom:6px; flex-shrink:0; flex-wrap:wrap; gap:6px; }
+        .main-view .view-header h3 { margin:0; font-size:1em; color:var(--text-primary); }
+        .view-header .chart-toggle-btn { padding:4px 16px; font-size:.75em; border-radius:14px; background:var(--btn-accent); color:white; transition:all .2s; }
+        .view-header .chart-toggle-btn:hover { background:var(--btn-accent-hover); transform:scale(1.02); }
+        .help-btn { padding:4px 12px; font-size:.75em; border-radius:14px; background:var(--gold-color); color:white; transition:all .2s; margin-left:8px; }
+        .help-btn:hover { background:var(--btn-accent); transform:scale(1.02); }
+        .stu-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:10px; flex:1; align-content:start; overflow-y:auto; padding-right:4px; }
+        @media (max-width:600px) { .stu-grid { grid-template-columns:1fr; gap:8px; } }
+        .stu-card { border:1px solid var(--border-color); border-radius:10px; padding:10px 12px; box-shadow:0 2px 4px var(--shadow-color); border-top:4px solid var(--btn-primary); background:var(--bg-card); display:flex; flex-direction:column; justify-content:space-between; min-height:160px; }
+        .stu-card.sick { border-top-color:var(--warning); background:var(--tag-neg-bg); }
+        .stu-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; border-bottom:1px dashed var(--border-color); padding-bottom:3px; }
+        .stu-name { font-size:1em; font-weight:900; color:var(--text-primary); }
+        .stu-name .badge { font-size:.5em; background:var(--btn-danger); color:white; padding:1px 6px; border-radius:3px; vertical-align:middle; }
+        .stu-label { font-size:.6em; color:var(--text-muted); }
+        .tag-pool { display:flex; flex-wrap:wrap; gap:3px; margin-bottom:4px; min-height:20px; }
+        .tag { font-size:.55em; padding:2px 6px; border-radius:3px; font-weight:bold; cursor:help; position:relative; }
+        .tag-pos { background:var(--tag-pos-bg); color:var(--tag-pos-text); border:1px solid var(--tag-pos-border); }
+        .tag-neg { background:var(--tag-neg-bg); color:var(--tag-neg-text); border:1px solid var(--tag-neg-border); }
+        .tag[title]:hover::after { content:attr(title); position:absolute; bottom:calc(100% + 4px); left:50%; transform:translateX(-50%); background:var(--bg-log); color:var(--text-log); padding:4px 10px; border-radius:4px; font-size:.9em; font-weight:normal; white-space:nowrap; z-index:100; box-shadow:0 2px 10px var(--shadow-heavy); pointer-events:none; }
+        .sub-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; margin:4px 0; }
+        .sub-box { background:var(--bg-input); padding:3px 4px; border-radius:4px; text-align:center; border:1px solid var(--border-color); display:flex; flex-direction:column; }
+        .sub-label { font-size:.55em; color:var(--text-muted); display:block; margin-bottom:0; }
+        .sub-val { font-size:.9em; font-weight:900; padding:0; border-radius:2px; color:var(--text-primary); text-shadow:none; }
+        .sub-estimate { font-size:.75em; font-weight:700; color:var(--text-muted); margin-top:1px; }
+        .sub-eff { font-size:.45em; color:var(--text-muted); }
+        .eff-row { font-size:.6em; display:flex; justify-content:space-around; margin:3px 0; color:var(--text-muted); background:var(--bg-input); padding:2px 6px; border-radius:4px; border:1px dashed var(--border-color); }
+        .status-row { display:flex; gap:12px; margin-top:3px; }
+        .status-item { flex:1; }
+        .status-item .label { font-size:.55em; color:var(--text-muted); display:block; }
+        .status-item .value { font-size:.7em; font-weight:bold; }
+        .stress-bar { height:4px; background:var(--border-color); border-radius:2px; margin-top:2px; overflow:hidden; }
+        .stress-fill { height:100%; transition:width .3s, background-color .3s; }
+        .right-panel { display:flex; flex-direction:column; gap:6px; min-height:0; }
+        .weather-panel { background:var(--weather-bg); border-radius:10px; padding:8px; text-align:center; border:1px solid var(--border-color); box-shadow:0 2px 6px var(--shadow-color); position:relative; flex-shrink:0; }
+        .weather-panel .emoji { font-size:1.8em; margin:1px 0; }
+        .weather-panel .label { font-size:.6em; color:var(--text-muted); }
+        .weather-panel .temp { font-size:.75em; font-weight:bold; color:var(--text-primary); }
+        .month-tag { position:absolute; top:4px; right:6px; background:var(--btn-danger); color:white; padding:1px 6px; font-size:.5em; border-radius:3px; font-weight:bold; }
+        .log-panel { flex:1; background:var(--bg-log); color:var(--text-log); border-radius:10px; padding:6px 10px; overflow-y:auto; font-size:.7em; border-top:4px solid var(--btn-accent); box-shadow:inset 0 2px 10px var(--shadow-color); min-height:80px; }
+        .log-entry { margin-bottom:3px; padding-bottom:3px; border-bottom:1px solid var(--log-border); line-height:1.4; color:var(--text-log); }
+        .log-entry .log-time { color:var(--log-time); }
+        .log-eff { color:var(--btn-success); font-weight:bold; margin-left:4px; }
+        #help-modal .help-content { max-height:300px; overflow-y:auto; }
+        #help-modal .tutorial-step { margin-bottom:12px; padding:10px; background:var(--bg-input); border-radius:6px; border-left:4px solid var(--btn-accent); }
+        #help-modal .tutorial-step h4 { margin:0 0 4px 0; color:var(--text-primary); font-size:.95em; }
+        #help-modal .tutorial-step p { margin:0; color:var(--text-secondary); font-size:.9em; line-height:1.4; }
+        #help-modal .highlight { color:var(--btn-danger); font-weight:bold; }
+        #help-modal .highlight-success { color:var(--btn-success); font-weight:bold; }
+        #help-modal .highlight-accent { color:var(--btn-accent); font-weight:bold; }
+        #help-modal .event-item, #help-modal .talent-item { background:var(--bg-input); padding:4px 8px; border-radius:4px; font-size:.85em; border:1px solid var(--border-color); margin-bottom:4px; }
+        #help-modal .event-item b { display:block; }
+        .choice-grid { display:grid; grid-template-columns:1fr; gap:8px; margin-top:15px; }
+        .btn-choice { padding:12px; background:var(--bg-input); border:2px solid var(--btn-accent); color:var(--text-primary); text-align:left; border-radius:8px; font-size:.95em; }
+        .btn-choice:disabled { opacity:.5; cursor:not-allowed; filter:grayscale(1); }
+        .mode-selector { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:12px; }
+        .mode-btn { padding:14px; border-radius:10px; border:2px solid var(--border-color); background:var(--bg-card); text-align:center; cursor:pointer; color:var(--text-secondary); }
+        .mode-btn:hover { border-color:var(--btn-accent); transform:translateY(-2px); }
+        .mode-btn.selected { border-color:var(--btn-accent); background:var(--bg-hover); }
+        .mode-btn h3 { margin:0 0 4px 0; font-size:1.1em; }
+        .mode-btn p { margin:0; font-size:.75em; color:var(--text-muted); }
+        .exam-table { width:100%; border-collapse:collapse; margin-top:10px; font-size:.8em; }
+        .exam-table th, .exam-table td { padding:6px 6px; text-align:center; border:1px solid var(--border-color); }
+        .exam-table th { background:var(--exam-header); color:white; font-size:.85em; }
+        .exam-table tr:nth-child(even) { background:var(--exam-row-even); }
+        .exam-table tr:nth-child(odd) { background:var(--exam-row-odd); }
+        .exam-cell { transform:scale(0); opacity:0; font-weight:bold; }
+        .exam-cell.pop { animation:popIn .4s forwards; }
+        .event-col { text-align:left !important; font-size:.7em; color:var(--btn-danger); line-height:1.3; max-width:150px; }
+        @keyframes popIn { to { transform:scale(1); opacity:1; } }
+        #monthly-report-modal .report-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+        #monthly-report-modal .report-item { background:var(--bg-input); border-radius:6px; padding:8px 10px; border:1px solid var(--border-color); display:flex; flex-direction:column; }
+        #monthly-report-modal .report-item .name { font-weight:bold; color:var(--text-primary); }
+        #monthly-report-modal .report-item .change { font-weight:bold; }
+        #monthly-report-modal .report-item .change.up { color:var(--btn-success); }
+        #monthly-report-modal .report-item .change.down { color:var(--btn-danger); }
+        #monthly-report-modal .report-item .detail { font-size:.8em; color:var(--text-muted); margin-top:2px; }
+        #monthly-report-modal .report-summary { background:var(--bg-input); border-radius:6px; padding:10px; margin-top:12px; border:1px solid var(--border-color); }
+        #monthly-report-modal .report-summary .stat { display:flex; justify-content:space-between; padding:2px 0; font-size:.9em; }
+        #chart-page { position:fixed; inset:0; background:var(--bg-primary); z-index:999; display:none; flex-direction:column; padding:20px 30px; }
+        #chart-page.active { display:flex; }
+        #chart-page .chart-header { display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:2px solid var(--border-color); flex-shrink:0; }
+        #chart-page .chart-header h2 { margin:0; color:var(--text-primary); font-size:1.4em; }
+        #chart-page .chart-header .close-btn { padding:8px 24px; background:var(--btn-danger); color:white; border-radius:20px; font-size:.9em; }
+        #chart-page .chart-body { flex:1; display:flex; flex-direction:column; padding-top:15px; min-height:0; }
+        #chart-page .chart-controls-wrap { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:10px; flex-shrink:0; }
+        #chart-page .chart-controls-wrap label { font-size:.8em; padding:3px 10px; background:var(--bg-input); border-radius:4px; border:1px solid var(--border-color); cursor:pointer; display:flex; align-items:center; gap:4px; color:var(--text-secondary); }
+        #chart-page .chart-container { flex:1; position:relative; background:var(--bg-input); border-radius:12px; border:1px solid var(--border-color); min-height:0; }
+        #chart-page .chart-container canvas { width:100%; height:100%; border-radius:12px; display:block; }
+        #chart-page .chart-tooltip { position:absolute; display:none; background:var(--bg-log); color:var(--text-log); padding:8px 14px; border-radius:8px; font-size:13px; pointer-events:none; z-index:10; white-space:nowrap; box-shadow:0 4px 20px var(--shadow-heavy); border:1px solid var(--border-color); transform:translate(-50%, -100%); margin-top:-10px; }
+        #chart-page .chart-tooltip .detail-row { display:flex; justify-content:space-between; gap:20px; padding:1px 0; font-size:.9em; }
+        #chart-page .chart-tooltip .detail-row .label { color:var(--text-muted); }
+        #chart-page .chart-tooltip .detail-row .value { font-weight:bold; }
+        #chart-page .no-data { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:1.2em; font-weight:500; letter-spacing:1px; }
+        .name-input { padding:8px; border:1px solid var(--border-color); border-radius:4px; width:100%; font-size:.85em; outline:none; text-align:center; background:var(--bg-input); color:var(--text-primary); }
+        .name-input:focus { border-color:var(--btn-accent); box-shadow:0 0 0 2px rgba(59,130,246,0.2); }
+        @media (max-width:480px) {
+            #monthly-report-modal .report-grid { grid-template-columns:1fr; }
+            .mode-selector { grid-template-columns:1fr; }
+            .header-left { gap:6px; }
+            .stat-group { gap:4px; }
+            .stat-pill { font-size:.7em; padding:2px 6px; }
+            #btn-next-turn { font-size:.7em; padding:4px 12px; }
+            #countdown { font-size:.65em; }
+        }
+    </style>
+</head>
+<div id="chart-page">
+    <div class="chart-header">
+        <h2>📈 成绩走势图</h2>
+        <button class="close-btn" onclick="UI.closeChartPage()">✕ 关闭</button>
+    </div>
+    <div class="chart-body">
+        <div class="chart-controls-wrap" id="chart-controls-page"></div>
+        <div class="chart-container">
+            <canvas id="chartCanvas"></canvas>
+            <div class="chart-tooltip" id="chart-tooltip-page"></div>
+        </div>
+    </div>
+</div>
+<body>
+
+<div id="app-wrapper">
+
+    <!-- ====== 开始界面 ====== -->
+    <div id="start-screen" class="overlay">
+        <div class="modal-box" id="start-box-inner" style="max-width:700px; border-top:6px solid var(--btn-accent);">
+            <h1 style="color:var(--text-primary); font-size:2.2em; margin-bottom:12px; text-align:center;">whk班主任模拟器V1.2</h1>
+            <div style="background:var(--bg-input); padding:12px; border-radius:8px; border:1px solid var(--border-color); margin-bottom:15px; color:var(--text-secondary); line-height:1.5; font-size:.9em;">
+                <b>背景档案：</b><br>
+                你接手了一群刚刚结束信息学奥赛（OI）的退役生。他们虽思维敏捷，但文化课基础薄弱。距离高考只有不到10个月的时间。
+                <br><br>
+                <b>📊 成绩提升模型：</b>分段效率曲线，低分段提升快，高分段提升极慢。
+                <br>
+                <b>🎲 属性分配：</b>天赋决定初始效率，理科天赋→理科效率高。
+                <br>
+                <b>🎯 彩蛋：</b>如果学生名为 "???"，将拥有特殊属性。
+            </div>
+
+            <div style="margin-bottom:15px; padding:12px; border:1px dashed var(--border-color); border-radius:8px; background:var(--bg-card);">
+                <h3 style="text-align:center; margin-top:0; margin-bottom:8px; color:var(--text-primary); font-size:1em;">为你的6名神仙命名：</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px;">
+                    <input type="text" id="name-0" placeholder="Debug618" class="name-input">
+                    <input type="text" id="name-1" placeholder="cyrel" class="name-input">
+                    <input type="text" id="name-2" placeholder="Snoozing_QwQ" class="name-input">
+                    <input type="text" id="name-3" placeholder="lxy_qwq" class="name-input">
+                    <input type="text" id="name-4" placeholder="Groyhj" class="name-input">
+                    <input type="text" id="name-5" placeholder="zenghaoran" class="name-input">
+                </div>
+            </div>
+
+            <div class="mode-selector">
+                <div class="mode-btn" data-mode="easy" onclick="Game.selectMode('easy')">
+                    <h3 style="color:var(--btn-success);">🟢 简单</h3>
+                    <p>¥10000，+15%效率</p>
+                </div>
+                <div class="mode-btn selected" data-mode="normal" onclick="Game.selectMode('normal')">
+                    <h3 style="color:var(--btn-accent);">🔵 普通</h3>
+                    <p>¥5000，-15%效率</p>
+                </div>
+                <div class="mode-btn" data-mode="hard" onclick="Game.selectMode('hard')">
+                    <h3 style="color:var(--btn-danger);">🔴 困难</h3>
+                    <p>¥1000，-30%效率</p>
+                </div>
+            </div>
+
+            <button class="btn-action" style="margin-top:15px; border-color:var(--btn-accent); text-align:center;" onclick="Game.startGame()">
+                <h5 style="font-size:1.1em; text-align:center;">🚀 开始带班</h5>
+            </button>
+        </div>
+    </div>
+
+    <!-- ====== 顶部导航 ====== -->
+    <header class="hidden" id="main-header">
+        <div class="header-left">
+            <button class="btn-back" onclick="Game.confirmBackToMenu()">🏠 退出</button>
+            <span class="title">高三(OI退役)班</span>
+            <span class="diff-badge normal" id="diff-badge">普通</span>
+            <button class="help-btn" onclick="UI.showHelp()">❓ 帮助</button>
+        </div>
+        <div class="stat-group">
+            <div class="stat-pill">🗓️ <span id="ui-time">2025/09 W1</span></div>
+            <div class="stat-pill">💰 <b id="ui-money">5000</b></div>
+            <div class="stat-pill">⚡ <b id="ui-ap">3</b><span id="ap-max-txt" style="font-size:.7em; color:var(--text-muted)">/3</span></div>
+            <span id="countdown">⏳ 剩余 40 周</span>
+            <button style="background:var(--btn-danger); color:white; padding:5px 16px; border-radius:20px; font-size:.8em;" onclick="Game.nextTurn()" id="btn-next-turn">结束本周</button>
+        </div>
+    </header>
+
+    <!-- ====== 主体 ====== -->
+    <div class="app-body hidden" id="main-body">
+        <aside class="sidebar">
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="UI.switchTab('action')">🎯 决策</button>
+                <button class="tab-btn" onclick="UI.switchTab('fac')">🏗️ 设施</button>
+            </div>
+            <div id="panel-action" class="panel-content active">
+                <h4 style="margin:0 0 4px 0; color:var(--text-muted); font-size:.7em;">📖 学习提分</h4>
+                <button class="btn-action" onclick="UI.toggleMenu('menu-study')">
+                    <h5>自习复习</h5><p>选择单科强化</p><span class="cost-tag">AP:1</span>
+                </button>
+                <div class="sub-menu" id="menu-study">
+                    <button class="btn-mini" onclick="Game.doAction('study','chi')">语文</button>
+                    <button class="btn-mini" onclick="Game.doAction('study','mat')">数学</button>
+                    <button class="btn-mini" onclick="Game.doAction('study','eng')">英语</button>
+                    <button class="btn-mini" onclick="Game.doAction('study','phy')">物理</button>
+                    <button class="btn-mini" onclick="Game.doAction('study','che')">化学</button>
+                    <button class="btn-mini" onclick="Game.doAction('study','bio')">生物</button>
+                </div>
+                <button class="btn-action" onclick="UI.toggleMenu('menu-test')">
+                    <h5>📝 随堂小测</h5><p>1.3倍自习效果</p><span class="cost-tag">¥500|AP:1</span>
+                </button>
+                <div class="sub-menu" id="menu-test">
+                    <button class="btn-mini" onclick="Game.doAction('test','chi')">语文测</button>
+                    <button class="btn-mini" onclick="Game.doAction('test','mat')">数学测</button>
+                    <button class="btn-mini" onclick="Game.doAction('test','eng')">英语测</button>
+                    <button class="btn-mini" onclick="Game.doAction('test','phy')">物理测</button>
+                    <button class="btn-mini" onclick="Game.doAction('test','che')">化学测</button>
+                    <button class="btn-mini" onclick="Game.doAction('test','bio')">生物测</button>
+                </div>
+                <button class="btn-action" onclick="UI.toggleMenu('menu-train')">
+                    <h5>🚀 特训班</h5><p>两科1.6倍自习</p><span class="cost-tag">¥2000|AP:2</span>
+                </button>
+                <div class="sub-menu" id="menu-train">
+                    <button class="btn-mini" onclick="Game.doAction('train','mat_phy')">数理强基</button>
+                    <button class="btn-mini" onclick="Game.doAction('train','chi_eng')">语英专项</button>
+                    <button class="btn-mini" onclick="Game.doAction('train','che_bio')">生化实验</button>
+                </div>
+                <button class="btn-action" onclick="UI.toggleMenu('menu-intensive')">
+                    <h5>🔥 单科特训</h5><p>5倍自习效果</p><span class="cost-tag">¥3000|AP:3</span>
+                </button>
+                <div class="sub-menu" id="menu-intensive">
+                    <button class="btn-mini" onclick="Game.doAction('intensive','chi')">语文特训</button>
+                    <button class="btn-mini" onclick="Game.doAction('intensive','mat')">数学特训</button>
+                    <button class="btn-mini" onclick="Game.doAction('intensive','eng')">英语特训</button>
+                    <button class="btn-mini" onclick="Game.doAction('intensive','phy')">物理特训</button>
+                    <button class="btn-mini" onclick="Game.doAction('intensive','che')">化学特训</button>
+                    <button class="btn-mini" onclick="Game.doAction('intensive','bio')">生物特训</button>
+                </div>
+                <button class="btn-action" onclick="UI.toggleMenu('menu-eff')">
+                    <h5>🧠 学法指导</h5><p>永久提升效率</p><span class="cost-tag">¥1500|AP:1</span>
+                </button>
+                <div class="sub-menu" id="menu-eff">
+                    <button class="btn-mini" onclick="Game.doAction('eff','arts')">文科拓展</button>
+                    <button class="btn-mini" onclick="Game.doAction('eff','sci')">理科逻辑</button>
+                </div>
+                <button class="btn-action" onclick="Game.doMockExam()">
+                    <h5>📚 全真模拟考</h5><p>含50%特殊事件</p><span class="cost-tag">¥4000|AP:2</span>
+                </button>
+                <h4 style="margin:5px 0 4px 0; color:var(--text-muted); font-size:.7em;">☕ 状态管理</h4>
+                <button class="btn-action" onclick="UI.showDoctorModal()">
+                    <h5>🏥 私人医生</h5><p>治愈病假</p><span class="cost-tag">¥1000</span>
+                </button>
+                <button class="btn-action" onclick="UI.showHotpotModal()">
+                    <h5>🍲 火锅聚餐</h5><p>清空压力</p><span class="cost-tag">¥2500|AP:2</span>
+                </button>
+                <button class="btn-action" onclick="Game.doAction('rest','snack')">
+                    <h5>🍢 小吃</h5><p>缓解压力</p><span class="cost-tag">¥400|AP:1</span>
+                </button>
+                <button class="btn-action" onclick="Game.doAction('rest','walk')">
+                    <h5>🚶 散步</h5><p>免费减压</p><span class="cost-tag">AP:1</span>
+                </button>
+                <!-- ===== 新增：看电影 ===== -->
+                <button class="btn-action" onclick="Game.doAction('rest','movie')">
+                    <h5>🎬 看电影</h5><p>放松心情 +10</p><span class="cost-tag">¥500|AP:1</span>
+                </button>
+                <!-- ===== 新增：勤工俭学 ===== -->
+                <button class="btn-action" onclick="Game.doAction('work','earn')">
+                    <h5>💼 勤工俭学</h5><p>赚取班费</p><span class="cost-tag">AP:1</span>
+                </button>
+            </div>
+            <div id="panel-fac" class="panel-content">
+                <div id="fac-container"></div>
+                <p style="font-size:.6em; color:var(--text-muted); margin-top:8px;">升级设施可减轻压力、提升效率、抵御恶劣天气。</p>
+            </div>
+        </aside>
+
+        <main class="main-view">
+            <div class="view-header">
+                <h3>🏫 班级概况</h3>
+                <div>
+                    <button class="chart-toggle-btn" onclick="UI.openChartPage()">📈 查看成绩走势</button>
+                </div>
+            </div>
+            <div id="view-classroom" class="stu-grid"></div>
+        </main>
+
+        <aside class="right-panel">
+            <div class="weather-panel">
+                <div class="month-tag hidden" id="sprint-tag">冲刺月</div>
+                <div class="label" id="ui-season">秋季</div>
+                <div class="emoji" id="ui-weather">☀️</div>
+                <div class="temp" id="ui-weather-txt">秋高气爽</div>
+            </div>
+            <div class="log-panel" id="log-area"></div>
+        </aside>
+    </div>
+
+    <!-- ====== 帮助模态框 ====== -->
+    <div id="help-modal" class="overlay hidden">
+        <div class="modal-box" style="max-width:750px; border-top:6px solid var(--gold-color);">
+            <h2 class="modal-title">❓ 帮助</h2>
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <button id="help-tab-guide" class="btn-mini" style="flex:1; background:var(--btn-accent); color:white;" onclick="UI.switchHelpTab('guide')">📖 新手指引</button>
+                <button id="help-tab-intro" class="btn-mini" style="flex:1; background:var(--bg-input);" onclick="UI.switchHelpTab('intro')">📚 详细介绍</button>
+            </div>
+            <div id="help-content-guide" class="help-content">
+                <div class="tutorial-step"><h4>🎯 核心目标</h4><p>在 <span class="highlight">2026年6月</span> 高考前，帮助6名OI退役生提升文化课成绩。</p></div>
+                <div class="tutorial-step"><h4>⚡ 行动力 (AP)</h4><p>每周 <span class="highlight-accent">3点行动力</span>，安排学习或放松。点击“结束本周”进入下一周，月初恢复。</p></div>
+                <div class="tutorial-step"><h4>📈 提分机制</h4><p>采用 <span class="highlight-accent">分段效率曲线</span>：低分段提升快，高分段提升极慢。自习、小测、特训都会积累 <span class="highlight">压力</span>（压力过高会降低效率）。</p></div>
+                <div class="tutorial-step"><h4>🧠 天赋与效率</h4><p>每个学生拥有随机天赋（正面/负面）。心情≥80%可能获得正面特质，≤20%可能获得负面特质（最多6个）。文科/理科效率可通过“学法指导”永久提升。</p></div>
+                <div class="tutorial-step"><h4>📊 考试与报告</h4><p>每月末月考，每周周考复盘。每月切换时生成 <span class="highlight-success">详细月度报告</span>，显示各科变化和班级汇总。</p></div>
+                <div class="tutorial-step"><h4>🎨 其他</h4><p>• 高考倒计时 • 成绩走势图（悬停查看详情） • 暗色/亮色主题 • 悬停查看特质效果</p></div>
+            </div>
+            <div id="help-content-intro" class="help-content hidden">
+                <h4 style="margin:10px 0 5px 0; color:var(--text-primary);">🎲 随机事件（共12种）</h4>
+                <div id="event-list" style="display:grid; grid-template-columns:1fr 1fr; gap:6px; max-height:180px; overflow-y:auto;"></div>
+                <h4 style="margin:10px 0 5px 0; color:var(--text-primary);">🧬 特质列表</h4>
+                <div id="talent-list" style="display:grid; grid-template-columns:1fr 1fr; gap:6px; max-height:180px; overflow-y:auto;"></div>
+            </div>
+            <div style="text-align:center; margin-top:20px;">
+                <button style="padding:10px 30px; background:var(--btn-accent); color:white; border-radius:20px;" onclick="UI.closeModal('help-modal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== 其他模态框 ====== -->
+    <div id="event-system-modal" class="overlay hidden">
+        <div class="modal-box event-modal-box" style="border-top:6px solid var(--gold-color);">
+            <h1 id="ev-modal-title" style="font-size:1.8em; margin-top:0; color:var(--text-primary);">事件标题</h1>
+            <p id="ev-modal-desc" style="font-size:1.1em; color:var(--text-secondary); margin-bottom:15px; line-height:1.5;"></p>
+            <div id="ev-modal-eff" style="background:var(--bg-input); border:1px dashed var(--border-color); padding:12px; border-radius:6px; margin-bottom:20px;"></div>
+        </div>
+    </div>
+
+    <div id="hotpot-modal" class="overlay hidden">
+        <div class="modal-box" style="text-align:center;">
+            <h2 class="modal-title">🍲 全班包场吃火锅</h2>
+            <p style="color:var(--text-secondary);">消耗 ¥2500 和 2 点行动力，清空全班压力，70%概率消除负面天赋。</p>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button style="flex:1; padding:12px; background:var(--border-color); color:var(--text-primary);" onclick="UI.closeModal('hotpot-modal')">取消</button>
+                <button style="flex:2; padding:12px; background:var(--btn-danger); color:white;" onclick="Game.confirmHotpot()">痛快买单！</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="doctor-modal" class="overlay hidden">
+        <div class="modal-box">
+            <h2 class="modal-title">🏥 聘请私人医生</h2>
+            <p style="color:var(--text-secondary);">消耗 ¥1000 立即治愈所选学生的病假。</p>
+            <div id="doctor-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:15px;"></div>
+            <button style="width:100%; padding:12px; background:var(--border-color); color:var(--text-primary);" onclick="UI.closeModal('doctor-modal')">关闭</button>
+        </div>
+    </div>
+
+    <div id="weekly-modal" class="overlay hidden">
+        <div class="modal-box">
+            <h2 class="modal-title">📝 周考复盘</h2>
+            <p style="color:var(--text-secondary);">获得 <b><span id="weekly-pts" style="color:var(--btn-danger); font-size:1.2em;">3</span></b> 点提升点数：</p>
+            <div id="weekly-alloc" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;"></div>
+            <button style="width:100%; padding:12px; background:var(--btn-success); color:white; font-size:1em;" onclick="Game.confirmWeekly()">确认分配</button>
+        </div>
+    </div>
+
+    <div id="choice-modal" class="overlay hidden">
+        <div class="modal-box">
+            <h2 class="modal-title" style="color:var(--gold-color);">⚠️ 突发状况</h2>
+            <p id="choice-desc" style="font-size:1em; line-height:1.5; color:var(--text-secondary); margin-bottom:15px;"></p>
+            <div class="choice-grid" id="choice-btns"></div>
+        </div>
+    </div>
+
+    <div id="exam-modal" class="overlay hidden" style="background:var(--bg-primary);">
+        <div style="width:95%; max-width:1200px; background:var(--bg-card); padding:20px; border-radius:12px; box-shadow:0 10px 30px var(--shadow-heavy); max-height:85vh; display:flex; flex-direction:column;">
+            <h1 id="exam-title" style="color:var(--btn-danger); text-align:center; font-size:2em; margin:0 0 4px 0;">月考</h1>
+            <p id="exam-rewards-txt" style="text-align:center; color:var(--text-muted); margin-top:0; font-weight:bold; font-size:.9em;"></p>
+            <div style="flex:1; overflow-y:auto; padding-right:8px;">
+                <table class="exam-table" id="exam-table"></table>
+            </div>
+            <button id="exam-close-btn" class="hidden" style="width:200px; margin:15px auto 0 auto; padding:10px; background:var(--btn-primary); color:white; font-size:1em; border-radius:30px;" onclick="UI.closeExam()">确认成绩</button>
+        </div>
+    </div>
+
+    <div id="monthly-report-modal" class="overlay hidden">
+        <div class="modal-box" style="max-width:750px;">
+            <h2 class="modal-title">📊 月度报告</h2>
+            <p style="color:var(--text-secondary);" id="report-month-label">2025年9月</p>
+            <div id="report-content" class="report-grid"></div>
+            <div id="report-summary" class="report-summary"></div>
+            <div style="text-align:center; margin-top:20px;">
+                <button style="padding:10px 30px; background:var(--btn-accent); color:white; border-radius:20px;" onclick="UI.closeModal('monthly-report-modal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="gaokao-modal" class="overlay hidden">
+        <div class="modal-box" style="text-align:center; border:5px solid var(--btn-danger);">
+            <h1 style="color:var(--btn-danger); font-size:2.8em;">🎓 2026 高考</h1>
+            <p style="font-size:1.1em; line-height:1.5; color:var(--text-secondary);">终于到了这一天。所有的努力都将凝结在答题卡上。</p>
+            <button onclick="Game.startGaokao()" style="padding:15px 40px; background:var(--btn-danger); color:white; font-size:1.3em; border-radius:50px; margin-top:15px;">奔赴考场</button>
+        </div>
+    </div>
+
+    <div id="ending-modal" class="overlay hidden" style="background:var(--bg-primary); overflow-y:auto; padding:30px 0;">
+        <div class="modal-box" style="max-width:800px; text-align:center; margin:0 auto;">
+            <h1 style="font-size:2.2em; color:var(--text-primary); margin-bottom:8px;">🎓 毕业盛典</h1>
+            <div id="ending-player" style="background:var(--bg-input); padding:15px; border:2px solid var(--gold-color); border-radius:8px; margin-bottom:20px; text-align:left; color:var(--text-secondary);"></div>
+            <h3 style="color:var(--text-primary); border-bottom:2px solid var(--btn-accent); padding-bottom:4px; text-align:left; font-size:1.1em;">🗺️ 蹭饭地图</h3>
+            <div id="ending-cengfan" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:8px; text-align:left; margin-bottom:20px;"></div>
+            
+            <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:15px;">
+                <button style="padding:10px 25px; background:var(--btn-accent); color:white; font-size:1em; border-radius:6px; border:none; cursor:pointer; font-weight:bold;" onclick="Game.returnToClass()">🏠 回到班级</button>
+                <button style="padding:10px 25px; background:var(--btn-primary); color:white; font-size:1em; border-radius:6px; border:none; cursor:pointer; font-weight:bold;" onclick="localStorage.removeItem('whk_save_v2'); location.reload()">🔄 重新开始</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="theme-toggle" onclick="UI.toggleTheme()" id="theme-toggle-btn">🌙</button>
+</div>
+
+<script>
+// ============================================================
+// 完整 JavaScript 代码
+// ============================================================
+
+// ===== UI 对象 =====
+const UI = {
+    toggleTheme() {
+        const html = document.documentElement;
+        const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        html.setAttribute('data-theme', next);
+        document.getElementById('theme-toggle-btn').textContent = next === 'dark' ? '☀️' : '🌙';
+        localStorage.setItem('theme', next);
+        if (document.getElementById('chart-page').classList.contains('active')) drawFullChart();
+    },
+    initTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            document.documentElement.setAttribute('data-theme', saved);
+            document.getElementById('theme-toggle-btn').textContent = saved === 'dark' ? '☀️' : '🌙';
+        }
+    },
+    openChartPage() {
+        const page = document.getElementById('chart-page');
+        if (!page) return;
+        page.style.display = 'flex';
+        page.classList.add('active');
+        page.offsetHeight;
+        setTimeout(() => {
+            drawFullChart();
+        }, 150);
+    },
+    closeChartPage() {
+        const page = document.getElementById('chart-page');
+        if (page) {
+            page.classList.remove('active');
+            page.style.display = 'none';
+        }
+    },
+    showHelp() {
+        this.populateHelpContent();
+        document.getElementById('help-modal').classList.remove('hidden');
+        this.switchHelpTab('guide');
+    },
+    switchHelpTab(tab) {
+        document.getElementById('help-content-guide').classList.toggle('hidden', tab !== 'guide');
+        document.getElementById('help-content-intro').classList.toggle('hidden', tab !== 'intro');
+        const gBtn = document.getElementById('help-tab-guide');
+        const iBtn = document.getElementById('help-tab-intro');
+        gBtn.style.background = tab === 'guide' ? 'var(--btn-accent)' : 'var(--bg-input)';
+        iBtn.style.background = tab === 'intro' ? 'var(--btn-accent)' : 'var(--bg-input)';
+        gBtn.style.color = tab === 'guide' ? 'white' : 'var(--text-secondary)';
+        iBtn.style.color = tab === 'intro' ? 'white' : 'var(--text-secondary)';
+    },
+    populateHelpContent() {
+        const eventList = document.getElementById('event-list');
+        eventList.innerHTML = CONFIG.EVENTS.map(e =>
+            `<div class="event-item" style="background:var(--bg-input);padding:4px 8px;border-radius:4px;font-size:.85em;border:1px solid var(--border-color);">
+                <b>${e.title}</b><br><span style="font-size:.8em;color:var(--text-muted);">${e.desc}</span>
+            </div>`
+        ).join('');
+
+        const talentList = document.getElementById('talent-list');
+        const allTalents = CONFIG.TALENTS.map(t =>
+            `<div class="talent-item" style="background:${t.t === 'pos' ? 'var(--tag-pos-bg)' : 'var(--tag-neg-bg)'};padding:4px 8px;border-radius:4px;font-size:.85em;border:1px solid ${t.t === 'pos' ? 'var(--tag-pos-border)' : 'var(--tag-neg-border)'};">
+                <span style="font-weight:bold;color:${t.t === 'pos' ? 'var(--tag-pos-text)' : 'var(--tag-neg-text)'};">${t.n}</span>
+                <span style="font-size:.75em;color:var(--text-muted);display:block;">${t.d}</span>
+            </div>`
+        ).join('');
+        talentList.innerHTML = allTalents;
+    },
+    switchTab(id) {
+        document.querySelectorAll('.panel-content').forEach(e => e.classList.remove('active'));
+        document.querySelectorAll('.sidebar .tab-btn').forEach(e => e.classList.remove('active'));
+        document.getElementById(`panel-${id}`).classList.add('active');
+        const btns = document.querySelectorAll('.sidebar .tab-btn');
+        if (id === 'action') btns[0].classList.add('active');
+        else btns[1].classList.add('active');
+    },
+    toggleMenu(id) {
+        const e = document.getElementById(id);
+        if (e) e.classList.toggle('active');
+    },
+    hideAllMenus() {
+        document.querySelectorAll('.sub-menu').forEach(e => e.classList.remove('active'));
+    },
+    closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
+    },
+    closeEventModal() {
+        this.closeModal('event-system-modal');
+    },
+    closeExam() {
+    console.log('🔵 closeExam 被调用');
+    console.log('   State.week =', State.week);
+    console.log('   State.month =', State.month);
+    console.log('   Game._examWeek =', Game._examWeek);
+    
+    this.closeModal('exam-modal');
+    
+    if (!State.isMockExam) {
+        if (Game._examWeek > 4) {
+            console.log('   ✅ 检测到月末考试 (examWeek > 4)，生成月度报告');
+            Game.generateMonthlyReport();
+            Game._examWeek = 0;
+        } else {
+            console.log('   ❌ 不是月末考试，不生成月度报告');
+        }
+        
+        console.log('   调用 Game.nextTurn()');
+        Game.nextTurn();
+    } else {
+        State.isMockExam = false;
+        Game.updateUI();
+    }
+},
+    showHotpotModal() {
+        document.getElementById('hotpot-modal').classList.remove('hidden');
+    },
+    showDoctorModal() {
+        const sicks = State.students.map((s, i) => ({ s, i })).filter(x => x.s.sickTimer > 0);
+        if (sicks.length === 0) { alert("没有学生生病！"); return; }
+        document.getElementById('doctor-list').innerHTML = sicks.map(x =>
+            `<div style="background:var(--bg-input);padding:10px;border-radius:6px;border:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;">
+                <div><b style="color:var(--text-primary);">${x.s.name}</b> <span style="color:var(--btn-danger);font-size:.8em;">(病假 ${x.s.sickTimer}周)</span></div>
+                <button style="padding:6px 14px;background:var(--btn-success);color:white;font-size:.8em;" onclick="Game.healDoctor(${x.i})">治愈 ¥1000</button>
+            </div>`
+        ).join('');
+        document.getElementById('doctor-modal').classList.remove('hidden');
+    },
+    showWeeklyModal() {
+        if (State.isGraduated) return;
+        State.tempAlloc = {};
+        CONFIG.SUBJECTS.forEach(sub => State.tempAlloc[sub.id] = 0);
+        this.renderWeeklyAlloc();
+        document.getElementById('weekly-modal').classList.remove('hidden');
+    },
+    renderWeeklyAlloc() {
+        const used = Object.values(State.tempAlloc).reduce((a, b) => a + b, 0);
+        document.getElementById('weekly-pts').innerText = 3 - used;
+        document.getElementById('weekly-alloc').innerHTML = CONFIG.SUBJECTS.map(sub =>
+            `<div style="background:var(--bg-input);padding:6px 10px;border-radius:4px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--border-color);font-size:.85em;">
+                <b style="color:var(--text-primary);">${sub.n}</b>
+                <div>
+                    <button style="padding:0 6px;background:var(--border-color);color:var(--text-primary);border-radius:3px;" onclick="UI.modWeekly('${sub.id}',-1)">-</button>
+                    <span style="display:inline-block;width:20px;text-align:center;color:var(--text-primary);">${State.tempAlloc[sub.id]||0}</span>
+                    <button style="padding:0 6px;background:var(--btn-accent);color:white;border-radius:3px;" onclick="UI.modWeekly('${sub.id}',1)">+</button>
+                </div>
+            </div>`
+        ).join('');
+    },
+    modWeekly(s, v) {
+        if (State.isGraduated) return;
+        const used = Object.values(State.tempAlloc).reduce((a, b) => a + b, 0);
+        const remaining = 3 - used;
+        if (v > 0 && remaining <= 0) return;
+        if (v < 0 && (State.tempAlloc[s] || 0) <= 0) return;
+        State.tempAlloc[s] = (State.tempAlloc[s] || 0) + v;
+        this.renderWeeklyAlloc();
+    },
+    renderClassroom() {
+        document.getElementById('view-classroom').innerHTML = State.students.map((s, idx) => {
+            let debuffs = '';
+            if (s.mood < 10) debuffs += `<span class="tag" style="background:var(--tag-neg-bg);color:var(--tag-neg-text);border:1px solid var(--tag-neg-border);">🤯 自我怀疑</span>`;
+            else if (s.mood < 20) debuffs += `<span class="tag" style="background:var(--cost-bg);color:var(--cost-text);border:1px solid var(--gold-color);">😰 焦虑</span>`;
+            else if (s.mood < 30) debuffs += `<span class="tag" style="background:var(--bg-input);color:var(--text-muted);border:1px solid var(--border-color);">😞 厌学</span>`;
+
+            const talentTags = s.talents.map(t =>
+                `<span class="tag ${t.t === 'neg' ? 'tag-neg' : 'tag-pos'}" title="${t.d}">${t.n}</span>`
+            ).join('');
+
+            const subs = CONFIG.SUBJECTS.map(sub => {
+                const score = s.mastery[sub.id] || 0;
+                const lv = getLevel(score, sub.cap);
+                const eff = getNormalEfficiency(score, sub.cap);
+                const estimate = Math.round(score / 10) * 10;
+                return `<div class="sub-box">
+                    <div class="sub-label">${sub.n}</div>
+                    <div class="sub-val" style="color:${lv.color};">${lv.level}</div>
+                    <div class="sub-estimate">${estimate}</div>
+                    <div class="sub-eff">${Math.round(eff*100)}%</div>
+                </div>`;
+            }).join('');
+
+            const total = Object.values(s.mastery).reduce((a, b) => a + b, 0);
+            const avgEff = CONFIG.SUBJECTS.reduce((sum, sub) => sum + getNormalEfficiency(s.mastery[sub.id] || 0, sub.cap), 0) / CONFIG.SUBJECTS.length;
+            const label = avgEff >= 1.3 ? '🚀 高速' : avgEff >= 0.9 ? '📈 稳步' : avgEff >= 0.5 ? '📊 瓶颈' : '🧗 冲刺';
+
+            return `
+            <div class="stu-card ${s.sickTimer > 0 ? 'sick' : ''}" id="stu-card-${idx}">
+                <div class="stu-header">
+                    <span class="stu-name">${s.name} ${s.sickTimer > 0 ? `<span class="badge">病假${s.sickTimer}周</span>` : ''}</span>
+                    <span class="stu-label">${label}</span>
+                </div>
+                <div class="tag-pool">${talentTags}${debuffs}</div>
+                <div style="font-size:.65em;color:var(--text-muted);margin-bottom:3px;">总分: <b style="color:var(--text-primary);">${Math.round(total)}</b></div>
+                <div class="sub-grid">${subs}</div>
+                <div class="eff-row"><span>📖 ${Math.round((s.effArts - 1) * 100)}%</span><span>🔬 ${Math.round((s.effSci - 1) * 100)}%</span></div>
+                <div class="status-row">
+                    <div class="status-item">
+                        <span class="label">压力</span>
+                        <span class="value" style="color:${s.stress > 85 ? 'var(--btn-danger)' : 'var(--text-primary)'}">${Math.round(s.stress)}%</span>
+                        <div class="stress-bar"><div class="stress-fill" style="width:${Math.min(100, s.stress)}%;background:${s.stress > 85 ? 'var(--btn-danger)' : 'var(--btn-accent)'}"></div></div>
+                    </div>
+                    <div class="status-item">
+                        <span class="label">心情</span>
+                        <span class="value" style="color:${s.mood >= 70 ? 'var(--btn-success)' : s.mood >= 40 ? 'var(--gold-color)' : 'var(--btn-danger)'}">${Math.round(s.mood)}</span>
+                        <div class="stress-bar"><div class="stress-fill" style="width:${Math.min(100, s.mood)}%;background:${s.mood >= 70 ? 'var(--btn-success)' : s.mood >= 40 ? 'var(--gold-color)' : 'var(--btn-danger)'}"></div></div>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    },
+    renderFacilities() {
+        document.getElementById('fac-container').innerHTML = CONFIG.FACILITIES.map(f => {
+            const lv = State.fac[f.id] || 0;
+            const cost = f.p[lv + 1];
+            return `<div style="border:1px solid var(--border-color);border-radius:6px;padding:6px 10px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center;background:var(--bg-card);font-size:.75em;">
+                <div><b style="color:var(--text-primary);">${f.n}</b> <span style="color:var(--btn-accent);font-size:.8em;">Lv.${lv}</span><p style="margin:1px 0 0 0;font-size:.65em;color:var(--text-muted);">${f.d}</p></div>
+                <button style="padding:3px 12px;background:var(--btn-primary);color:white;font-size:.75em;" ${lv >= 2 ? 'disabled' : ''} onclick="Game.buyFac('${f.id}')">${lv >= 2 ? '满级' : '¥' + cost}</button>
+            </div>`;
+        }).join('');
+    },
+    showEventModal(ev, options) {
+        let html = `<div class="choice-grid">`;
+        options.forEach((opt, idx) => {
+            const disabled = !opt.available ? 'disabled' : '';
+            const label = opt.text + (opt.cost ? ` (💰¥${opt.cost})` : '') +
+                (opt.costAP ? ` (⚡${opt.costAP}AP)` : '') + opt.conditionText;
+            html += `<button class="btn-choice" ${disabled} onclick="UI.handleEventChoice(${idx})">${label}</button>`;
+        });
+        html += `</div>`;
+        document.getElementById('ev-modal-title').innerText = ev.title;
+        document.getElementById('ev-modal-desc').innerText = ev.desc;
+        document.getElementById('ev-modal-eff').innerHTML = html;
+        document.getElementById('event-system-modal').classList.remove('hidden');
+        window._currentEvent = ev;
+        window._currentOptions = options;
+    },
+    handleEventChoice(idx) {
+    const ev = window._currentEvent;
+    const opt = window._currentOptions[idx];
+    if (!opt.available) return;
+    let effectDesc = '';
+    if (opt.cost) { State.money -= opt.cost; effectDesc += `花费 ¥${opt.cost}；`; }
+    if (opt.costAP) { State.ap -= opt.costAP; effectDesc += `消耗 ${opt.costAP}AP；`; }
+    if (opt.effect) {
+        const fn = opt.effect;
+        if (fn.length === 1) {
+            const target = Game.getRandStu(1)[0];
+            if (target) {
+                const oldStress = target.stress;
+                const oldMood = target.mood;
+                fn(target);
+                // ===== 钳制压力与心情 =====
+                target.stress = Math.max(0, Math.min(100, target.stress));
+                target.mood = Math.max(0, Math.min(100, target.mood));
+                const stressChange = target.stress - oldStress;
+                const moodChange = target.mood - oldMood;
+                effectDesc += `影响学生 ${target.name}：压力${stressChange >= 0 ? '+' : ''}${Math.round(stressChange)}%，心情${moodChange >= 0 ? '+' : ''}${Math.round(moodChange)}%`;
+            }
+        } else {
+            fn();
+            // ===== 全班钳制 =====
+            State.students.forEach(st => {
+                st.stress = Math.max(0, Math.min(100, st.stress));
+                st.mood = Math.max(0, Math.min(100, st.mood));
+            });
+            effectDesc += '全班受到影响';
+        }
+    }
+    Game.log(`事件【${ev.title}】已处理：${effectDesc}`, "[事件]");
+    UI.closeModal('event-system-modal');
+    Game.updateUI();
+    saveGame();
+}
+};
+// ===== 续接第 1001 行 =====
+const CONFIG = {
+    SUBJECTS: [
+        { id: 'chi', n: '语文', cap: 150, type: 'arts' },
+        { id: 'mat', n: '数学', cap: 150, type: 'sci' },
+        { id: 'eng', n: '英语', cap: 150, type: 'arts' },
+        { id: 'phy', n: '物理', cap: 100, type: 'sci' },
+        { id: 'che', n: '化学', cap: 100, type: 'sci' },
+        { id: 'bio', n: '生物', cap: 100, type: 'sci' }
+    ],
+    FACILITIES: [
+        { id: 'desk', n: '课桌椅', lv: ['破木桌', '普通课桌', '人体工学椅'], p: [0, 2000, 6000], d: '降低复习压力' },
+        { id: 'tech', n: '教学硬件', lv: ['粉笔黑板', '投影仪', '智慧屏'], p: [0, 3000, 8000], d: '提高吸收效率' },
+        { id: 'ac', n: '恒温系统', lv: ['无', '空调', '中央新风'], p: [0, 2500, 7000], d: '减免恶劣天气生病' },
+        { id: 'music', n: '校园广播网', lv: ['无', '普通广播', '沉浸音响'], p: [0, 2000, 5000], d: '每回合恢复心情' },
+        { id: 'psy', n: '心理宣泄室', lv: ['无', '兼职沙袋', '专业咨询'], p: [0, 3000, 8000], d: '每回合大幅降低压力' }
+    ],
+    TALENTS: [
+        { id: 't1', n: '解析眼', t: 'pos', cost: 1.2, type: 'sci', d: '理科学习效率+15%' },
+        { id: 't2', n: '语感', t: 'pos', cost: 1.0, type: 'arts', d: '文科学习效率+15%' },
+        { id: 't3', n: '大心脏', t: 'pos', cost: 1.0, type: 'all', d: '压力自然增长减半' },
+        { id: 't4', n: '实验狂', t: 'pos', cost: 0.8, type: 'sci', d: '化学/生物提升+20%' },
+        { id: 't5', n: '卷王', t: 'pos', cost: 1.5, type: 'all', d: '全科微弱加成+5%' },
+        { id: 't6', n: '锦鲤', t: 'pos', cost: 0.8, type: 'all', d: '考试不易发挥失常' },
+        { id: 't7', n: '乐天派', t: 'pos', cost: 0.7, type: 'arts', d: '心情极易恢复' },
+        { id: 't_comp', n: '竞赛达人', t: 'pos', cost: 1.0, type: 'sci', d: '理科效率+10%' },
+        { id: 't_money', n: '奖金激励', t: 'pos', cost: 0.8, type: 'all', d: '考试发挥更稳定' },
+        { id: 'n1', n: '粗心', t: 'neg', cost: -0.5, type: 'all', d: '大考容易扣分' },
+        { id: 'n2', n: '玻璃心', t: 'neg', cost: -0.8, type: 'all', d: '压力极易升高' },
+        { id: 'n3', n: '偏科', t: 'neg', cost: -0.5, type: 'all', d: '大考随机发挥失常' },
+        { id: 'n4', n: '网瘾', t: 'neg', cost: -0.6, type: 'sci', d: '有概率翘课打游戏' },
+        { id: 'n5', n: '多愁善感', t: 'neg', cost: -0.5, type: 'all', d: '心情极易下降' }
+    ],
+    UNIS: [
+        { min: 685, list: ['清华大学', '北京大学'] },
+        { min: 650, list: ['复旦大学', '上海交大', '浙江大学', '中科大'] },
+        { min: 600, list: ['重庆大学', '四川大学', '电子科大', '中南大学', '厦门大学'] },
+        { min: 500, list: ['重庆邮电', '西南大学', '合肥工大'] },
+        { min: 0, list: ['蓝翔技校', '家里蹲', '复读高中'] }
+    ],
+    EXAM_EVENTS: {
+        'chi': [{ t: '作文偏题', v: -12 }, { t: '阅读灵光一闪', v: 8 }, { t: '默写忘了', v: -6 }, { t: '古文语感极佳', v: 10 }, { t: '作文扣题精准', v: 15 }, { t: '古诗鉴赏崩溃', v: -10 }],
+        'mat': [{ t: '蒙对选择题', v: 5 }, { t: '大题全错', v: -12 }, { t: '忘写解扣分', v: -3 }, { t: '解析几何解出', v: 12 }, { t: '压轴题完美', v: 18 }, { t: '导数计算失误', v: -8 }],
+        'eng': [{ t: '听力杂音', v: -8 }, { t: '阅读生词崩溃', v: -10 }, { t: '套用高级句型', v: 8 }, { t: '完形语感选对', v: 10 }, { t: '七选五全对', v: 15 }, { t: '作文跑题', v: -12 }],
+        'phy': [{ t: '受力分析反', v: -8 }, { t: '没写单位', v: -4 }, { t: '压轴题完美', v: 14 }, { t: '实验题蒙对', v: 6 }, { t: '电磁场全对', v: 16 }, { t: '动量守恒算错', v: -10 }],
+        'che': [{ t: '方程式配平失败', v: -6 }, { t: '推断看错条件', v: -10 }, { t: '有机推断全对', v: 12 }, { t: '实验方案满分', v: 10 }, { t: '计算点错', v: -4 }, { t: '工业流程全对', v: 14 }],
+        'bio': [{ t: '遗传算错概率', v: -8 }, { t: '概念记混', v: -10 }, { t: '基因图谱看穿', v: 12 }, { t: '选择题全对', v: 10 }, { t: '实验设计完美', v: 14 }, { t: '生态填空全错', v: -6 }]
+    },
+    EVENTS: [
+        { id: 'ev1', title: '🎮 沉迷游戏', desc: '某位同学周末偷偷跑去网吧通宵打游戏...', options: [
+            { text: '严厉批评并没收手机', effect: (s) => { s.stress += 30; s.mood -= 10; } },
+            { text: '找他谈心，了解原因', effect: (s) => { s.stress -= 20; s.mood += 10; } },
+            { text: '通知家长共同教育 (需¥500)', condition: () => State.money >= 500, cost: 500, effect: (s) => { s.stress -= 40; s.mood += 5; } }
+        ] },
+        { id: 'ev2', title: '💡 突然顿悟', desc: '一位学生在刷题时突然打通了任督二脉！', options: [
+            { text: '表扬并鼓励分享', effect: (s) => { s.mood += 20; s.mastery.mat += 5; s.mastery.phy += 5; } },
+            { text: '安排他给全班讲解', effect: (s) => { s.mood += 10; State.students.forEach(st => { st.mastery.mat += 2; st.mastery.phy += 2; }); } },
+            { text: '奖励竞赛书 (需¥300)', condition: () => State.money >= 300, cost: 300, effect: (s) => { s.mood += 30; s.mastery.mat += 12; s.mastery.phy += 12; } }
+        ] },
+        { id: 'ev3', title: '😵 心态崩溃', desc: '模拟卷太难，某位同学当场撕了卷子...', options: [
+            { text: '严肃批评，树立纪律', effect: (s) => { s.stress += 40; s.mood -= 20; } },
+            { text: '课后心理辅导', effect: (s) => { s.stress -= 30; s.mood += 15; } },
+            { text: '安排去心理宣泄室 (需Lv≥1)', condition: () => State.fac.psy >= 1, effect: (s) => { s.stress -= 50; s.mood += 20; } }
+        ] },
+        { id: 'ev4', title: '📧 家长投诉', desc: '家长群里有人发长文吐槽作业太多...', options: [
+            { text: '公开回应，安抚家长', effect: () => { State.students.forEach(s => { s.stress += 10; }); } },
+            { text: '召开线上家长会', effect: () => { State.money -= 200; State.students.forEach(s => { s.mood += 5; }); } },
+            { text: '减少作业量 (需1AP)', condition: () => State.ap >= 1, costAP: 1, effect: () => { State.students.forEach(s => { s.stress -= 20; s.mood += 10; }); } }
+        ] },
+        { id: 'ev5', title: '🏆 竞赛获奖', desc: '某位同学在学科竞赛中获奖，全班振奋！', options: [
+            { text: '全校表扬，树立榜样', effect: (s) => { s.mood += 30; if (s.talents.length < 6 && !s.talents.some(t => t.id === 't_comp')) { s.talents.push({ id: 't_comp', n: '竞赛达人', t: 'pos', d: '理科效率+10%' }); } } },
+            { text: '发放奖金鼓励', effect: (s) => { s.mood += 20; State.money -= 500; if (s.talents.length < 6 && !s.talents.some(t => t.id === 't_money')) { s.talents.push({ id: 't_money', n: '奖金激励', t: 'pos', d: '考试发挥更稳定' }); } } }
+        ] },
+        { id: 'ev6', title: '🤒 生病请假', desc: '换季流感，某位同学高烧缺席了本周课程。', options: [
+            { text: '让他好好休息', effect: (s) => { s.sickTimer = 2; s.stress -= 20; } },
+            { text: '安排同学送笔记', effect: (s) => { s.sickTimer = 1; s.mood += 10; } },
+            { text: '请私人医生上门 (需¥1000)', condition: () => State.money >= 1000, cost: 1000, effect: (s) => { s.sickTimer = 0; s.mood += 15; } }
+        ] },
+        { id: 'ev7', title: '📚 奋发图强', desc: '垫底的同学痛定思痛，决定逆袭！', options: [
+            { text: '制定个人学习计划', effect: (s) => { s.mood += 10; CONFIG.SUBJECTS.forEach(sub => { s.mastery[sub.id] += 3; }); } },
+            { text: '安排一对一辅导', effect: (s) => { s.mood += 15; s.mastery.mat += 8; s.mastery.eng += 8; } },
+            { text: '购买额外习题 (需¥400)', condition: () => State.money >= 400, cost: 400, effect: (s) => { s.mood += 20; CONFIG.SUBJECTS.forEach(sub => { s.mastery[sub.id] += 6; }); } }
+        ] },
+        { id: 'ev8', title: '🎂 生日buff', desc: '班里给某位同学过了生日，心情大好！', options: [
+            { text: '全班庆祝', effect: (s) => { s.mood += 25; s.stress -= 20; State.students.forEach(st => { st.mood += 5; }); } },
+            { text: '送他一本好书', effect: (s) => { s.mood += 20; s.mastery.chi += 8; s.mastery.eng += 8; } },
+            { text: '组织生日派对 (需¥500)', condition: () => State.money >= 500, cost: 500, effect: (s) => { s.mood += 30; s.stress -= 30; State.students.forEach(st => { st.mood += 10; }); } }
+        ] },
+        { id: 'ev9', title: '😰 考前焦虑', desc: '大考临近，多名学生出现焦虑症状。', options: [
+            { text: '开展考前心理辅导', effect: () => { State.students.forEach(s => { s.stress -= 15; s.mood += 5; }); } },
+            { text: '组织放松活动', effect: () => { State.students.forEach(s => { s.stress -= 25; }); } },
+            { text: '邀请专家讲座 (需¥800)', condition: () => State.money >= 800, cost: 800, effect: () => { State.students.forEach(s => { s.stress -= 35; s.mood += 15; }); } }
+        ] },
+        { id: 'ev10', title: '🎯 目标明确', desc: '一位学生突然明确了自己的目标大学，动力十足！', options: [
+            { text: '鼓励他制定计划', effect: (s) => { s.mood += 20; s.mastery.mat += 5; s.mastery.eng += 5; } },
+            { text: '分享他的目标激励全班', effect: (s) => { s.mood += 15; State.students.forEach(st => { st.mood += 5; }); } },
+            { text: '帮他联系目标大学学长 (需¥200)', condition: () => State.money >= 200, cost: 200, effect: (s) => { s.mood += 30; s.mastery.chi += 10; s.mastery.eng += 10; } }
+        ] },
+        { id: 'ev11', title: '🌧️ 阴雨天', desc: '连续阴雨天气，班级气氛低迷。', options: [
+            { text: '放轻松音乐调节气氛', effect: () => { State.students.forEach(s => { s.mood += 5; }); } },
+            { text: '组织室内游戏', effect: () => { State.students.forEach(s => { s.stress -= 10; s.mood += 10; }); } },
+            { text: '购买小零食安慰 (需¥300)', condition: () => State.money >= 300, cost: 300, effect: () => { State.students.forEach(s => { s.mood += 15; s.stress -= 10; }); } }
+        ] },
+        { id: 'ev12', title: '🌟 星光闪耀', desc: '班级在全校评比中获得优秀班级称号！', options: [
+            { text: '拍照留念，张贴荣誉榜', effect: () => { State.students.forEach(s => { s.mood += 10; }); } },
+            { text: '组织班级聚餐 (需¥600)', condition: () => State.money >= 600, cost: 600, effect: () => { State.students.forEach(s => { s.mood += 20; s.stress -= 20; }); } },
+            { text: '申请班级经费奖励', effect: () => { State.money += 1000; State.students.forEach(s => { s.mood += 15; }); } }
+        ] }
+    ]
+};
+
+const SEASONS = { '8': '秋', '9': '秋', '10': '秋', '11': '冬', '12': '冬', '1': '冬', '2': '春', '3': '春', '4': '春', '5': '夏', '6': '夏' };
+const WEATHER_POOL = {
+    '秋': [{ i: '☀️', n: '秋高气爽' }, { i: '🌧️', n: '秋雨连绵' }],
+    '冬': [{ i: '🌫️', n: '湿冷大雾', eff: 'cold' }, { i: '🌨️', n: '寒潮入侵', eff: 'cold' }],
+    '春': [{ i: '🌤️', n: '春暖花开' }, { i: '🌧️', n: '春雨绵绵' }],
+    '夏': [{ i: '🥵', n: '高温预警', eff: 'hot' }, { i: '⛈️', n: '狂风暴雨' }]
+};
+
+// ===== 状态 =====
+let State = {
+    week: 1, month: 8, year: 2025, money: 0, ap: 3, maxAp: 3,
+    diff: 'normal', mode: 'normal', isGraduated: false, isMockExam: false,
+    weather: { i: '☀️', n: '晴朗', eff: '' }, season: '秋',
+    fac: { desk: 0, tech: 0, ac: 0, music: 0, psy: 0 },
+    tempAlloc: {}, students: [],
+    eventCooldowns: {},
+    birthdayTriggered: {},
+    monthStartScores: []
+};
+
+function saveGame() {
+    try { if (State.students && State.students.length > 0) localStorage.setItem('whk_save_v2', JSON.stringify(State)); } catch (e) {}
+}
+
+function checkSavedGame() {
+    try {
+        const s = localStorage.getItem('whk_save_v2');
+        if (s) {
+            const btn = document.createElement('button');
+            btn.className = 'btn-action';
+            btn.style.marginTop = '12px';
+            btn.style.borderColor = 'var(--btn-accent)';
+            btn.style.textAlign = 'center';
+            btn.innerHTML = `<h5 style="color:var(--btn-accent);font-size:1.1em;justify-content:center;">继续游戏</h5><p>发现存档，点击恢复</p>`;
+            btn.onclick = () => {
+                const parsed = JSON.parse(s);
+                if (!parsed.eventCooldowns) parsed.eventCooldowns = {};
+                if (!parsed.fac.music) parsed.fac.music = 0;
+                if (!parsed.fac.psy) parsed.fac.psy = 0;
+                if (!parsed.birthdayTriggered) parsed.birthdayTriggered = {};
+                if (!parsed.monthStartScores) parsed.monthStartScores = [];
+                parsed.students.forEach(st => {
+                    if (typeof st.mood === 'undefined') st.mood = 60;
+                    if (typeof st.continuousGood === 'undefined') st.continuousGood = 0;
+                    if (typeof st.effArts === 'undefined') st.effArts = 1.0;
+                    if (typeof st.effSci === 'undefined') st.effSci = 1.0;
+                    if (!st.history) st.history = { scores: [], ranks: [] };
+                    if (!st.history.scores) st.history.scores = [];
+                    if (!st.history.ranks) st.history.ranks = [];
+                    if (typeof st.birthdayMonth === 'undefined') st.birthdayMonth = 0;
+                });
+                State = parsed;
+                document.getElementById('start-screen').classList.add('hidden');
+                document.getElementById('main-header').classList.remove('hidden');
+                document.getElementById('main-body').classList.remove('hidden');
+                Game.updateUI();
+                updateDiffBadge();
+                Game.updateCountdown();
+                if (!localStorage.getItem('tutorial_shown')) {
+                    UI.showHelp();
+                    localStorage.setItem('tutorial_shown', 'true');
+                }
+            };
+            document.getElementById('start-box-inner').appendChild(btn);
+        }
+    } catch (e) {}
+}
+
+function updateDiffBadge() {
+    const badge = document.getElementById('diff-badge');
+    const names = { easy: '简单', normal: '普通', hard: '困难' };
+    badge.textContent = names[State.diff] || '普通';
+    badge.className = 'diff-badge ' + (State.diff || 'normal');
+}
+
+// ===== 工具函数 =====
+function getNormalEfficiency(score, cap) {
+    const ratio = score / cap;
+    let eff;
+    if (ratio < 0.25) eff = 2.0 - (ratio / 0.25) * 0.2;
+    else if (ratio < 0.40) eff = 1.8 - ((ratio - 0.25) / 0.15) * 0.3;
+    else if (ratio < 0.55) eff = 1.5 - ((ratio - 0.40) / 0.15) * 0.5;
+    else if (ratio < 0.70) eff = 1.0 - ((ratio - 0.55) / 0.15) * 0.4;
+    else if (ratio < 0.85) eff = 0.6 - ((ratio - 0.70) / 0.15) * 0.3;
+    else eff = 0.3 * Math.exp(-6 * (ratio - 0.85));
+    return Math.max(0.02, Math.min(2.0, eff));
+}
+
+function getLevel(score, cap) {
+    const r = score / cap;
+    if (r >= 0.95) return { level: 'SSS', color: '#dc2626' };
+    if (r >= 0.88) return { level: 'SS', color: '#ea580c' };
+    if (r >= 0.80) return { level: 'S', color: '#9333ea' };
+    if (r >= 0.70) return { level: 'A', color: '#16a34a' };
+    if (r >= 0.55) return { level: 'B', color: '#2563eb' };
+    if (r >= 0.40) return { level: 'C', color: '#64748b' };
+    if (r >= 0.25) return { level: 'D', color: '#94a3b8' };
+    return { level: 'E', color: '#cbd5e1' };
+}
+
+// ============================================================
+// Game 对象
+// ============================================================
+const Game = {
+    _examWeek: 0,
+    selectMode(mode) {
+        State.mode = mode;
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+        document.querySelector(`.mode-btn[data-mode="${mode}"]`).classList.add('selected');
+    },
+
+    confirmBackToMenu() {
+        if (State.isGraduated) {
+            if (confirm('确认要回到主菜单吗？进度将丢失！')) location.reload();
+            return;
+        }
+        if (confirm('确认要回到主菜单吗？当前进度将丢失！')) location.reload();
+    },
+
+    calculateInitialEfficiency(talents) {
+        let sciCount = 0, artsCount = 0;
+        talents.forEach(t => {
+            if (t.type === 'sci') sciCount++;
+            if (t.type === 'arts') artsCount++;
+            if (t.type === 'all') { if (Math.random() < 0.5) sciCount += 0.3; else artsCount += 0.3; }
+        });
+        const baseSci = 0.85 + Math.random() * 0.3;
+        const baseArts = 0.85 + Math.random() * 0.3;
+        let effSci = Math.min(1.4, baseSci + sciCount * 0.08);
+        let effArts = Math.min(1.4, baseArts + artsCount * 0.08);
+        if (talents.some(t => t.id === 'n3')) {
+            if (Math.random() < 0.5) effSci = Math.max(0.7, effSci - 0.15);
+            else effArts = Math.max(0.7, effArts - 0.15);
+        }
+        if (talents.some(t => t.id === 'n4')) effSci = Math.max(0.7, effSci - 0.10);
+        if (talents.some(t => t.id === 'n5')) effArts = Math.max(0.7, effArts - 0.08);
+        return { effSci, effArts };
+    },
+
+    distributeStats(talents, targetTotal) {
+        const w = { chi: 1, mat: 1, eng: 1, phy: 1, che: 1, bio: 1 };
+        talents.forEach(t => {
+            if (t.id === 't1') { w.mat += 0.5; w.phy += 0.5; w.che += 0.4; w.bio += 0.4; }
+            if (t.id === 't2') { w.chi += 0.5; w.eng += 0.5; }
+            if (t.id === 't4') { w.che += 0.6; w.bio += 0.6; }
+            if (t.id === 't5') { Object.keys(w).forEach(k => w[k] += 0.2); }
+            if (t.id === 'n1') { Object.keys(w).forEach(k => w[k] -= 0.1); }
+            if (t.id === 'n3') { const keys = Object.keys(w); w[keys[Math.floor(Math.random() * keys.length)]] -= 0.6; }
+            if (t.id === 'n4') { w.mat -= 0.3; w.phy -= 0.3; }
+        });
+        Object.keys(w).forEach(k => { w[k] = Math.max(0.1, w[k] * (0.85 + Math.random() * 0.3)); });
+        const sum = Object.values(w).reduce((a, b) => a + b, 0);
+        const mastery = {};
+        CONFIG.SUBJECTS.forEach(sub => {
+            mastery[sub.id] = Math.max(15, Math.min(sub.cap - 5, Math.round(targetTotal * (w[sub.id] / sum))));
+        });
+        return mastery;
+    },
+
+    startGame() {
+        const diff = State.mode;
+        State.diff = diff;
+        const defaultNames = ["Debug618", "cyrel", "Snoozing_QwQ", "lxy_qwq", "Groyhj", "zenghaoran"];
+        const names = [];
+        for (let i = 0; i < 6; i++) {
+            const input = document.getElementById(`name-${i}`).value.trim();
+            names.push(input || defaultNames[i]);
+        }
+
+        let targetScore = 380;
+        if (diff === 'easy') { State.money = 10000; targetScore = 440; }
+        else if (diff === 'normal') { State.money = 5000; targetScore = 380; }
+        else { State.money = 1000; targetScore = 330; }
+
+        const posPool = CONFIG.TALENTS.filter(t => t.t === 'pos');
+        const negPool = CONFIG.TALENTS.filter(t => t.t === 'neg');
+
+        State.students = names.map(n => {
+            const talents = [...this.shuffleArray([...posPool]).slice(0, 2), ...this.shuffleArray([...negPool]).slice(0, 1)];
+            const cost = talents.reduce((s, t) => s + (t.cost || 0), 0);
+            const target = Math.max(300, Math.min(580, targetScore + (Math.random() * 40 - 20) - cost * 8));
+            const mastery = this.distributeStats(talents, target);
+            const { effSci, effArts } = this.calculateInitialEfficiency(talents);
+            return {
+                name: n,
+                status: 'normal',
+                stress: 20 + Math.random() * 30,
+                sickTimer: 0,
+                mood: 50 + Math.floor(Math.random() * 31),
+                continuousGood: 0,
+                history: { scores: [], ranks: [] },
+                talents: talents,
+                mastery: mastery,
+                effArts: effArts,
+                effSci: effSci,
+                birthdayMonth: 0
+            };
+        });
+
+        // ---- 彩蛋：Snoozing ----
+        State.students.forEach(s => {
+            if (s.name === 'Snoozing') {
+                s.mastery.chi = 10;
+                s.mastery.eng = 148;
+                s.effSci = 1.2;
+                s.effArts = 0.01;
+                const diff = State.diff;
+                let baseTotal = 380;
+                if (diff === 'easy') baseTotal = 440;
+                else if (diff === 'normal') baseTotal = 380;
+                else baseTotal = 330;
+                const remaining = Math.max(0, baseTotal - 158);
+                const per = Math.floor(remaining / 4);
+                s.mastery.mat = Math.min(150, Math.max(20, per + 10));
+                s.mastery.phy = Math.min(100, Math.max(15, per));
+                s.mastery.che = Math.min(100, Math.max(15, per));
+                s.mastery.bio = Math.min(100, Math.max(15, per));
+                let newTotal = Object.values(s.mastery).reduce((a, b) => a + b, 0);
+                let diffTotal = baseTotal - newTotal;
+                if (diffTotal > 0) s.mastery.mat = Math.min(150, s.mastery.mat + diffTotal);
+                else if (diffTotal < 0) s.mastery.mat = Math.max(20, s.mastery.mat + diffTotal);
+                this.log(`✨ 彩蛋：Snoozing 特殊属性已激活 (语文E，英语SSS，理科效率+20%，文科效率-99%)`, "[彩蛋]");
+            }
+        });
+
+        State.monthStartScores = State.students.map(s => Object.values(s.mastery).reduce((a, b) => a + b, 0));
+
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('main-header').classList.remove('hidden');
+        document.getElementById('main-body').classList.remove('hidden');
+        updateDiffBadge();
+
+        this.updateWeather();
+        this.log("新学期开始！", "[档案建立]");
+        this.updateUI();
+        this.updateCountdown();
+        saveGame();
+
+        if (!localStorage.getItem('tutorial_shown')) {
+            UI.showHelp();
+            localStorage.setItem('tutorial_shown', 'true');
+        }
+    },
+
+    shuffleArray(arr) {
+        const r = [...arr];
+        for (let i = r.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [r[i], r[j]] = [r[j], r[i]];
+        }
+        return r;
+    },
+
+    getDiffMultiplier() {
+        if (State.diff === 'easy') return 1.15;
+        if (State.diff === 'hard') return 0.70;
+        return 0.85;
+    },
+
+    calculateGain(subjectId, currentScore, baseGain, student) {
+        const cap = CONFIG.SUBJECTS.find(x => x.id === subjectId).cap;
+        let eff = getNormalEfficiency(currentScore, cap);
+        const isArts = (subjectId === 'chi' || subjectId === 'eng');
+        const isSci = !isArts;
+        student.talents.forEach(t => {
+            if (t.id === 't1' && isSci) eff *= 1.15;
+            if (t.id === 't2' && isArts) eff *= 1.15;
+            if (t.id === 't4' && (subjectId === 'che' || subjectId === 'bio')) eff *= 1.20;
+            if (t.id === 't5') eff *= 1.05;
+        });
+        if (isArts) eff *= student.effArts;
+        if (isSci) eff *= student.effSci;
+        if (student.stress > 80) eff *= Math.max(0, 1 - (student.stress - 80) / 100);
+        return { gain: Math.max(0.02, baseGain * eff), efficiency: eff };
+    },
+
+    doAction(cat, sub) {
+        if (State.isGraduated) {
+            if (cat === 'rest' && sub === 'snack') {
+                State.students.forEach(s => { s.stress = Math.max(0, s.stress - 20); s.mood = Math.min(100, s.mood + 5); });
+                this.log("同学们请你吃了小吃！", "[温馨回忆]");
+                this.updateUI();
+                return;
+            }
+            if (cat === 'rest' && sub === 'movie') {
+                State.students.forEach(s => { s.mood = Math.min(100, s.mood + 10); });
+                this.log("同学们一起看电影，心情大好！", "[温馨回忆]");
+                this.updateUI();
+                return;
+            }
+            if (cat === 'work' && sub === 'earn') {
+                State.money += 1000;
+                this.log("毕业生勤工俭学，班费+1000", "[温馨回忆]");
+                this.updateUI();
+                return;
+            }
+            return alert("已经毕业啦！");
+        }
+
+        // ===== 勤工俭学 =====
+        if (cat === 'work' && sub === 'earn') {
+            if (State.ap < 1) return alert("AP不足！");
+            State.ap -= 1;
+            State.money += 1000;
+            this.log("💼 勤工俭学，赚取 ¥1000", "[资金]");
+            UI.hideAllMenus();
+            this.updateUI();
+            saveGame();
+            return;
+        }
+
+        if (cat === 'eff') {
+            if (State.money < 1500 || State.ap < 1) return alert("资源不足！");
+            State.money -= 1500; State.ap -= 1;
+            State.students.forEach(s => {
+                if (sub === 'arts') s.effArts = Math.min(1.5, s.effArts + 0.05);
+                if (sub === 'sci') s.effSci = Math.min(1.5, s.effSci + 0.05);
+            });
+            this.log(`${sub === 'arts' ? '文' : '理'}科指导`, `[效率提升]`);
+            UI.hideAllMenus();
+            this.updateUI();
+            saveGame();
+            return;
+        }
+
+        if (State.ap < 1) return alert("AP不足！");
+        let costAP = cat === 'train' ? 2 : (cat === 'intensive' ? 3 : 1);
+        let costMoney = cat === 'train' ? 2000 : cat === 'intensive' ? 3000 : cat === 'test' ? 500 : (cat === 'rest' && sub === 'snack' ? 400 : (cat === 'rest' && sub === 'movie' ? 500 : 0));
+        if (State.ap < costAP) return alert("AP不足！");
+        if (State.money < costMoney) return alert("班费不足！");
+        State.ap -= costAP;
+        if (costMoney > 0) State.money -= costMoney;
+
+        const techBonus = 1 + (State.fac.tech * 0.15);
+        const diffMod = this.getDiffMultiplier();
+
+        State.students.forEach(s => {
+            if (s.sickTimer > 0) return;
+            if (cat === 'study' || cat === 'test') {
+                let baseGain = (sub === 'chi' ? 1.2 : 2.0) * techBonus * diffMod;
+                if (cat === 'test') baseGain *= 1.3;
+                const result = this.calculateGain(sub, s.mastery[sub] || 0, baseGain, s);
+                const cap = CONFIG.SUBJECTS.find(x => x.id === sub).cap;
+                s.mastery[sub] = Math.min(cap, (s.mastery[sub] || 0) + result.gain);
+                s.stress = Math.min(100, s.stress + Math.max(2, (cat === 'test' ? 20 : 15) - State.fac.desk * 5));
+            } else if (cat === 'train') {
+                sub.split('_').forEach(su => {
+                    const baseGain = (su === 'chi' ? 1.2 : 2.0) * 1.6 * techBonus * diffMod;
+                    const result = this.calculateGain(su, s.mastery[su] || 0, baseGain, s);
+                    const cap = CONFIG.SUBJECTS.find(x => x.id === su).cap;
+                    s.mastery[su] = Math.min(cap, (s.mastery[su] || 0) + result.gain);
+                });
+                s.stress = Math.min(100, s.stress + Math.max(10, 30 - State.fac.desk * 5));
+            } else if (cat === 'intensive') {
+                const baseGain = (sub === 'chi' ? 1.2 : 2.0) * 5.0 * techBonus * diffMod;
+                const result = this.calculateGain(sub, s.mastery[sub] || 0, baseGain, s);
+                const cap = CONFIG.SUBJECTS.find(x => x.id === sub).cap;
+                s.mastery[sub] = Math.min(cap, (s.mastery[sub] || 0) + result.gain);
+                s.stress = Math.min(100, s.stress + Math.max(10, 35 - State.fac.desk * 5));
+            } else if (cat === 'rest') {
+                if (sub === 'walk') { s.stress = Math.max(0, s.stress - 20); s.mood = Math.min(100, s.mood + 2); }
+                if (sub === 'snack') { s.stress = Math.max(0, s.stress - 30); s.mood = Math.min(100, s.mood + 5); }
+                if (sub === 'movie') { s.mood = Math.min(100, s.mood + 10); }
+            }
+        });
+
+        UI.hideAllMenus();
+        const name = CONFIG.SUBJECTS.find(x => x.id === sub);
+        let actionName = '';
+        if (cat === 'study') actionName = '自习';
+        else if (cat === 'test') actionName = '小测';
+        else if (cat === 'train') actionName = '特训';
+        else if (cat === 'intensive') actionName = '🔥特训';
+        else if (cat === 'rest') {
+            if (sub === 'walk') actionName = '散步';
+            else if (sub === 'snack') actionName = '小吃';
+            else if (sub === 'movie') actionName = '看电影';
+        }
+        this.log(`${actionName} ${name ? name.n : ''}`);
+        this.updateUI();
+        saveGame();
+    },
+
+    buyFac(id) {
+        if (State.isGraduated) return alert("已毕业！");
+        const f = CONFIG.FACILITIES.find(x => x.id === id);
+        const lv = State.fac[id] || 0;
+        const cost = f.p[lv + 1];
+        if (!cost) return alert("已满级！");
+        if (State.money >= cost) {
+            State.money -= cost;
+            State.fac[id] = lv + 1;
+            this.updateUI();
+            this.log(`升级 ${f.n}`, `[资金-${cost}]`);
+            saveGame();
+        } else alert("班费不足！");
+    },
+
+    confirmHotpot() {
+        if (State.isGraduated) {
+            State.students.forEach(s => { s.stress = 0; s.mood = Math.min(100, s.mood + 20); });
+            UI.closeModal('hotpot-modal');
+            this.log("同学们请你吃了回忆火锅！", "[温馨]");
+            this.updateUI();
+            return;
+        }
+        if (State.money < 2500 || State.ap < 2) return alert("资源不足！");
+        State.money -= 2500; State.ap -= 2;
+        State.students.forEach(s => {
+            s.stress = 0;
+            s.mood = Math.min(100, s.mood + 20);
+            s.talents = s.talents.filter(t => t.t !== 'neg' || Math.random() > 0.7);
+        });
+        UI.closeModal('hotpot-modal');
+        this.log("包场火锅！", "[压力清空]");
+        this.updateUI();
+        saveGame();
+    },
+
+    doMockExam() {
+        if (State.isGraduated) return alert("已经毕业啦！");
+        if (State.money < 4000 || State.ap < 2) return alert("资源不足！");
+        State.money -= 4000; State.ap -= 2;
+        State.isMockExam = true;
+        this.log("全真模拟考！", "[实战]");
+        this.prepareExam("模拟考试", true);
+    },
+
+    nextTurn() {
+        if (State.isGraduated) return;
+        State.week++;
+        State.students.forEach(s => { if (s.sickTimer > 0) s.sickTimer--; });
+        
+        if (State.week === 2 && State.month !== 6) { 
+            UI.showWeeklyModal(); 
+            return; 
+        }
+        
+        if (State.week > 4) {
+            this._examWeek = State.week;
+            State.week = 1;
+            State.month++;
+            if (State.month > 12) { State.month = 1; State.year++; }
+            this.updateWeather();
+            this.checkBirthdayEvents();
+            State.monthStartScores = State.students.map(s => Object.values(s.mastery).reduce((a, b) => a + b, 0));
+            if (State.month === 6 && State.year === 2026) {
+                document.getElementById('gaokao-modal').classList.remove('hidden');
+                this.updateUI();
+                this.updateCountdown();
+                return;
+            } else {
+                this.prepareExam();
+                this.updateCountdown();
+                return;
+            }
+        }
+        this.finishTurnLogic();
+        this.updateCountdown();
+    },
+
+    generateMonthlyReport() {
+        console.log('🟢 生成月度报告（对比上一次月考）');
+
+        const hasHistory = State.students.some(s => s.history && s.history.scores && s.history.scores.length > 0);
+        if (!hasHistory) {
+            console.log('❌ 没有考试记录，跳过月度报告');
+            return;
+        }
+
+        const monthLabel = `${State.year}年${State.month}月`;
+        document.getElementById('report-month-label').textContent = monthLabel + ' 月度报告（与上次月考对比）';
+
+        let html = '';
+        let totalPrev = 0, totalCurr = 0;
+        let totalChange = 0;
+        let maxImprove = -Infinity;
+        let maxImproveName = '';
+        let hasValidData = false;
+
+        State.students.forEach(s => {
+            const scores = s.history && s.history.scores ? s.history.scores : [];
+            const subjectScores = s.history && s.history.subjectScores ? s.history.subjectScores : [];
+
+            const currScore = scores.length >= 1 ? scores[scores.length - 1] : null;
+            const prevScore = scores.length >= 2 ? scores[scores.length - 2] : null;
+
+            if (currScore === null) {
+                html += `
+                    <div class="report-item">
+                        <div><span class="name">${s.name}</span> <span class="change same">无数据</span></div>
+                        <div class="detail">暂无考试记录</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const isFirstExam = (prevScore === null);
+            const change = isFirstExam ? 0 : currScore - prevScore;
+            const sign = change > 0 ? '+' : '';
+            const cls = change > 0 ? 'up' : (change < 0 ? 'down' : 'same');
+
+            totalPrev += isFirstExam ? currScore : prevScore;
+            totalCurr += currScore;
+            totalChange += change;
+            hasValidData = true;
+
+            if (!isFirstExam && change > maxImprove) {
+                maxImprove = change;
+                maxImproveName = s.name;
+            }
+
+            let subDetails = '';
+            if (!isFirstExam && subjectScores.length >= 2) {
+                const currSub = subjectScores[subjectScores.length - 1];
+                const prevSub = subjectScores[subjectScores.length - 2];
+                if (currSub && prevSub) {
+                    subDetails = CONFIG.SUBJECTS.map(sub => {
+                        const diff = (currSub[sub.id] || 0) - (prevSub[sub.id] || 0);
+                        return `${sub.n}${diff >= 0 ? '+' : ''}${Math.round(diff)}`;
+                    }).join(' | ');
+                }
+            } else if (isFirstExam && subjectScores.length >= 1) {
+                const currSub = subjectScores[subjectScores.length - 1];
+                if (currSub) {
+                    subDetails = CONFIG.SUBJECTS.map(sub => {
+                        return `${sub.n}${Math.round(currSub[sub.id] || 0)}`;
+                    }).join(' | ');
+                }
+            }
+
+            const changeDisplay = isFirstExam ? '首次考试' : `${sign}${Math.round(change)}分`;
+            const detailDisplay = isFirstExam ? `首次：${Math.round(currScore)}` : `${Math.round(prevScore)} → ${Math.round(currScore)}`;
+
+            html += `
+                <div class="report-item">
+                    <div>
+                        <span class="name">${s.name}</span>
+                        <span class="change ${cls}">${changeDisplay}</span>
+                    </div>
+                    <div class="detail">${detailDisplay}</div>
+                    <div style="font-size:.7em;color:var(--text-muted);margin-top:2px;">${subDetails || '暂无科目详情'}</div>
+                </div>
+            `;
+        });
+
+        document.getElementById('report-content').innerHTML = html;
+
+        if (!hasValidData) {
+            document.getElementById('report-summary').innerHTML = `
+                <div style="text-align:center;color:var(--text-muted);padding:10px;">暂无有效考试数据</div>
+            `;
+            document.getElementById('monthly-report-modal').classList.remove('hidden');
+            return;
+        }
+
+        const avgPrev = totalPrev / State.students.length;
+        const avgCurr = totalCurr / State.students.length;
+        const avgChange = avgCurr - avgPrev;
+
+        if (maxImprove === -Infinity) maxImprove = 0;
+
+        document.getElementById('report-summary').innerHTML = `
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
+                <div>
+                    <div style="font-size:.7em;color:var(--text-muted);">班级均分变化</div>
+                    <div style="font-weight:bold;color:${avgChange >= 0 ? 'var(--btn-success)' : 'var(--btn-danger)'};">${avgChange >= 0 ? '+' : ''}${Math.round(avgChange)}分</div>
+                </div>
+                <div>
+                    <div style="font-size:.7em;color:var(--text-muted);">进步最大</div>
+                    <div style="font-weight:bold;color:var(--btn-success);">${maxImproveName || '无'} ${maxImprove !== 0 ? '(' + (maxImprove > 0 ? '+' : '') + Math.round(maxImprove) + ')' : ''}</div>
+                </div>
+                <div>
+                    <div style="font-size:.7em;color:var(--text-muted);">班级均分</div>
+                    <div style="font-weight:bold;">${Math.round(avgCurr)}</div>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('monthly-report-modal').classList.remove('hidden');
+    },
+
+    checkBirthdayEvents() {
+        State.students.forEach(s => {
+            if (s.birthdayMonth === State.month) return;
+            if (Math.random() < 0.20) {
+                s.birthdayMonth = State.month;
+                const gifts = [
+                    { msg: `🎂 ${s.name} 生日！全班庆祝！`, effect: () => { s.stress = Math.max(0, s.stress - 40); s.mood = Math.min(100, s.mood + 20); CONFIG.SUBJECTS.forEach(sub => { s.mastery[sub.id] = Math.min(sub.cap, s.mastery[sub.id] + 3); }); } },
+                    { msg: `🎉 ${s.name} 生日许愿！士气大振！`, effect: () => { State.students.forEach(st => { st.stress = Math.max(0, st.stress - 15); st.mood = Math.min(100, st.mood + 5); }); } },
+                    { msg: `🎁 ${s.name} 收到家人鼓励！`, effect: () => { s.stress = Math.max(0, s.stress - 30); s.mood = Math.min(100, s.mood + 15); CONFIG.SUBJECTS.forEach(sub => { s.mastery[sub.id] = Math.min(sub.cap, s.mastery[sub.id] + 2); }); } }
+                ];
+                const gift = gifts[Math.floor(Math.random() * gifts.length)];
+                this.log(gift.msg, "[生日]");
+                gift.effect();
+                this.updateUI();
+            }
+        });
+    },
+
+    confirmWeekly() {
+        if (State.isGraduated) return;
+        const pts = parseInt(document.getElementById('weekly-pts').innerText);
+        if (pts > 0) { alert("请分配完所有点数！"); return; }
+        State.students.forEach(s => {
+            if (s.sickTimer > 0) return;
+            for (const k in State.tempAlloc) {
+                if (State.tempAlloc[k] > 0) {
+                    const cap = CONFIG.SUBJECTS.find(x => x.id === k).cap;
+                    s.mastery[k] = Math.min(cap, s.mastery[k] + State.tempAlloc[k] * 1.5);
+                }
+            }
+        });
+        UI.closeModal('weekly-modal');
+        this.log("周考复盘完成。");
+        this.finishTurnLogic();
+    },
+
+    finishTurnLogic() {
+        if (State.isGraduated) return;
+        State.ap = State.maxAp;
+        State.money += 300 + (State.students.length * 60);
+        const moodRegen = State.fac.music * 5;
+        const stressRed = State.fac.psy * 8;
+
+        State.students.forEach(s => {
+            const baseDecay = s.talents.some(t => t.id === 't3') ? 8 : 4;
+            s.stress = Math.max(0, s.stress - baseDecay - stressRed);
+            const moodDecay = s.talents.some(t => t.id === 'n5') ? -5 : 0;
+            const moodBoost = s.talents.some(t => t.id === 't7') ? 5 : 0;
+            s.mood = Math.min(100, Math.max(0, s.mood + moodRegen + moodDecay + moodBoost));
+            if (State.weather.eff === 'cold' || State.weather.eff === 'hot') {
+                if (State.fac.ac === 0 && Math.random() < 0.08 && s.sickTimer === 0) {
+                    s.sickTimer = 4;
+                    this.log(`${s.name} 病倒了！`, "[生病]");
+                }
+            }
+        });
+
+        State.students.forEach(s => {
+            if (s.mood >= 80 && Math.random() < 0.30) {
+                const posTalents = CONFIG.TALENTS.filter(t => t.t === 'pos');
+                const available = posTalents.filter(t => !s.talents.some(ex => ex.id === t.id));
+                if (available.length > 0 && s.talents.length < 6) {
+                    const newT = available[Math.floor(Math.random() * available.length)];
+                    s.talents.push({ ...newT });
+                    this.log(`${s.name} 因心情极佳，获得了特质【${newT.n}】`, "[心情特质]");
+                }
+            } else if (s.mood <= 20 && Math.random() < 0.30) {
+                const negTalents = CONFIG.TALENTS.filter(t => t.t === 'neg');
+                const available = negTalents.filter(t => !s.talents.some(ex => ex.id === t.id));
+                if (available.length > 0 && s.talents.length < 6) {
+                    const newT = available[Math.floor(Math.random() * available.length)];
+                    s.talents.push({ ...newT });
+                    this.log(`${s.name} 因心情极差，获得了负面特质【${newT.n}】`, "[心情特质]");
+                }
+            }
+        });
+
+        if (Math.random() < 0.60) {
+            this.triggerEnhancedEvent();
+        }
+
+        this.updateUI();
+        saveGame();
+    },
+
+    triggerEnhancedEvent() {
+        const available = CONFIG.EVENTS.filter(e => !State.eventCooldowns[e.id]);
+        if (available.length === 0) return;
+        const ev = available[Math.floor(Math.random() * available.length)];
+        State.eventCooldowns[ev.id] = 3;
+
+        const options = ev.options.map(opt => {
+            let availableFlag = true;
+            let conditionText = '';
+            if (opt.condition && !opt.condition()) {
+                availableFlag = false;
+                conditionText = ' ❌ 条件不满足';
+            } else if (opt.condition) {
+                conditionText = ' ✅ 条件满足';
+            }
+            return { ...opt, available: availableFlag, conditionText };
+        });
+
+        UI.showEventModal(ev, options);
+    },
+
+    getRandStu(num) {
+        const arr = [...State.students];
+        for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; }
+        return arr.slice(0, num);
+    },
+
+    updateWeather() {
+        State.season = SEASONS[State.month.toString()];
+        State.weather = WEATHER_POOL[State.season][Math.floor(Math.random() * WEATHER_POOL[State.season].length)];
+    },
+
+    getRealRank(score) {
+        if (score >= 720) return 1;
+        if (score >= 681) { const f = (720 - score) / 39; return Math.floor(1 + 158 * f * f); }
+        const table = [{ s: 681, r: 159 }, { s: 680, r: 176 }, { s: 650, r: 1701 }, { s: 600, r: 11716 }, { s: 550, r: 32260 }, { s: 500, r: 62078 }, { s: 450, r: 91261 }, { s: 400, r: 112843 }, { s: 350, r: 126882 }, { s: 300, r: 134938 }, { s: 250, r: 138444 }, { s: 200, r: 139415 }, { s: 180, r: 139478 }, { s: 0, r: 140000 }];
+        for (let i = 0; i < table.length - 1; i++) {
+            if (score >= table[i + 1].s) {
+                const rangeS = table[i].s - table[i + 1].s;
+                const rangeR = table[i + 1].r - table[i].r;
+                const f = (table[i].s - score) / rangeS;
+                return Math.max(1, Math.round(table[i].r + f * rangeR));
+            }
+        }
+        return 140000;
+    },
+
+    prepareExam(forcedName = "", isMock = false) {
+        UI._examClosed = false;
+    
+        if (State.isGraduated) return;
+        const m = document.getElementById('exam-modal');
+        const title = forcedName || (State.month === 9 ? "起点摸底" : State.month === 1 ? "一诊" : State.month === 3 ? "二诊" : "月度联考");
+        document.getElementById('exam-title').innerText = title;
+        document.getElementById('exam-rewards-txt').innerText = isMock ? "（模拟考试，不计入档案）" : "";
+        document.getElementById('exam-close-btn').classList.add('hidden');
+
+        let rData = State.students.map(s => {
+            const obj = { name: s.name, scores: {}, total: 0, ref: s, events: [] };
+            CONFIG.SUBJECTS.forEach(sub => {
+                const base = s.mastery[sub.id] || 0;
+                let raw = base * (1 - Math.min(s.stress, 80) / 600) * (s.sickTimer > 0 ? 0.7 : 1) + (Math.random() * 10 - 5);
+                obj.scores[sub.id] = raw;
+            });
+            return obj;
+        });
+
+        rData.forEach(row => {
+            const mult = row.ref.mood < 10 ? 0.5 : row.ref.mood < 20 ? 0.7 : row.ref.mood < 30 ? 0.85 : 1;
+            for (const k in row.scores) row.scores[k] *= mult;
+        });
+
+        rData.forEach(row => {
+            CONFIG.SUBJECTS.forEach(sub => {
+                const pool = CONFIG.EXAM_EVENTS[sub.id] || [];
+                const posChance = 0.3 + (row.ref.mood / 100) * 0.4;
+                let ev = null;
+                if (Math.random() < posChance) {
+                    const pos = pool.filter(e => e.v > 0);
+                    if (pos.length > 0) ev = pos[Math.floor(Math.random() * pos.length)];
+                } else {
+                    const neg = pool.filter(e => e.v < 0);
+                    if (neg.length > 0) ev = neg[Math.floor(Math.random() * neg.length)];
+                }
+                if (!ev) ev = pool[Math.floor(Math.random() * pool.length)];
+                if (ev) {
+                    row.events.push(`[${sub.n}]${ev.t}(${ev.v > 0 ? '+' : ''}${ev.v})`);
+                    row.scores[sub.id] += ev.v;
+                }
+            });
+        });
+
+        rData.forEach(row => {
+            let sum = 0;
+            CONFIG.SUBJECTS.forEach(sub => {
+                row.scores[sub.id] = Math.max(0, Math.min(sub.cap, Math.round(row.scores[sub.id])));
+                sum += row.scores[sub.id];
+            });
+            row.total = sum;
+            const p = sum / 7.5;
+            // ----- 绝对分数影响心情（原有） -----
+            if (p >= 80) row.ref.mood = Math.min(100, row.ref.mood + 8);
+            else if (p >= 60) row.ref.mood = Math.min(100, row.ref.mood + 2);
+            else if (p < 40) row.ref.mood = Math.max(0, row.ref.mood - 20);
+            else if (p < 60) row.ref.mood = Math.max(0, row.ref.mood - 10);
+            row.ref.mood = Math.max(0, Math.min(100, row.ref.mood));
+        });
+
+        rData.sort((a, b) => b.total - a.total);
+        rData.forEach((row, idx) => {
+            if (idx > 0 && row.total === rData[idx - 1].total) row.rank = rData[idx - 1].rank;
+            else row.rank = Math.max(this.getRealRank(row.total), idx + 1);
+        });
+
+        // ===== 新增：排名变化 + 分数变化 影响心情 =====
+        if (!isMock) {
+            rData.forEach(row => {
+                const s = row.ref;
+                const history = s.history;
+                if (history && history.scores && history.scores.length > 0) {
+                    const prevScore = history.scores[history.scores.length - 1];
+                    const prevRank = history.ranks && history.ranks.length > 0 ? history.ranks[history.ranks.length - 1] : null;
+                    
+                    // 分数变化影响
+                    const scoreDiff = row.total - prevScore;
+                    if (Math.abs(scoreDiff) > 1) {
+                        const moodDelta = Math.min(10, Math.max(-10, Math.round(scoreDiff / 8)));
+                        if (moodDelta > 0) {
+                            s.mood = Math.min(100, s.mood + moodDelta);
+                            this.log(`${s.name} 分数进步 ${Math.round(scoreDiff)} 分，心情 +${moodDelta}`, "[心情]");
+                        } else if (moodDelta < 0) {
+                            s.mood = Math.max(0, s.mood + moodDelta);
+                            this.log(`${s.name} 分数退步 ${Math.round(-scoreDiff)} 分，心情 ${moodDelta}`, "[心情]");
+                        }
+                    }
+                    
+                    // 排名变化影响
+                    if (prevRank !== null && prevRank !== row.rank) {
+                        const rankDiff = prevRank - row.rank; // 正数表示排名上升（数值变小）
+                        if (Math.abs(rankDiff) >= 2) {
+                            const moodDelta = Math.min(8, Math.max(-8, Math.round(rankDiff / 3)));
+                            if (moodDelta > 0) {
+                                s.mood = Math.min(100, s.mood + moodDelta);
+                                this.log(`${s.name} 排名上升 ${rankDiff} 名，心情 +${moodDelta}`, "[心情]");
+                            } else if (moodDelta < 0) {
+                                s.mood = Math.max(0, s.mood + moodDelta);
+                                this.log(`${s.name} 排名下降 ${-rankDiff} 名，心情 ${moodDelta}`, "[心情]");
+                            }
+                        }
+                    }
+                    
+                    // 绝对分数段额外心情修正
+                    if (row.total >= 650) s.mood = Math.min(100, s.mood + 3);
+                    else if (row.total >= 600) s.mood = Math.min(100, s.mood + 2);
+                    else if (row.total >= 550) s.mood = Math.min(100, s.mood + 1);
+                    else if (row.total < 350) s.mood = Math.max(0, s.mood - 3);
+                    else if (row.total < 400) s.mood = Math.max(0, s.mood - 1);
+                    
+                    s.mood = Math.max(0, Math.min(100, s.mood));
+                }
+            });
+        }
+
+        const execRender = () => {
+            
+            m.classList.remove('hidden');
+            const tb = document.getElementById('exam-table');
+            tb.innerHTML =
+                `<tr><th>姓名</th>${CONFIG.SUBJECTS.map(s => `<th>${s.n}</th>`).join('')}<th style="background:var(--btn-danger)">总分</th><th style="background:#8b5cf6">排名</th><th style="background:var(--gold-color);width:180px;">考场动态</th></tr>`;
+            rData.forEach((row, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${row.name}${row.ref.sickTimer > 0 ? ' 🤒' : ''}</td>`;
+                CONFIG.SUBJECTS.forEach(sub => tr.innerHTML += `<td id="c-${idx}-${sub.id}" class="exam-cell"></td>`);
+                tr.innerHTML += `<td id="c-${idx}-total" class="exam-cell" style="color:var(--btn-danger);"></td>`;
+                tr.innerHTML += `<td id="c-${idx}-rank" class="exam-cell" style="color:#8b5cf6;"></td>`;
+                tr.innerHTML += `<td id="c-${idx}-events" class="exam-cell event-col"></td>`;
+                tb.appendChild(tr);
+            });
+            CONFIG.SUBJECTS.forEach((sub, i) => {
+                setTimeout(() => {
+                    rData.forEach((row, idx) => {
+                        const cell = document.getElementById(`c-${idx}-${sub.id}`);
+                        if (cell) {
+                            cell.innerText = row.scores[sub.id] || 0;
+                            const ratio = (row.scores[sub.id] || 0) / sub.cap;
+                            cell.style.background = ratio >= 0.8 ? '#ea580c' : ratio >= 0.6 ? '#16a34a' :
+                                'var(--border-color)';
+                            if (ratio >= 0.6) cell.style.color = 'white';
+                            cell.classList.add('pop');
+                        }
+                    });
+                }, i * 300);
+            });
+            setTimeout(() => {
+                rData.forEach((row, idx) => {
+                    const tc = document.getElementById(`c-${idx}-total`);
+                    if (tc) { tc.innerText = row.total; tc.classList.add('pop', 'flash-gold'); }
+                    const rc = document.getElementById(`c-${idx}-rank`);
+                    if (rc) { rc.innerText = `第${row.rank}名`; rc.classList.add('pop'); }
+                    const ec = document.getElementById(`c-${idx}-events`);
+                    if (ec) { ec.innerHTML = row.events.slice(0, 3).join('<br>') || '-'; ec.classList.add('pop'); }
+                });
+                setTimeout(() => {
+                    if (!isMock) {
+                        let rewardMsg = '🏆 补助¥1000';
+                        let bonusTotal = 0;
+                        
+                        // 存储历史数据 & 计算进步奖金
+                        rData.forEach(r => {
+                            if (r.ref.history) {
+                                if (!r.ref.history.scores) r.ref.history.scores = [];
+                                r.ref.history.scores.push(r.total);
+                                if (!r.ref.history.ranks) r.ref.history.ranks = [];
+                                r.ref.history.ranks.push(r.rank);
+                                
+                                if (!r.ref.history.subjectScores) r.ref.history.subjectScores = [];
+                                let subScores = {};
+                                CONFIG.SUBJECTS.forEach(sub => {
+                                    subScores[sub.id] = r.scores[sub.id] || 0;
+                                });
+                                r.ref.history.subjectScores.push(subScores);
+                                
+                                // ===== 进步奖金逻辑 =====
+                                const scores = r.ref.history.scores;
+                                if (scores.length >= 2) {
+                                    const prevScore = scores[scores.length - 2];
+                                    const currScore = scores[scores.length - 1];
+                                    const progress = currScore - prevScore;
+                                    // 如果上次生病了（sickTimer > 0）则不算
+                                    // 注意：sickTimer 是考试时的状态，我们检查考试时是否生病
+                                    // 但历史数据中没有存储 sickTimer，所以用当前状态判断可能不准
+                                    // 用 r.ref.sickTimer 但那是当前状态，考试时可能已经好了
+                                    // 改用 r.ref.history 中是否存储了 sick 信息？
+                                    // 简单处理：检查考试时是否生病，我们用 r.ref.sickTimer > 0 来判断
+                                    // 但 r.ref.sickTimer 是当前状态，不是考试时的状态
+                                    // 折中：如果当前 sickTimer > 0，不发放进步奖金
+                                    // 更准确的做法是在历史中存储 sick 状态，但为了简化，我们检查当前是否生病
+                                    // 如果当前生病，不发放
+                                    if (r.ref.sickTimer === 0 && progress > 50) {
+                                        let bonus = 0;
+                                        if (progress > 100) { bonus = 5000; }
+                                        else if (progress > 80) { bonus = 2000; }
+                                        else if (progress > 50) { bonus = 1000; }
+                                        if (bonus > 0) {
+                                            State.money += bonus;
+                                            bonusTotal += bonus;
+                                            this.log(`🏅 ${r.name} 进步 ${Math.round(progress)} 分，获得进步奖金 ¥${bonus}`, "[进步奖]");
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        
+                        // 基础补助
+                        State.money += 1000;
+                        if (bonusTotal > 0) {
+                            rewardMsg = `🏆 补助¥1000 + 进步奖金¥${bonusTotal}`;
+                        }
+                        document.getElementById('exam-rewards-txt').innerText = rewardMsg;
+                    }
+                    document.getElementById('exam-close-btn').classList.remove('hidden');
+                }, 600);
+            }, CONFIG.SUBJECTS.length * 300 + 200);
+        };
+        execRender();
+    },
+
+    startGaokao() {
+        if (State.isGraduated) return;
+        document.getElementById('gaokao-modal').classList.add('hidden');
+        this.prepareExam("全国统一高考");
+        const btn = document.getElementById('exam-close-btn');
+        btn.innerText = "查看录取";
+        btn.onclick = () => { 
+            State.isGraduated = true; 
+            this.showEnding(); 
+        };
+    },
+
+    showEnding() {
+        document.getElementById('exam-modal').classList.add('hidden');
+        document.getElementById('ending-modal').classList.remove('hidden');
+        let html = "", total = 0;
+        State.students.forEach(s => {
+            const scores = s.history && s.history.scores ? s.history.scores : [];
+            const fs = scores.length > 0 ? scores[scores.length - 1] : 400;
+            total += fs;
+            const tier = CONFIG.UNIS.find(u => fs >= u.min) || CONFIG.UNIS[4];
+            const uni = tier.list[Math.floor(Math.random() * tier.list.length)];
+            html += `<div style="background:var(--bg-input);border:1px solid var(--border-color);padding:8px;border-radius:6px;display:flex;align-items:center;gap:8px;">
+                <div style="font-size:1.2em;">📍</div>
+                <div><b style="color:var(--text-primary);">${s.name}</b><br><span style="color:var(--btn-accent);font-size:.85em;">${uni} (${fs}分)</span></div>
+            </div>`;
+        });
+        document.getElementById('ending-cengfan').innerHTML = html;
+        const avg = total / State.students.length;
+        const evalText = avg >= 685 ? '🎉 神级！全员清北！' : avg >= 650 ? '🌟 全员C9！' : avg >= 600 ? '👍 全员985！' :
+            avg >= 500 ? '✅ 全员211！' : '😅 还需努力！';
+        document.getElementById('ending-player').innerHTML = `
+            <p style="font-weight:bold;color:var(--text-primary);">平均分: ${Math.round(avg)}</p>
+            <p style="color:var(--text-secondary);">${evalText}</p>
+            <p style="color:var(--text-muted);font-size:.9em;">感谢您的游玩！</p>
+        `;
+        saveGame();
+    },
+
+    returnToClass() {
+        document.getElementById('ending-modal').classList.add('hidden');
+        State.ap = 'INF';
+        document.getElementById('ui-ap').innerText = 'INF';
+        document.getElementById('ap-max-txt').innerText = '';
+        document.getElementById('btn-next-turn').innerText = '已毕业 🎓';
+        document.getElementById('btn-next-turn').disabled = true;
+        this.log("同学们毕业了，偶尔会回来看你。", "[完结]");
+        this.updateUI();
+        this.updateCountdown();
+    },
+
+    healDoctor(sIdx) {
+        if (State.isGraduated) return alert("已毕业！");
+        if (State.money < 1000) return alert("班费不足！");
+        State.money -= 1000;
+        State.students[sIdx].sickTimer = 0;
+        UI.closeModal('doctor-modal');
+        this.log(`治好了 ${State.students[sIdx].name}。`, "[康复]");
+        this.updateUI();
+        saveGame();
+    },
+
+    log(msg, eff = "") {
+        const area = document.getElementById('log-area');
+        const timeStr = `${State.year}/${String(State.month).padStart(2, '0')} W${State.week}`;
+        area.innerHTML =
+            `<div class="log-entry"><span class="log-time">[${timeStr}]</span> ${msg} ${eff ? `<span class="log-eff">${eff}</span>` : ''}</div>` +
+            area.innerHTML;
+    },
+
+    updateUI() {
+        document.getElementById('ui-time').innerText = `${State.year}/${State.month} W${State.week}`;
+        document.getElementById('ui-money').innerText = Math.round(State.money);
+        if (!State.isGraduated && typeof State.ap === 'number') {
+            document.getElementById('ui-ap').innerText = State.ap;
+            document.getElementById('ap-max-txt').innerText = `/${State.maxAp}`;
+        }
+        document.getElementById('ui-weather').innerText = State.weather.i;
+        document.getElementById('ui-weather-txt').innerText = State.weather.n;
+        document.getElementById('ui-season').innerText = State.season + "季";
+        document.getElementById('sprint-tag').classList.toggle('hidden', !(State.month === 5 && State.year === 2026));
+        UI.renderClassroom();
+        UI.renderFacilities();
+        updateDiffBadge();
+        this.updateCountdown();
+    },
+
+    updateCountdown() {
+        const targetYear = 2026, targetMonth = 6, targetWeek = 1;
+        let totalMonths = (targetYear - State.year) * 12 + (targetMonth - State.month);
+        let totalWeeks = totalMonths * 4 + (targetWeek - State.week);
+        if (totalWeeks < 0) totalWeeks = 0;
+        document.getElementById('countdown').textContent = `⏳ 剩余 ${totalWeeks} 周`;
+    }
+};
+// ===== 图表配置 =====
+const ChartColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'];
+let ChartState = [true, true, true, true, true, true];
+let ChartHoverData = [];
+// ===== 图表绘制 =====
+function drawFullChart() {
+    const cvs = document.getElementById('chartCanvas');
+    if (!cvs) return;
+
+    const container = cvs.parentElement;
+    if (!container) return;
+
+    let w = container.clientWidth || 600;
+    let h = container.clientHeight || 400;
+    if (w < 100) w = 600;
+    if (h < 100) h = 400;
+
+    const dpr = window.devicePixelRatio || 1;
+    cvs.width = w * dpr;
+    cvs.height = h * dpr;
+    cvs.style.width = w + 'px';
+    cvs.style.height = h + 'px';
+
+    const ctx = cvs.getContext('2d');
+    if (!ctx) return;
+    ctx.scale(dpr, dpr);
+
+    const W = w, H = h;
+    ctx.clearRect(0, 0, W, H);
+
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const bgColor = isDark ? '#1e293b' : '#f8fafc';
+    const gridColor = isDark ? '#475569' : '#cbd5e1';
+    const textColor = isDark ? '#cbd5e1' : '#64748b';
+
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, W, H);
+    ChartHoverData = [];
+
+    const activeStudents = State.students.filter((_, i) => ChartState[i]);
+    const hasData = activeStudents.some(s => s.history && s.history.scores && s.history.scores.length > 0);
+
+    if (!hasData) {
+        ctx.fillStyle = textColor;
+        ctx.font = '20px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('暂无考试数据', W / 2, H / 2);
+        return;
+    }
+
+    let maxExams = 0;
+    activeStudents.forEach(s => {
+        if (s.history && s.history.scores) {
+            maxExams = Math.max(maxExams, s.history.scores.length);
+        }
+    });
+
+    let allScores = [];
+    activeStudents.forEach(s => {
+        if (s.history && s.history.scores) {
+            allScores = allScores.concat(s.history.scores);
+        }
+    });
+
+    const TARGET_PIXEL_GAP = 600;
+    let yMin, yMax;
+
+    if (allScores.length > 0) {
+        const rawMin = Math.min(...allScores);
+        const rawMax = Math.max(...allScores);
+        const rawRange = rawMax - rawMin;
+
+        const sorted = [...allScores].sort((a, b) => a - b);
+        let minDiff = Infinity;
+        for (let i = 1; i < sorted.length; i++) {
+            const diff = sorted[i] - sorted[i-1];
+            if (diff < minDiff) minDiff = diff;
+        }
+        if (minDiff === Infinity || minDiff === 0) minDiff = 1;
+
+        const pad = { top: 35, bottom: 50, left: 65, right: 35 };
+        const drawH = H - pad.top - pad.bottom;
+
+        const requiredRange = (minDiff * drawH) / TARGET_PIXEL_GAP;
+
+        let finalRange = Math.max(rawRange, requiredRange, 360);
+
+        const margin = Math.max(finalRange * 0.20, 25);
+        yMin = Math.max(0, rawMin - margin);
+        yMax = rawMax + margin;
+
+        if (yMax - yMin < 360) {
+            const center = (yMax + yMin) / 2;
+            yMin = Math.max(0, center - 180);
+            yMax = center + 180;
+        }
+
+        if (rawMax < 650 && yMax < 700) {
+            yMax = Math.max(700, rawMax + margin);
+        }
+        if (rawMin > 300 && yMin > 180) {
+            yMin = Math.min(180, rawMin - margin);
+        }
+        if (yMax - yMin < 360) {
+            const center = (yMax + yMin) / 2;
+            yMin = Math.max(0, center - 180);
+            yMax = center + 180;
+        }
+    } else {
+        yMin = 0;
+        yMax = 750;
+    }
+
+    const pad = { top: 35, bottom: 50, left: 65, right: 35 };
+    const drawW = W - pad.left - pad.right;
+    const drawH = H - pad.top - pad.bottom;
+
+    let stepX = 0, offsetX = 0;
+    if (maxExams > 1) {
+        const FIXED_SPACING = 150;
+        const totalNeeded = (maxExams - 1) * FIXED_SPACING;
+        if (drawW >= totalNeeded) {
+            stepX = FIXED_SPACING;
+            offsetX = (drawW - totalNeeded) / 2;
+        } else {
+            const MIN_SPACING = 80;
+            const minNeeded = (maxExams - 1) * MIN_SPACING;
+            if (drawW >= minNeeded) {
+                stepX = drawW / (maxExams - 1);
+                offsetX = 0;
+            } else {
+                stepX = Math.max(60, drawW / (maxExams - 1));
+                offsetX = 0;
+            }
+        }
+    } else {
+        stepX = drawW;
+        offsetX = 0;
+    }
+
+    ctx.strokeStyle = gridColor;
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i <= 4; i++) {
+        const value = yMin + (yMax - yMin) * (1 - i / 4);
+        const y = pad.top + (i / 4) * drawH;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, y);
+        ctx.lineTo(W - pad.right, y);
+        ctx.stroke();
+        ctx.fillStyle = textColor;
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(Math.round(value), pad.left - 8, y);
+    }
+
+    const firstStudent = activeStudents.find(s => s.history && s.history.scores && s.history.scores.length > 0);
+    const examNames = firstStudent?.history?.scores?.map((_, i) => `第${i+1}次`) || [];
+    if (examNames.length > 0) {
+        examNames.forEach((name, i) => {
+            const x = pad.left + offsetX + i * (maxExams > 1 ? stepX : 0);
+            ctx.fillStyle = textColor;
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.fillText(name, x, pad.top + drawH + 8);
+        });
+    }
+
+    ctx.save();
+    ctx.translate(14, pad.top + drawH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = textColor;
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('总分', 0, 0);
+    ctx.restore();
+
+    activeStudents.forEach((s, idx) => {
+        const globalIndex = State.students.indexOf(s);
+        if (!ChartState[globalIndex]) return;
+        if (!s.history || !s.history.scores || s.history.scores.length === 0) return;
+
+        const color = isDark ? '#ffffff' : ChartColors[globalIndex];
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+
+        const points = [];
+        s.history.scores.forEach((score, j) => {
+            const x = pad.left + offsetX + j * (maxExams > 1 ? stepX : 0);
+            let y = pad.top + drawH - (score - yMin) / (yMax - yMin) * drawH;
+            y = Math.max(pad.top, Math.min(pad.top + drawH, y));
+            points.push({ x, y, score, index: j });
+            if (j === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+
+            ChartHoverData.push({
+                x, y,
+                name: s.name,
+                score,
+                index: j + 1,
+                color: color,
+                student: s,
+                examIndex: j,
+                prevScore: j > 0 ? s.history.scores[j - 1] : null,
+                yMin: yMin,
+                yMax: yMax
+            });
+        });
+        ctx.stroke();
+
+        points.forEach((p) => {
+            const radius = 5;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, radius + 1, 0, Math.PI * 2);
+            ctx.fillStyle = isDark ? '#1e293b' : '#ffffff';
+            ctx.fill();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, radius * 0.6, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+        });
+    });
+
+    const controlsWrap = document.getElementById('chart-controls-page');
+    if (controlsWrap && controlsWrap.children.length === 0) {
+        controlsWrap.innerHTML = State.students.map((s, i) => `
+            <label>
+                <input type="checkbox" ${ChartState[i] ? 'checked' : ''} onchange="toggleChartLinePage(${i}, this.checked)">
+                <span style="color:${ChartColors[i]}">${s.name}</span>
+            </label>
+        `).join('');
+    }
+}
+function toggleChartLinePage(i, checked) {
+    ChartState[i] = checked;
+    drawFullChart();
+}
+
+document.addEventListener('mousemove', function(e) {
+    const cvs = document.getElementById('chartCanvas');
+    if (!cvs || !document.getElementById('chart-page').classList.contains('active')) return;
+
+    const rect = cvs.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    const scaleX = cvs.width / rect.width / dpr;
+    const scaleY = cvs.height / rect.height / dpr;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+
+    let closest = null, minDist = 25;
+    ChartHoverData.forEach(d => {
+        const dist = Math.sqrt(Math.pow(d.x - mx, 2) + Math.pow(d.y - my, 2));
+        if (dist < minDist) { minDist = dist; closest = d; }
+    });
+
+    const tip = document.getElementById('chart-tooltip-page');
+    if (closest) {
+        const s = closest.student;
+        let details = '';
+        if (s && s.mastery) {
+            details = CONFIG.SUBJECTS.map(sub =>
+                `<div class="detail-row"><span class="label">${sub.n}</span><span class="value">${Math.round(s.mastery[sub.id] || 0)}</span></div>`
+            ).join('');
+        }
+        let changeHtml = '';
+        if (closest.prevScore !== null && closest.prevScore !== undefined) {
+            const diff = closest.score - closest.prevScore;
+            const sign = diff > 0 ? '+' : '';
+            const cls = diff > 0 ? 'up' : (diff < 0 ? 'down' : '');
+            changeHtml = `<div class="change-row">较上次: <span class="${cls}">${sign}${Math.round(diff)}分</span></div>`;
+        }
+        tip.style.display = 'block';
+        tip.style.left = (closest.x / scaleX) + 'px';
+        tip.style.top = (closest.y / scaleY) + 'px';
+        tip.innerHTML = `
+            <div style="font-weight:bold;margin-bottom:4px;color:${closest.color}">${closest.name}</div>
+            <div class="detail-row"><span class="label">第${closest.index}次考试</span><span class="value" style="color:#fcd34d;">${closest.score}分</span></div>
+            ${details ? `<div style="border-top:1px solid var(--border-color);margin-top:4px;padding-top:4px;">${details}</div>` : ''}
+            ${changeHtml}
+        `;
+    } else {
+        tip.style.display = 'none';
+    }
+});
+
+// ===== 启动 =====
+window.onload = () => {
+    checkSavedGame();
+    document.querySelector('.mode-btn[data-mode="normal"]')?.classList.add('selected');
+    window.addEventListener('resize', () => {
+        if (document.getElementById('chart-page').classList.contains('active')) {
+            drawFullChart();
+        }
+    });
+};
+</script>
+</body>
+</html>
