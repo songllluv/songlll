@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>难度选择 Demo — OI 教练模拟器</title>
+  <style>
+    :root { --bg: #f7f7f8; --card: #ffffff; --muted: #666; --accent: #2b6cb0; }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "PingFang SC","Microsoft YaHei",Arial,Helvetica,sans-serif;
+      background: var(--bg);
+      margin: 0;
+      color: #222;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 16px;
+    }
+
+    header {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    header h1 { margin: 0; font-size: 18px; }
+
+    .panel {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+
+    .small { font-size: 13px; color: var(--muted); }
+    .muted { color: var(--muted); font-size: 13px; }
+
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+    label.block { display: block; margin: 6px 0; font-weight: 600; }
+
+    /* ========== 难度轮播 ========== */
+    .diff-carousel-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 14px;
+      user-select: none;
+      width: 100%;
+    }
+
+    .carousel-viewport {
+      position: relative;
+      flex: 1;
+      max-width: 520px;
+      height: 180px;
+      overflow: hidden;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    .carousel-track {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .diff-carousel-card {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: var(--card);
+      border: 1px solid #e6e6e6;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: transform 0.28s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.22s ease;
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .diff-carousel-card.carousel-enter-right { transform: translateX(100%); opacity: 0; }
+    .diff-carousel-card.carousel-enter-left  { transform: translateX(-100%); opacity: 0; }
+    .diff-carousel-card.carousel-exit-left    { transform: translateX(-100%); opacity: 0; pointer-events: none; }
+    .diff-carousel-card.carousel-exit-right   { transform: translateX(100%); opacity: 0; pointer-events: none; }
+    .diff-carousel-card.carousel-active       { transform: translateX(0); opacity: 1; }
+
+    .diff-card-name {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 8px;
+      letter-spacing: 3px;
+      transition: opacity 0.2s ease 0.04s;
+    }
+
+    .diff-card-desc {
+      font-size: 15px;
+      color: var(--muted);
+      transition: opacity 0.22s ease 0.08s;
+    }
+
+    .diff-carousel-card.carousel-enter-right .diff-card-name,
+    .diff-carousel-card.carousel-enter-left  .diff-card-name,
+    .diff-carousel-card.carousel-enter-right .diff-card-desc,
+    .diff-carousel-card.carousel-enter-left  .diff-card-desc {
+      opacity: 0;
+    }
+    .diff-carousel-card.carousel-active .diff-card-name,
+    .diff-carousel-card.carousel-active .diff-card-desc {
+      opacity: 1;
+    }
+
+    .carousel-arrow {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1px solid #ddd;
+      background: var(--card);
+      color: #333;
+      font-size: 22px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s ease;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      flex-shrink: 0;
+    }
+    .carousel-arrow:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 3px 10px rgba(43,108,176,0.18);
+      transform: scale(1.08);
+    }
+    .carousel-arrow:active {
+      transform: scale(0.95);
+    }
+
+    .diff-detail-panel {
+      margin-top: 14px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+    .diff-detail-panel.diff-detail-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .diff-detail-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto 14px;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+
+    .diff-detail-stats {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .diff-stat-item {
+      background: #f8fafc;
+      border: 1px solid #e6e6e6;
+      border-radius: 8px;
+      padding: 8px 16px;
+      text-align: center;
+      min-width: 80px;
+      opacity: 0;
+      transition: opacity 0.22s ease, transform 0.22s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .diff-detail-panel.diff-detail-visible .diff-detail-desc,
+    .diff-detail-panel.diff-detail-visible .diff-stat-item {
+      opacity: 1;
+    }
+
+    .diff-detail-panel.diff-detail-visible .diff-stat-item:nth-child(1) { transition-delay: 0.04s; }
+    .diff-detail-panel.diff-detail-visible .diff-stat-item:nth-child(2) { transition-delay: 0.10s; }
+    .diff-detail-panel.diff-detail-visible .diff-stat-item:nth-child(3) { transition-delay: 0.16s; }
+
+    .diff-stat-item:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(43,108,176,0.08);
+      transform: translateY(-2px);
+    }
+    .diff-stat-key {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .diff-stat-val {
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* 当前选中指示 */
+    .current-selection {
+      margin-top: 20px;
+      padding: 12px 16px;
+      background: #f0f7ff;
+      border: 1px solid #d0e3f7;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 14px;
+      color: #2b6cb0;
+    }
+    .current-selection strong { font-size: 16px; }
+
+    footer {
+      text-align: center;
+      padding: 12px 8px;
+      color: #999;
+      font-size: 12px;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>难度选择 Demo</h1>
+  </header>
+
+  <div class="panel">
+    <h3 style="margin:0 0 4px 0;">选择难度</h3>
+    <p class="small" style="margin:0 0 8px 0;">使用左右箭头或键盘方向键切换难度</p>
+
+    <!-- 隐藏的 select（保持与原版一致的数据接口） -->
+    <select id="start-diff" style="display:none">
+      <option value="1">简单 - 适合初次体验的人</option>
+      <option value="2" selected>普通 - 标准游戏体验</option>
+      <option value="3">困难 - 适合寻求挑战的人</option>
+    </select>
+
+    <!-- 轮播 -->
+    <div class="diff-carousel-wrapper">
+      <button class="carousel-arrow carousel-arrow-left" id="diff-prev" aria-label="上一个难度">&lt;</button>
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="diff-carousel-track"></div>
+      </div>
+      <button class="carousel-arrow carousel-arrow-right" id="diff-next" aria-label="下一个难度">&gt;</button>
+    </div>
+
+    <!-- 详情面板 -->
+    <div id="diff-detail" class="diff-detail-panel"></div>
+
+    <!-- 当前选中 -->
+    <div class="current-selection" id="current-selection">
+      当前难度：<strong id="current-diff-label">普通</strong>（值：<span id="current-diff-value">2</span>）
+    </div>
+  </div>
+
+  <footer>
+    从 start.html 摘出的难度选择轮播组件 · 行为完全与原版一致
+  </footer>
+</div>
+
+<script>
+  // ============ 轮播式难度选择（与原版 start.html 行为完全一致） ============
+  (function() {
+    var defs = [
+      { v: 1, label: '简单', desc: '适合初次体验的人', detail: '', stats: [
+        { k: '经费倍率', v: '150%' }, { k: '初始能力', v: '+20' }, { k: '比赛强度', v: '较低' }
+      ]},
+      { v: 2, label: '普通', desc: '标准游戏体验', detail: '', stats: [
+        { k: '经费倍率', v: '100%' }, { k: '初始能力', v: '+0' }, { k: '比赛强度', v: '标准' }
+      ]},
+      { v: 3, label: '专家', desc: '不适合任何人', detail: '', stats: [
+        { k: '经费倍率', v: '50%' }, { k: '初始能力', v: '-20' }, { k: '比赛强度', v: '高' }
+      ]}
+    ];
+
+    var track = document.getElementById('diff-carousel-track');
+    var hidden = document.getElementById('start-diff');
+    var detail = document.getElementById('diff-detail');
+    var currentDiffLabel = document.getElementById('current-diff-label');
+    var currentDiffValue = document.getElementById('current-diff-value');
+
+    if (!track || !hidden) return;
+
+    var currentIndex = 0;
+    var initialVal = parseInt(hidden.value) || 2;
+    for (var i = 0; i < defs.length; i++) {
+      if (defs[i].v === initialVal) { currentIndex = i; break; }
+    }
+
+    var isAnimating = false;
+    var ANIM_DURATION = 300;   // 与CSS过渡时长保持同步
+    var DETAIL_FADE_GAP = 140; // 详情面板先淡出、再更新内容、再淡入的间隔
+
+    function buildCard(def, extraClass) {
+      var card = document.createElement('div');
+      card.className = 'diff-carousel-card' + (extraClass ? ' ' + extraClass : '');
+      card.dataset.val = def.v;
+      var nameEl = document.createElement('div');
+      nameEl.className = 'diff-card-name';
+      nameEl.textContent = def.label;
+      var descEl = document.createElement('div');
+      descEl.className = 'diff-card-desc';
+      descEl.textContent = def.desc;
+      card.appendChild(nameEl);
+      card.appendChild(descEl);
+      return card;
+    }
+
+    function updateDetail(def) {
+      if (!detail) return;
+      // 先淡出详情面板
+      detail.classList.remove('diff-detail-visible');
+      // 等待淡出完成后更新内容并淡入
+      clearTimeout(detail._fadeTimer);
+      detail._fadeTimer = setTimeout(function() {
+        var html = '<div class="diff-detail-desc">' + def.detail + '</div>';
+        html += '<div class="diff-detail-stats">';
+        for (var i = 0; i < def.stats.length; i++) {
+          var s = def.stats[i];
+          html += '<div class="diff-stat-item"><span class="diff-stat-key">' + s.k + '</span><span class="diff-stat-val">' + s.v + '</span></div>';
+        }
+        html += '</div>';
+        detail.innerHTML = html;
+        // 触发回流后淡入
+        void detail.offsetWidth;
+        detail.classList.add('diff-detail-visible');
+      }, DETAIL_FADE_GAP);
+
+      // 更新底部当前选中显示
+      if (currentDiffLabel) currentDiffLabel.textContent = def.label;
+      if (currentDiffValue) currentDiffValue.textContent = def.v;
+    }
+
+    function showCard(index, direction) {
+      if (isAnimating) return;
+      if (index < 0 || index >= defs.length) return;
+      if (index === currentIndex) return;
+
+      isAnimating = true;
+      var oldCard = track.querySelector('.diff-carousel-card');
+      var newDef = defs[index];
+
+      // 确定进出方向对应的CSS类
+      var enterClass = direction === 'next' ? 'carousel-enter-right' : 'carousel-enter-left';
+      var exitClass  = direction === 'next' ? 'carousel-exit-left'  : 'carousel-exit-right';
+
+      // 创建新卡片，初始状态为离屏
+      var newCard = buildCard(newDef, enterClass);
+      track.appendChild(newCard);
+
+      // 强制回流，确保浏览器识别起始状态
+      void newCard.offsetWidth;
+
+      // 同时触发旧卡片退出和新卡片进入
+      if (oldCard) { oldCard.classList.add(exitClass); }
+      newCard.classList.remove(enterClass);
+      newCard.classList.add('carousel-active');
+
+      // 更新隐藏select和详情面板
+      hidden.value = '' + newDef.v;
+      updateDetail(newDef);
+      currentIndex = index;
+
+      // 动画结束后清理旧卡片
+      setTimeout(function() {
+        if (oldCard && oldCard.parentNode) oldCard.parentNode.removeChild(oldCard);
+        isAnimating = false;
+      }, ANIM_DURATION + 20);
+    }
+
+    // 初始渲染
+    track.innerHTML = '';
+    var initialCard = buildCard(defs[currentIndex], 'carousel-active');
+    track.appendChild(initialCard);
+
+    // 初始详情直接显示，不需要动画
+    if (detail) {
+      var d = defs[currentIndex];
+      var html = '<div class="diff-detail-desc">' + d.detail + '</div>';
+      html += '<div class="diff-detail-stats">';
+      for (var i = 0; i < d.stats.length; i++) {
+        var s = d.stats[i];
+        html += '<div class="diff-stat-item"><span class="diff-stat-key">' + s.k + '</span><span class="diff-stat-val">' + s.v + '</span></div>';
+      }
+      html += '</div>';
+      detail.innerHTML = html;
+      void detail.offsetWidth;
+      detail.classList.add('diff-detail-visible');
+    }
+
+    // 绑定箭头事件
+    var prevBtn = document.getElementById('diff-prev');
+    var nextBtn = document.getElementById('diff-next');
+    if (prevBtn) prevBtn.addEventListener('click', function() { showCard(currentIndex - 1, 'prev'); });
+    if (nextBtn) nextBtn.addEventListener('click', function() { showCard(currentIndex + 1, 'next'); });
+
+    // 支持键盘左右方向键切换
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft')  { showCard(currentIndex - 1, 'prev'); }
+      if (e.key === 'ArrowRight') { showCard(currentIndex + 1, 'next'); }
+    });
+  })();
+</script>
+
+</body>
+</html>

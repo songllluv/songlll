@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>开始 — OI 教练模拟器</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="lib/echarts.min.js"></script>
+<!-- Clarity tracking removed -->
+  <!-- Cloudflare Web Analytics loader (conditional: only load if page load time <= 2s) -->
+  <script>
+    (function(){
+      function injectCF(){
+        var s = document.createElement('script');
+        s.defer = true;
+        s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+        s.setAttribute('data-cf-beacon', '{"token": "cd3db41765ea4c17be0930b3f94e3c3a"}');
+        document.head.appendChild(s);
+      }
+      function shouldLoad(){
+        try{
+          var start = (performance.timing && performance.timing.navigationStart) || 0;
+          var elapsed = performance.now ? performance.now() : (Date.now() - start);
+          return elapsed <= 2000;
+        }catch(e){ return false; }
+      }
+      document.addEventListener('DOMContentLoaded', function(){ if(shouldLoad()) injectCF(); });
+    })();
+  </script>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>OI 教练模拟器 — 开始</h1>
+  </header>
+  <div class="panel">
+    <h3>新游戏设置</h3>
+    
+    <!-- 步骤指示器 -->
+    <div class="step-indicator">
+      <span class="step-dot active" id="step-dot-1">1</span><span class="step-line" id="step-line-1"></span>
+      <span class="step-dot" id="step-dot-2">2</span><span class="step-line" id="step-line-2"></span>
+      <span class="step-dot" id="step-dot-3">3</span>
+    </div>
+
+    <!-- 步骤内容区 -->
+    <div class="step-body">
+      <!-- 第一步：选择难度和模式 -->
+      <div class="active" id="step-1">
+        <label class="block">选择难度</label>
+        <select id="start-diff" style="display:none">
+          <option value="1">简单 - 适合初次体验的人</option>
+          <option value="2" selected>普通 - 标准游戏体验</option>
+          <option value="3">困难 - 适合寻求挑战的人</option>
+        </select>
+        <div class="diff-carousel-wrapper">
+          <button class="carousel-arrow carousel-arrow-left" id="diff-prev" aria-label="上一个难度">&lt;</button>
+          <div class="carousel-viewport">
+            <div class="carousel-track" id="diff-carousel-track"></div>
+          </div>
+          <button class="carousel-arrow carousel-arrow-right" id="diff-next" aria-label="下一个难度">&gt;</button>
+        </div>
+        <div id="diff-detail" class="diff-detail-panel"></div>
+
+        <input type="hidden" id="start-mode" value="simplified" />
+
+        <div class="step-actions">
+          <button class="btn" id="step1-next" style="min-width:180px;padding:10px 24px;font-size:16px;">下一步 →</button>
+        </div>
+      </div>
+
+      <!-- 第二步：选择省份（地图） -->
+      <div id="step-2">
+        <label class="block">选择省份</label>
+        <div class="small muted" style="margin-bottom:6px">不同省份影响初始经费和训练质量。<strong>强省</strong>资源丰富<strong>弱省</strong>具有挑战性。</div>
+        <div id="map-container"></div>
+        <div id="prov-info-panel">请在地图上点击选择省份</div>
+        <div id="prov-detail-panel" class="prov-detail-panel" style="margin-top:8px;padding:10px 14px;background:#f9fafb;border:1px solid #e4e7ed;border-radius:6px;font-size:13px;line-height:1.8;color:#555;display:none;"></div>
+        <input type="hidden" id="start-prov" value="1" />
+
+        <div class="step-actions">
+          <button class="btn btn-ghost" id="step2-prev">← 上一步</button>
+          <button class="btn" id="step2-next" style="min-width:120px;">下一步 →</button>
+        </div>
+      </div>
+
+      <!-- 第三步：学生人数 / 天赋预览 / 开始 -->
+      <div id="step-3">
+        <label class="block">学生人数 (3-10)</label>
+        <div class="small muted" style="margin-bottom:6px">更多学生意味着更多机遇，也会带来更多的经费开支</div>
+        <input id="start-stu" type="number" min="3" max="10" value="5" style="width:120px;font-size:18px;text-align:center;" />
+
+        <!-- 天赋预览（折叠） -->
+        <div class="sub-panel collapsible collapsed" id="talent-only-panel" style="margin-top:12px">
+          <h4>游戏核心概念</h4>
+          <div class="small muted" style="line-height:1.6;margin-bottom:10px">
+            <p><strong>目标</strong>：带领学生在两个赛季内冲击NOI金牌，入选国家集训队，进军IOI</p>
+            <p><strong>学生属性</strong>：思维、编程、心理三项基础能力 + 五大知识点（数据结构、图论、字符串、数学、DP）</p>
+            <p><strong>经费管理</strong>：升级设施、参加集训都需要经费，需合理规划</p>
+            <p><strong>压力系统</strong>：高压训练会增加压力，压力过高可能导致退队</p>
+            <p><strong>比赛链</strong>：CSP-S1 → CSP-S2 → NOIP → 省选 → NOI，必须通过前一场才能参加下一场</p>
+          </div>
+  <h4 class="collapsible-head" style="margin-top:16px">天赋预览</h4>
+  <div class="small muted" style="margin-bottom:6px">学生在训练中有概率获得天赋，天赋会影响比赛表现和训练效果</div>
+          <div id="talent-grid" class="talent-grid"></div>
+          <select id="train-talent" style="display:none"></select>
+        </div>
+
+        <div class="step-actions">
+          <button class="btn btn-ghost" id="step3-prev">← 上一步</button>
+          <button class="btn btn-ghost" id="start-help">查看详细帮助</button>
+          <button class="btn" id="daily-challenge-btn">今日挑战</button>
+          <button class="btn" id="start-button">开始游戏</button>
+        </div>
+      </div>
+    </div><!-- .step-body -->
+  </div>
+</div>
+
+<script src="lib/chinese-convert.js"></script>
+<script src="lib/climate.js"></script>
+<script src="events.js"></script>
+<script src="lib/facilities.js"></script>
+<script src="lib/provinces.js"></script>
+<script src="lib/constants.js"></script>
+<script src="lib/utils.js"></script>
+<script src="lib/models.js"></script>
+<script src="lib/talent.js"></script>
+<script src="game.js"></script>
+<script src="render.js"></script>
+<script src="debug.js"></script>
+<script>
+
+  // 移除对招生/学前培养状态的维护；仅提供渲染天赋网格的功能
+  function renderTalentGrid(){
+    const grid = document.getElementById('talent-grid');
+    const hiddenSelect = document.getElementById('train-talent');
+    if(!grid || !hiddenSelect) return;
+    grid.innerHTML = '';
+    hiddenSelect.innerHTML = '';
+    if(typeof window === 'undefined' || !window.TalentManager) return;
+    const talents = window.TalentManager.getRegistered();
+    talents.forEach(name => {
+      const info = window.TalentManager.getTalentInfo(name) || {};
+      // populate hidden select
+      const opt = document.createElement('option'); opt.value = name; opt.textContent = name; hiddenSelect.appendChild(opt);
+
+      // create card
+      const card = document.createElement('div'); card.className = 'talent-card'; card.dataset.val = name;
+      const top = document.createElement('div');
+      const dot = document.createElement('span'); dot.className = 'color-dot'; dot.style.background = (info.color || '#2b6cb0');
+      const title = document.createElement('span'); title.className = 'title'; title.textContent = name;
+      top.appendChild(dot); top.appendChild(title);
+      const desc = document.createElement('div'); desc.className = 'desc'; desc.textContent = info.description || '';
+      card.appendChild(top); card.appendChild(desc);
+
+      card.addEventListener('click', ()=>{
+        // 单选高亮，仅用于展示/选择
+        grid.querySelectorAll('.talent-card.selected').forEach(c=>c.classList.remove('selected'));
+        card.classList.add('selected');
+        hiddenSelect.value = name;
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  // 页面加载后渲染天赋列表：优先在 TalentManager 已注册天赋时立即渲染，
+  // 否则在 window.load 后再渲染，并提供短轮询作为回退，确保在 registerDefaultTalents 之后渲染。
+  function ensureRenderTalentGrid(){
+    try{
+      if(typeof window !== 'undefined' && window.TalentManager && typeof window.TalentManager.getRegistered === 'function'){
+        const reg = window.TalentManager.getRegistered() || [];
+        if(reg.length > 0){ renderTalentGrid(); return true; }
+      }
+    }catch(e){}
+    return false;
+  }
+
+  if(!ensureRenderTalentGrid()){
+    // 在 load 事件后再尝试（script.js 在 window.onload 中会调用 registerDefaultTalents）
+    window.addEventListener('load', ()=>{ setTimeout(()=>{ renderTalentGrid(); }, 50); });
+
+    // 作为额外保险，短轮询直到 TalentManager 出现或超时
+    let _tg_tries = 0;
+    const _tg_interval = setInterval(()=>{
+      _tg_tries += 1;
+      if(ensureRenderTalentGrid() || _tg_tries > 12) clearInterval(_tg_interval);
+    }, 200);
+  }
+
+  // ============ 交互式中国地图省份选择 ============
+  // ECharts地图名称 -> 游戏省份ID 映射表
+  const MAP_NAME_TO_PROVINCE_ID = {
+    '北京市': 1, '北京': 1,
+    '重庆市': 2, '重庆': 2,
+    '湖南省': 3, '湖南': 3,
+    '广东省': 4, '广东': 4,
+    '四川省': 5, '四川': 5,
+    '浙江省': 6, '浙江': 6,
+    '上海市': 7, '上海': 7,
+    '福建省': 8, '福建': 8,
+    '江苏省': 9, '江苏': 9,
+    '山东省': 10, '山东': 10,
+    '湖北省': 11, '湖北': 11,
+    '江西省': 12, '江西': 12,
+    '河北省': 13, '河北': 13,
+    '香港特别行政区': 14, '香港': 14,
+    '陕西省': 15, '陕西': 15,
+    '河南省': 16, '河南': 16,
+    '安徽省': 17, '安徽': 17,
+    '黑龙江省': 18, '黑龙江': 18,
+    '广西壮族自治区': 19, '广西': 19,
+    '辽宁省': 20, '辽宁': 20,
+    '吉林省': 21, '吉林': 21,
+    '天津市': 22, '天津': 22,
+    '山西省': 23, '山西': 23,
+    '贵州省': 24, '贵州': 24,
+    '澳门特别行政区': 25, '澳门': 25,
+    '新疆维吾尔自治区': 26, '新疆': 26,
+    '海南省': 27, '海南': 27,
+    '内蒙古自治区': 28, '内蒙古': 28,
+    '云南省': 29, '云南': 29,
+    '宁夏回族自治区': 30, '宁夏': 30,
+    '甘肃省': 31, '甘肃': 31,
+    '青海省': 32, '青海': 32,
+    '西藏自治区': 33, '西藏': 33
+  };
+
+  function initProvinceMap(onReady){
+    const mapDom = document.getElementById('map-container');
+    const hiddenInput = document.getElementById('start-prov');
+    const infoPanel = document.getElementById('prov-info-panel');
+    if(!mapDom || !hiddenInput) return;
+
+    const myChart = echarts.init(mapDom);
+    if(typeof onReady === 'function') onReady(myChart);
+    myChart.showLoading();
+
+    // 渲染地图的核心逻辑（geoJson已加载完成后调用）
+    function renderMapWithGeoJson(geoJson){
+      myChart.hideLoading();
+      echarts.registerMap('china', geoJson);
+
+      var initialProvId = parseInt(hiddenInput.value) || 1;
+      var initialMapName = '北京市';
+      for(var mapName in MAP_NAME_TO_PROVINCE_ID){
+        if(MAP_NAME_TO_PROVINCE_ID.hasOwnProperty(mapName) && MAP_NAME_TO_PROVINCE_ID[mapName] === initialProvId){
+          initialMapName = mapName; break;
+        }
+      }
+
+      var option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: function(params){
+            if(params.name === '台湾省' || params.name === '南海诸岛') return params.name + '该区域选手无法参加NOI';
+            var pid = MAP_NAME_TO_PROVINCE_ID[params.name];
+            if(pid !== undefined && typeof PROVINCES !== 'undefined' && PROVINCES[pid]){
+              var p = PROVINCES[pid];
+              var adjustedBudget = getAdjustedBudget(p.baseBudget);
+              var tip = '<strong>' + params.name + '</strong>（' + p.type + '）<br/>初始经费：¥' + adjustedBudget.toLocaleString();
+              if(p.description){
+                tip += '<br/><span style="color:#888;font-size:12px;">' + p.description + '</span>';
+              }
+              if(p.initialFacilities){
+                var facNames = {'computer':'计算机','network':'网络','fan':'电扇','ac':'空调','library':'资料库'};
+                var facParts = [];
+                for(var fk in p.initialFacilities){
+                  if(p.initialFacilities.hasOwnProperty(fk) && p.initialFacilities[fk] > 0){
+                    facParts.push((facNames[fk]||fk) + ' Lv.' + p.initialFacilities[fk]);
+                  }
+                }
+                if(facParts.length > 0) tip += '<br/>初始设施：' + facParts.join('，');
+              }
+              return tip;
+            }
+            return params.name;
+          }
+        },
+        series: [{
+          name: '中国地图',
+          type: 'map',
+          map: 'china',
+          roam: true,
+          zoom: 1.2,
+          selectedMode: 'single',
+          label: { show: true, fontSize: 10, color: '#333' },
+          itemStyle: { areaColor: '#e0e8f5', borderColor: '#fff', borderWidth: 1 },
+          emphasis: { label: { color: '#000' }, itemStyle: { areaColor: '#b5c8ea' } },
+          select: { label: { color: '#fff' }, itemStyle: { areaColor: '#409EFF' } },
+          data: [{
+            name: '台湾省',
+            select: { disabled: true },
+            itemStyle: { areaColor: '#dcdcdc', color: '#dcdcdc' },
+            emphasis: { label: { show: true }, itemStyle: { areaColor: '#dcdcdc' } }
+          }, {
+            name: '南海诸岛',
+            select: { disabled: true },
+            itemStyle: { areaColor: '#e0e0e0', color: '#e0e0e0' },
+            emphasis: { label: { show: true }, itemStyle: { areaColor: '#e0e0e0' } }
+          }]
+        }]
+      };
+
+      myChart.setOption(option);
+
+      if(initialMapName && MAP_NAME_TO_PROVINCE_ID[initialMapName] !== undefined){
+        myChart.dispatchAction({ type: 'select', seriesIndex: 0, name: initialMapName });
+        updateProvInfo(initialMapName);
+      }
+
+      myChart.on('click', function(params){
+        if(params.name === '台湾省' || params.name === '南海诸岛'){
+          myChart.dispatchAction({ type: 'unselect', seriesIndex: 0, name: params.name });
+          infoPanel.innerHTML = '<span style="color:#E6A23C;">该区域暂不可选</span>';
+          var dp = document.getElementById('prov-detail-panel');
+          if(dp) dp.style.display = 'none';
+          return;
+        }
+        if(!params.name) return;
+
+        var pid = MAP_NAME_TO_PROVINCE_ID[params.name];
+        if(pid !== undefined){
+          hiddenInput.value = pid;
+          updateProvInfo(params.name);
+          handleProvLanguageSwitch(pid);
+        } else {
+          infoPanel.innerHTML = '<span style="color:#E6A23C;">该区域暂不可选</span>';
+          var dp2 = document.getElementById('prov-detail-panel');
+          if(dp2) dp2.style.display = 'none';
+        }
+      });
+
+      window.addEventListener('resize', function(){ myChart.resize(); });
+    }
+
+    // 先尝试从CDN加载，失败则回退到本地文件（解决GitHub Pages的CORS问题）
+    fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
+      .then(function(response){ return response.json(); })
+      .then(function(geoJson){ renderMapWithGeoJson(geoJson); })
+      .catch(function(cdnError){
+        console.warn('CDN地图数据加载失败，尝试本地文件:', cdnError);
+        return fetch('assets/china.json')
+          .then(function(response){ return response.json(); });
+      })
+      .then(function(geoJson){
+        if(geoJson) renderMapWithGeoJson(geoJson);
+      })
+      .catch(function(error){
+        myChart.hideLoading();
+        console.error('地图数据加载失败:', error);
+        infoPanel.innerHTML = '<span style="color:#F56C6C;">地图加载失败，请刷新页面重试</span>';
+      });
+
+    function updateProvInfo(mapName){
+      var pid = MAP_NAME_TO_PROVINCE_ID[mapName];
+      var detailPanel = document.getElementById('prov-detail-panel');
+
+      if(pid !== undefined && typeof PROVINCES !== 'undefined' && PROVINCES[pid]){
+        var p = PROVINCES[pid];
+        var adjustedBudget = getAdjustedBudget(p.baseBudget);
+        var tagClass = p.type === '强省' ? 'prov-type-strong' : (p.type === '普通省' ? 'prov-type-normal' : 'prov-type-weak');
+        infoPanel.innerHTML = '当前选择：<strong>' + mapName + '</strong><span class="prov-type-tag ' + tagClass + '">' + p.type + '</span> 初始经费：¥' + adjustedBudget.toLocaleString();
+
+        // 构建统一详情面板
+        var sections = [];
+
+        // 1) 省份描述
+        if(p.description){
+          sections.push('<div class="prov-detail-section"><span class="prov-detail-label">简介</span><span class="prov-detail-text">' + p.description + '</span></div>');
+        }
+
+        // 2) 气候摘要
+        if(typeof getProvinceClimateSummary === 'function'){
+          var summary = getProvinceClimateSummary(mapName);
+          if(summary){
+            var tempParts = [];
+            summary.seasons.forEach(function(s){ tempParts.push(summary.seasonLabels[s] + summary.avgTemp[s] + '℃'); });
+            var precipParts = [];
+            summary.seasons.forEach(function(s){ precipParts.push(summary.seasonLabels[s] + Math.round(summary.precipProb[s]*100) + '%'); });
+            var extremeLines = [];
+            summary.extremeWeather.forEach(function(ew){
+              var lc = ew.level==='高'?'#F56C6C':(ew.level==='中'?'#E6A23C':(ew.level==='低'?'#67C23A':'#999'));
+              extremeLines.push('<span style="white-space:nowrap">' + ew.label + '（<span style="color:' + lc + ';font-weight:600">' + ew.level + '</span>）</span>');
+            });
+            sections.push('<div class="prov-detail-section"><span class="prov-detail-label">气候</span>' +
+              '<span>气温：' + tempParts.join(' ') + '；降水概率：' + precipParts.join(' ') + '；极端天气：' + extremeLines.join(' ') + '</span></div>');
+          }
+        }
+
+        // 3) 初始设施
+        var fac = p.initialFacilities;
+        if(fac){
+          var facNames = {'computer':'计算机','network':'网络','fan':'电扇','ac':'空调','library':'资料库'};
+          var facLines = [];
+          for(var fk in fac){
+            if(fac.hasOwnProperty(fk)){
+              var lv = fac[fk];
+              facLines.push('<span class="facility-init-item"><span class="facility-init-name">' + (facNames[fk]||fk) + '</span><span class="facility-init-level">Lv.' + lv + '</span></span>');
+            }
+          }
+          if(facLines.length > 0){
+            sections.push('<div class="prov-detail-section"><span class="prov-detail-label">初始设施</span>' + facLines.join(' ') + '</div>');
+          }
+        }
+
+        if(sections.length > 0){
+          detailPanel.innerHTML = sections.join('');
+          detailPanel.style.display = 'block';
+        } else {
+          detailPanel.style.display = 'none';
+        }
+      } else {
+        infoPanel.textContent = '请在地图上点击选择省份';
+        if(detailPanel) detailPanel.style.display = 'none';
+      }
+    }
+
+    // 根据当前难度计算调整后的经费
+    function getAdjustedBudget(baseBudget){
+      var diffEl = document.getElementById('start-diff');
+      var diff = diffEl ? parseInt(diffEl.value) : 2;
+      if(diff === 1) return Math.floor(baseBudget * 1.5);   // 简单 +50%
+      if(diff === 3) return Math.floor(baseBudget * 0.5);   // 困难 -50%
+      return baseBudget;                                     // 普通不变
+    }
+
+    function handleProvLanguageSwitch(provId){
+      if(typeof window === 'undefined' || !window.ChineseConverter) return;
+      try{
+        if(provId === 14 || provId === 25){
+          window.ChineseConverter.setUseTraditionalChinese(true);
+          setTimeout(function(){ window.ChineseConverter.convertPageToTraditional(); }, 100);
+        } else {
+          var wasTraditional = window.ChineseConverter.shouldUseTraditionalChinese();
+          if(wasTraditional){
+            window.ChineseConverter.setUseTraditionalChinese(false);
+            window.location.reload();
+          }
+        }
+      }catch(e){}
+    }
+  }
+  // ============ 地图省份选择 end ============
+
+    // 轮播式难度选择（三卡并排，弹性动画）
+    function renderDiffGrid(){
+      var defs = [
+        {v:1, label:'简单', desc:'适合初次体验的人', detail:'', stats:[
+          {k:'经费倍率', v:'150%'}, {k:'初始能力', v:'+20'}, {k:'比赛强度', v:'较低'}
+        ]},
+        {v:2, label:'普通', desc:'标准游戏体验', detail:'', stats:[
+          {k:'经费倍率', v:'100%'}, {k:'初始能力', v:'+0'}, {k:'比赛强度', v:'标准'}
+        ]},
+        {v:3, label:'专家', desc:'不适合任何人', detail:'', stats:[
+          {k:'经费倍率', v:'50%'}, {k:'初始能力', v:'-20'}, {k:'比赛强度', v:'高'}
+        ]}
+      ];
+      var track = document.getElementById('diff-carousel-track');
+      var hidden = document.getElementById('start-diff');
+      var detail = document.getElementById('diff-detail');
+      if(!track || !hidden) return;
+
+      var currentIndex = 0;
+      var initialVal = parseInt(hidden.value) || 2;
+      for(var i = 0; i < defs.length; i++){ if(defs[i].v === initialVal){ currentIndex = i; break; } }
+
+      // 构建单张卡片
+      function buildCard(def, index){
+        var card = document.createElement('div');
+        card.className = 'diff-carousel-card';
+        card.dataset.index = '' + index;
+        var nameEl = document.createElement('div');
+        nameEl.className = 'diff-card-name';
+        nameEl.textContent = def.label;
+        var descEl = document.createElement('div');
+        descEl.className = 'diff-card-desc';
+        descEl.textContent = def.desc;
+        card.appendChild(nameEl);
+        card.appendChild(descEl);
+        // 点击侧边卡片切换到该难度
+        card.addEventListener('click', function(){
+          if(parseInt(card.dataset.index) !== currentIndex){
+            setActive(parseInt(card.dataset.index));
+          }
+        });
+        return card;
+      }
+
+      // 更新详情面板
+      function updateDetail(def){
+        if(!detail) return;
+        detail.classList.remove('diff-detail-visible');
+        clearTimeout(detail._fadeTimer);
+        detail._fadeTimer = setTimeout(function(){
+          var html = '<div class="diff-detail-desc">' + def.detail + '</div>';
+          html += '<div class="diff-detail-stats">';
+          for(var i = 0; i < def.stats.length; i++){
+            var s = def.stats[i];
+            html += '<div class="diff-stat-item"><span class="diff-stat-key">' + s.k + '</span><span class="diff-stat-val">' + s.v + '</span></div>';
+          }
+          html += '</div>';
+          detail.innerHTML = html;
+          void detail.offsetWidth;
+          detail.classList.add('diff-detail-visible');
+        }, 160);
+      }
+
+      // 设置激活卡片
+      function setActive(index){
+        if(index < 0 || index >= defs.length) return;
+        currentIndex = index;
+        var cards = track.querySelectorAll('.diff-carousel-card');
+        cards.forEach(function(card){
+          var ci = parseInt(card.dataset.index);
+          if(ci === index){
+            card.classList.add('carousel-active');
+          } else {
+            card.classList.remove('carousel-active');
+          }
+        });
+        hidden.value = '' + defs[index].v;
+        updateDetail(defs[index]);
+      }
+
+      // 初始渲染：三张卡片全部生成
+      track.innerHTML = '';
+      for(var i = 0; i < defs.length; i++){
+        var card = buildCard(defs[i], i);
+        if(i === currentIndex) card.classList.add('carousel-active');
+        track.appendChild(card);
+      }
+      // 初始详情
+      if(detail){
+        var d = defs[currentIndex];
+        var html = '<div class="diff-detail-desc">' + d.detail + '</div>';
+        html += '<div class="diff-detail-stats">';
+        for(var i = 0; i < d.stats.length; i++){
+          var s = d.stats[i];
+          html += '<div class="diff-stat-item"><span class="diff-stat-key">' + s.k + '</span><span class="diff-stat-val">' + s.v + '</span></div>';
+        }
+        html += '</div>';
+        detail.innerHTML = html;
+        void detail.offsetWidth;
+        detail.classList.add('diff-detail-visible');
+      }
+
+      // 箭头按钮
+      var prevBtn = document.getElementById('diff-prev');
+      var nextBtn = document.getElementById('diff-next');
+      if(prevBtn) prevBtn.addEventListener('click', function(){ setActive((currentIndex - 1 + defs.length) % defs.length); });
+      if(nextBtn) nextBtn.addEventListener('click', function(){ setActive((currentIndex + 1) % defs.length); });
+
+      // 键盘左右键
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'ArrowLeft'){ setActive((currentIndex - 1 + defs.length) % defs.length); }
+        if(e.key === 'ArrowRight'){ setActive((currentIndex + 1) % defs.length); }
+      });
+    }
+
+    try{ renderDiffGrid(); }catch(e){ console.error('渲染难度轮播失败', e); }
+
+  // ============ 三步向导导航逻辑 ============
+  var currentStep = 1;
+  var mapChartInstance = null;
+  var mapInitialized = false;
+
+  function goToStep(step){
+    // 隐藏所有步骤
+    document.querySelectorAll('#step-1, #step-2, #step-3').forEach(function(el){ el.classList.remove('active'); });
+    // 显示目标步骤
+    var target = document.getElementById('step-' + step);
+    if(target) target.classList.add('active');
+
+    // 更新步骤指示器
+    ['step-dot-1','step-dot-2','step-dot-3'].forEach(function(id, idx){
+      var dot = document.getElementById(id);
+      var s = idx + 1;
+      if(dot){
+        dot.classList.remove('active','done');
+        if(s < step) dot.classList.add('done');
+        else if(s === step) dot.classList.add('active');
+      }
+    });
+    ['step-line-1','step-line-2'].forEach(function(id, idx){
+      var line = document.getElementById(id);
+      if(line){
+        line.classList.remove('done');
+        if(idx + 1 < step) line.classList.add('done');
+      }
+    });
+
+    currentStep = step;
+
+    // 当进入第二步时，初始化或刷新地图
+    if(step === 2){
+      if(!mapInitialized){
+        initProvinceMap(function(chart){
+          mapChartInstance = chart;
+          mapInitialized = true;
+        });
+      } else if(mapChartInstance){
+        setTimeout(function(){ mapChartInstance.resize(); }, 50);
+      }
+    }
+  }
+
+  // 第一步：下一步按钮
+  document.getElementById('step1-next').addEventListener('click', function(){ goToStep(2); });
+
+  // 第二步：上一步 / 下一步按钮
+  document.getElementById('step2-prev').addEventListener('click', function(){ goToStep(1); });
+  document.getElementById('step2-next').addEventListener('click', function(){ goToStep(3); });
+
+  // 第三步：上一步按钮
+  document.getElementById('step3-prev').addEventListener('click', function(){ goToStep(2); });
+
+  // 开始游戏按钮
+  document.getElementById('start-button').addEventListener('click', function(){
+    if(typeof startFromStartPage !== 'undefined') startFromStartPage();
+  });
+
+  // 查看帮助按钮（移至第三步，但如果其他页面引用则保留）
+  var helpBtn = document.getElementById('start-help');
+  if(helpBtn) helpBtn.onclick = function(){ window.open('help.html','_blank'); };
+
+  // 今日挑战按钮
+  document.getElementById('daily-challenge-btn').addEventListener('click', function(){
+    if(typeof getDailyChallengeParams === 'function'){
+      var params = getDailyChallengeParams();
+      var provinceName = (typeof PROVINCES !== 'undefined' && PROVINCES[params.provinceId]) 
+        ? PROVINCES[params.provinceId].name 
+        : '未知省份';
+      
+      if(confirm('📅 今日挑战（' + params.displayDate + '）\n\n省份：' + provinceName + '\n难度：普通\n种子：' + params.seed + '\n\n所有玩家今天都将使用相同的初始条件！\n\n确认开始今日挑战？')){
+        try {
+          sessionStorage.setItem('oi_game_active_session', 'true');
+          sessionStorage.setItem('oi_daily_challenge', 'true');
+          sessionStorage.setItem('oi_daily_challenge_date', params.date);
+        } catch(e) {
+          console.error('无法设置 sessionStorage:', e);
+        }
+        var url = 'game.html?new=1&daily=1&d=' + params.difficulty + '&p=' + params.provinceId + '&c=5&seed=' + params.seed;
+        window.location.href = url;
+      }
+    } else {
+      alert('今日挑战功能加载失败，请刷新页面重试');
+    }
+  });
+  // ============ 三步向导导航 end ============
+
+    // 初始化可折叠面板：默认折叠对点招生与学前培养，点击标题切换
+  (function(){
+    function togglePanel(panel, expand){
+      if(expand){
+        panel.classList.remove('collapsed');
+        panel.classList.add('expanded');
+      } else {
+        panel.classList.remove('expanded');
+        panel.classList.add('collapsed');
+      }
+    }
+
+    document.querySelectorAll('.sub-panel.collapsible').forEach(panel => {
+      const head = panel.querySelector('.collapsible-head');
+      // ensure initial state: keep collapsed if class present
+      if(panel.classList.contains('collapsed')){
+        togglePanel(panel, false);
+      } else {
+        togglePanel(panel, true);
+      }
+
+      head && head.addEventListener('click', ()=>{
+        const isCollapsed = panel.classList.contains('collapsed');
+        togglePanel(panel, isCollapsed);
+
+        // 如果展开，尝试渲染面板内的延迟内容（例如天赋网格）
+        try{
+          if(!isCollapsed){
+            // 如果面板包含天赋网格，则渲染
+            if(panel.querySelector && panel.querySelector('#talent-grid')){
+              if(typeof renderTalentGrid === 'function') renderTalentGrid();
+            }
+            // 兼容旧的 train-panel 行为
+            if(panel.id === 'train-panel'){
+              if(typeof populateTalentSelect === 'function') try{ populateTalentSelect(); }catch(e){}
+            }
+          }
+        }catch(e){}
+      });
+    });
+  })();
+</script>
+<script>
+</script>
+  <footer style="text-align:center;padding:12px 8px;color:#666;font-size:13px;border-top:1px solid #eee;margin-top:18px">
+    作者 @Dreamers-seve · 洛谷: <a href="https://www.luogu.com.cn/user/668972" target="_blank" rel="noopener">https://www.luogu.com.cn/user/668972</a> · GitHub: <a href="https://github.com/seve42/OItrainer" target="_blank" rel="noopener">https://github.com/seve42/OItrainer</a>
+  </footer>
+  <!-- winter plan injection: center link inside footer (or fixed bottom if no footer) -->
+  <script>
+    (function(){
+      try{
+        var cutoff = new Date('2026-03-01T00:00:00Z');
+        var now = new Date();
+        if(now >= cutoff) return;
+        var footer = document.querySelector('footer');
+        var linkHtml = '<a href="https://www.luogu.me/article/n4gmkam0" target="_blank" rel="noopener" style="color:#1976d2;text-decoration:none;font-weight:600;padding:6px 10px;border-radius:6px">冬日绘板计划</a>';
+        var container;
+        if(footer){
+          container = footer.querySelector('#winter-plan');
+          if(!container){
+            container = document.createElement('div');
+            container.id = 'winter-plan';
+            container.style.marginTop = '8px';
+            container.style.fontSize = '13px';
+            container.style.color = '#1976d2';
+            container.style.textAlign = 'center';
+            footer.appendChild(container);
+          }
+        } else {
+          container = document.getElementById('winter-plan');
+          if(!container){
+            container = document.createElement('div');
+            container.id = 'winter-plan';
+            container.style.position = 'fixed';
+            container.style.left = '0';
+            container.style.right = '0';
+            container.style.bottom = '8px';
+            container.style.textAlign = 'center';
+            container.style.fontSize = '13px';
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
+          }
+        }
+        container.innerHTML = linkHtml;
+      }catch(e){}
+    })();
+  </script>
+  <script>
+    // 页面加载时检查是否需要使用繁体中文
+    (function(){
+      try{
+        if(window.ChineseConverter && window.ChineseConverter.shouldUseTraditionalChinese()){
+          // 等待DOM完全加载后再转换
+          if(document.readyState === 'loading'){
+            document.addEventListener('DOMContentLoaded', function(){
+              setTimeout(function(){
+                window.ChineseConverter.convertPageToTraditional();
+              }, 100);
+            });
+          } else {
+            setTimeout(function(){
+              window.ChineseConverter.convertPageToTraditional();
+            }, 100);
+          }
+        }
+      }catch(e){ 
+        console.error('繁体中文转换失败:', e); 
+      }
+    })();
+  </script>
+  <div class="disclaimer" role="note" aria-label="免责声明">
+    免责声明：本游戏为虚构的教学与娱乐模拟游戏。游戏中所展示的训练方式、成绩、资源分配、时间安排均为玩法设定。所有人名均为随机生成，所有训练用题库均为AI生成，和现实中对应年份比赛题目完全不相关。省份强弱和各国选手水平均为虚构和游戏设定，IOI成员国/地区为截止2025年10月官网标准。
+  </div>
+</body>
+</html>
