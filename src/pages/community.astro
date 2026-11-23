@@ -2,7 +2,7 @@
 import Html from "../layouts/Html.astro";
 ---
 
-<Html title="社区" enableMath enableHighlight>
+<Html title="社区" enableHighlight>
     <div slot="header">
         社区
         <div style="float: right;">
@@ -31,6 +31,9 @@ import Html from "../layouts/Html.astro";
     </div>
 
     <script>
+        import renderMathInElement from "katex/contrib/auto-render";
+        import "katex/dist/katex.min.css";
+
         async function fetchWithTimeout(
             resource: string | URL | Request,
             options = { timeout: 8000 },
@@ -72,14 +75,37 @@ import Html from "../layouts/Html.astro";
         const commentsElement = document.getElementById("comments");
         const commentsData = await fetch(baseDiscussUrl + "getComments");
         const commentsJson = await commentsData.json();
-        console.log(commentsJson);
 
-        let commentsHTML = "<h3>评论区</h3>";
+        // 使用 textContent 插入用户内容，避免将评论当作 HTML 执行。
+        const heading = document.createElement("h3");
+        heading.textContent = "评论区";
+        commentsElement!.replaceChildren(heading);
+
         for (const comment of commentsJson) {
-            commentsHTML += "<div class='comment-card'><p><strong>" + comment.name +
-                "</strong> 说:</p><p>" + comment.content + "</p></div>";
+            const card = document.createElement("div");
+            card.className = "comment-card";
+
+            const authorLine = document.createElement("p");
+            const author = document.createElement("strong");
+            author.textContent = String(comment.name ?? "匿名");
+            authorLine.append(author, document.createTextNode(" 说:"));
+
+            const content = document.createElement("p");
+            content.textContent = String(comment.content ?? "");
+
+            card.append(authorLine, content);
+            commentsElement!.append(card);
         }
-        commentsElement!.innerHTML = commentsHTML;
+
+        renderMathInElement(commentsElement!, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true },
+            ],
+            throwOnError: false,
+        });
     </script>
 
     <script type="module">
