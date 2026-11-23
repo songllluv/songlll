@@ -94,6 +94,6 @@ const renderedContent = markdown.render(source);
 <MarkdownLayout
     title={`${projectName} · ${doc}`}
     content={renderedContent}
-    backHref="/"
+    backHref={`/repost/${project}/`}
     sourceHref={`/repost/${project}/${fileName}`}
 />
