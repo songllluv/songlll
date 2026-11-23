@@ -1,13 +1,14 @@
 ---
-import "../styles/index.css";
-import { marked } from 'marked';
+import Html from "../layouts/Html.astro";
+import { marked } from "marked";
 import { getCollection } from "astro:content";
-const postList = await getCollection('articles');
 
-const aboutmd=`
+const postList = await getCollection("articles");
+
+const aboutmd = `
 关于 [我](./articles/aboutme)
-`
-const about:string = await marked(aboutmd);
+`;
+const about: string = await marked(aboutmd);
 
 const games = [
     {
@@ -60,78 +61,63 @@ const games = [
         license: false,
     },
 ];
-
 ---
-<html lang="zh">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Songlll 导航页</title>
-		<script class="show" defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
-        <script class="show" defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-        <script type="module" class="show">hljs.highlightAll();</script>
-        <script class="show">
-            MathJax = {
-                tex: {
-                    inlineMath: [['$', '$'], ['\\(', '\\)']]
-                },
-                svg: {
-                    fontCache: 'global'
-                }
-            };
-            MathJax.typesetPromise()
-        </script>
-        <script type="module">
-            import { showDialog } from '/index.js';
-        </script>
-	</head>
-	<body>
-		<header>导航页</header>
-        <div class="card">
-            <h1>文章列表</h1>
-            <ul id="list">
-                {postList.map((post) => (
-                    <li>
-                        <a href={`/articles/${post.slug}/`}>{post.data.title}</a>
-                    </li>
-                ))}
-            </ul>
-            <br />
-        </div>
-        <script>
-            const showPages = Number(localStorage.getItem('showPages')) || 1;
-            const list = document.getElementById('list');
-            const items = list?.getElementsByTagName('li')||[];
-            var count = 0;
-            const showCountBegin = (showPages - 1) * 10, showCountEnd = showPages * 10 - 1;
-            for (const item of items) {
-                count++;
-                if (count > showCountEnd || count <= showCountBegin) {
-                    item.style.display = 'none';
-                }
+
+<Html title="Songlll 导航页" enableHighlight>
+    <div slot="header">导航页</div>
+
+    <div class="card">
+        <h1>文章列表</h1>
+        <ul id="list">
+            {postList.map((post) => (
+                <li>
+                    <a href={`/articles/${post.slug}/`}>{post.data.title}</a>
+                </li>
+            ))}
+        </ul>
+        <br />
+    </div>
+
+    <script>
+        const showPages = Number(localStorage.getItem("showPages")) || 1;
+        const list = document.getElementById("list");
+        const items = list?.getElementsByTagName("li") || [];
+        let count = 0;
+        const showCountBegin = (showPages - 1) * 10;
+        const showCountEnd = showPages * 10 - 1;
+
+        for (const item of items) {
+            count++;
+            if (count > showCountEnd || count <= showCountBegin) {
+                item.style.display = "none";
             }
-        </script>
-        <div class="card">
-            <h1>游戏</h1>
-            <ul id="pages">
-                {games.map((game) => (
-                    <li>
-                        <a href={`/repost/${game.path}/${game.entry}`}>
-                            {game.name}
-                        </a>
-                        <span style="margin-left: 8px; font-size: 12px;">
-                            {game.readme && (
-                                <a href={`/repost-docs/${game.path}/README`}>[README]</a>
-                            )}
-                            {game.license && (
-                                <a href={`/repost-docs/${game.path}/LICENSE`}>[LICENSE]</a>
-                            )}
-                        </span>
-                    </li>
-                ))}
-            </ul>
-        </div>
-		<div class="card" set:html={about}>
-		</div>
-	</body>
-</html>
+        }
+    </script>
+
+    <div class="card">
+        <h1>游戏</h1>
+        <ul id="pages">
+            {games.map((game) => (
+                <li>
+                    <a href={`/repost/${game.path}/${game.entry}`}>
+                        {game.name}
+                    </a>
+                    <span style="margin-left: 8px; font-size: 12px;">
+                        {game.readme && (
+                            <a href={`/repost-docs/${game.path}/README`}>[README]</a>
+                        )}
+                        {game.license && (
+                            <a href={`/repost-docs/${game.path}/LICENSE`}>[LICENSE]</a>
+                        )}
+                    </span>
+                </li>
+            ))}
+        </ul>
+    </div>
+
+    <div class="card" set:html={about}></div>
+
+    <script type="module">
+        import { showDialog } from "/index.js";
+    </script>
+</Html>
