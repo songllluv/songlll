@@ -2,6 +2,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import MarkdownIt from "markdown-it";
+import markdownItKatex from "markdown-it-katex";
 import MarkdownLayout from "../../../layouts/Markdown.astro";
 
 export async function getStaticPaths() {
@@ -46,6 +47,10 @@ const markdown = new MarkdownIt({
     html: false,
     linkify: true,
     typographer: false,
+});
+
+markdown.use(markdownItKatex, {
+    throwOnError: false,
 });
 
 // README 中的相对链接和图片应以原项目目录为基准，而不是文档页面的 URL。
