@@ -4,9 +4,10 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run build:game && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "build:game": "npm --prefix apps/oier-gaokao-recovery-simulator ci && npm --prefix apps/oier-gaokao-recovery-simulator run build"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",

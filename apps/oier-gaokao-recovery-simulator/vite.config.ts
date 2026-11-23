@@ -4,12 +4,16 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: './', // 适配 GitHub Pages 相对路径
+  base: './',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),
     },
+  },
+  build: {
+    outDir: '../../public/repost/oier-gaokao-recovery-simulator',
+    emptyOutDir: true,
   },
   server: {
     hmr: true,
