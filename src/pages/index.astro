@@ -9,6 +9,58 @@ const aboutmd=`
 `
 const about:string = await marked(aboutmd);
 
+const games = [
+    {
+        name: "OI Remake Game",
+        path: "oi-remake-game",
+        entry: "index.html",
+        readme: true,
+        license: true,
+    },
+    {
+        name: "Oier 高考复健模拟器",
+        path: "oier-gaokao-recovery-simulator",
+        entry: "index.html",
+        readme: true,
+        license: false,
+    },
+    {
+        name: "OI 模拟器",
+        path: "oimoniqi",
+        entry: "index.html",
+        readme: true,
+        license: false,
+    },
+    {
+        name: "OI Race Simulation",
+        path: "OIRaceSimulation",
+        entry: "index.html",
+        readme: true,
+        license: true,
+    },
+    {
+        name: "OItrainer",
+        path: "OItrainer",
+        entry: "index.html",
+        readme: true,
+        license: true,
+    },
+    {
+        name: "VR OI Simulator",
+        path: "vr-oi-simulator",
+        entry: "index.html",
+        readme: true,
+        license: true,
+    },
+    {
+        name: "WHK-LXY",
+        path: "whk-LXY",
+        entry: "New-whk-safe.html",
+        readme: false,
+        license: false,
+    },
+];
+
 ---
 <html lang="zh">
 	<head>
@@ -43,7 +95,7 @@ const about:string = await marked(aboutmd);
             <ul id="list">
                 {postList.map((post) => (
                     <li>
-                        <a href={`/articles/${post.slug}/`} style={`${post.id==`aboutme.md` ? "display:none;" : ''}`}>{post.data.title}</a>
+                        <a href={`/articles/${post.slug}/`}>{post.data.title}</a>
                     </li>
                 ))}
             </ul>
@@ -64,5 +116,25 @@ const about:string = await marked(aboutmd);
         </script>
 		<div class="card" set:html={about}>
 		</div>
+        <div class="card">
+        <h1>游戏</h1>
+        <ul id="pages">
+            {games.map((game) => (
+                <li>
+                    <a href={`/repost/${game.path}/${game.entry}`}>
+                        {game.name}
+                    </a>
+                    <span style="margin-left: 8px; font-size: 12px;">
+                        {game.readme && (
+                            <a href={`/repost/${game.path}/README.md`}>[README]</a>
+                        )}
+                        {game.license && (
+                            <a href={`/repost/${game.path}/LICENSE`}>[LICENSE]</a>
+                        )}
+                    </span>
+                </li>
+            ))}
+        </ul>
+    </div>
 	</body>
 </html>
