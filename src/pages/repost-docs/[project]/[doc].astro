@@ -1,0 +1,104 @@
+
+---
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { marked } from "marked";
+
+export async function getStaticPaths() {
+    const projects = [
+        "oi-remake-game",
+        "oier-gaokao-recovery-simulator",
+        "oimoniqi",
+        "OIRaceSimulation",
+        "OItrainer",
+        "vr-oi-simulator",
+    ];
+
+    const docs = [];
+
+    for (const project of projects) {
+        docs.push(
+            { params: { project, doc: "README" } }
+        );
+    }
+
+    for (const project of [
+        "oi-remake-game",
+        "OIRaceSimulation",
+        "OItrainer",
+        "vr-oi-simulator",
+    ]) {
+        docs.push(
+            { params: { project, doc: "LICENSE" } }
+        );
+    }
+
+    return docs;
+}
+
+const { project, doc } = Astro.params;
+
+const filePath = path.join(
+    process.cwd(),
+    "public",
+    "repost",
+    project!,
+    `${doc}.md`
+);
+
+// README.md 或 LICENSE 文件名
+const actualPath = doc === "README"
+    ? path.join(path.dirname(filePath), "README.md")
+    : path.join(path.dirname(filePath), "LICENSE");
+
+const content = await readFile(actualPath, "utf-8");
+const html = await marked.parse(content);
+---
+
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{project} - {doc}</title>
+</head>
+<body>
+    <main class="document">
+        <a href={`/repost/${project}/`}>返回项目</a>
+        <h1>{project} · {doc}</h1>
+        <article set:html={html} />
+    </main>
+</body>
+</html>
+
+<style>
+    .document {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 24px;
+        line-height: 1.7;
+        overflow-wrap: anywhere;
+    }
+
+    .document :global(pre) {
+        overflow-x: auto;
+        padding: 12px;
+        background: #f3f4f6;
+        border-radius: 8px;
+    }
+
+    .document :global(img) {
+        max-width: 100%;
+    }
+
+    .document :global(table) {
+        display: block;
+        overflow-x: auto;
+        border-collapse: collapse;
+    }
+
+    .document :global(th),
+    .document :global(td) {
+        border: 1px solid #ddd;
+        padding: 6px 12px;
+    }
+</style>

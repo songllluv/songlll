@@ -88,9 +88,6 @@ const games = [
 	<body>
 		<header>导航页</header>
         <div class="card">
-            <ul id="pages">
-                
-            </ul>
             <h1>文章列表</h1>
             <ul id="list">
                 {postList.map((post) => (
@@ -114,27 +111,27 @@ const games = [
                 }
             }
         </script>
+        <div class="card">
+            <h1>游戏</h1>
+            <ul id="pages">
+                {games.map((game) => (
+                    <li>
+                        <a href={`/repost/${game.path}/${game.entry}`}>
+                            {game.name}
+                        </a>
+                        <span style="margin-left: 8px; font-size: 12px;">
+                            {game.readme && (
+                                <a href={`/repost-docs/${game.path}/README.md`}>[README]</a>
+                            )}
+                            {game.license && (
+                                <a href={`/repost-docs/${game.path}/LICENSE`}>[LICENSE]</a>
+                            )}
+                        </span>
+                    </li>
+                ))}
+            </ul>
+        </div>
 		<div class="card" set:html={about}>
 		</div>
-        <div class="card">
-        <h1>游戏</h1>
-        <ul id="pages">
-            {games.map((game) => (
-                <li>
-                    <a href={`/repost/${game.path}/${game.entry}`}>
-                        {game.name}
-                    </a>
-                    <span style="margin-left: 8px; font-size: 12px;">
-                        {game.readme && (
-                            <a href={`/repost/${game.path}/README.md`}>[README]</a>
-                        )}
-                        {game.license && (
-                            <a href={`/repost/${game.path}/LICENSE`}>[LICENSE]</a>
-                        )}
-                    </span>
-                </li>
-            ))}
-        </ul>
-    </div>
 	</body>
 </html>
