@@ -1,0 +1,162 @@
+---
+import Html from "./Html.astro";
+
+interface Props {
+    title: string;
+    content: string;
+    backHref?: string;
+    sourceHref?: string;
+}
+
+const {
+    title,
+    content,
+    backHref = "/",
+    sourceHref,
+} = Astro.props;
+---
+
+<Html title={title}>
+    <main class="card markdown-document">
+        <nav class="document-toolbar" aria-label="文档导航">
+            <a href={backHref}>← 返回主页</a>
+            {sourceHref && (
+                <a href={sourceHref} target="_blank" rel="noopener noreferrer">
+                    查看原始文件
+                </a>
+            )}
+        </nav>
+
+        <article class="markdown-content" set:html={content} />
+    </main>
+</Html>
+
+<style is:global>
+    .markdown-document {
+        box-sizing: border-box;
+        width: min(960px, calc(100% - 32px));
+        margin: 24px auto;
+        padding: 20px clamp(16px, 3vw, 36px);
+        line-height: 1.75;
+        overflow-wrap: anywhere;
+    }
+
+    .document-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-bottom: 14px;
+        margin-bottom: 22px;
+        border-bottom: 1px solid rgb(120 140 170 / 0.25);
+        font-size: 14px;
+    }
+
+    .markdown-content {
+        min-width: 0;
+    }
+
+    .markdown-content h1,
+    .markdown-content h2,
+    .markdown-content h3,
+    .markdown-content h4 {
+        line-height: 1.35;
+        margin-top: 1.6em;
+        margin-bottom: 0.7em;
+    }
+
+    .markdown-content h1 {
+        margin-top: 0;
+        padding-bottom: 0.45em;
+        border-bottom: 1px solid rgb(120 140 170 / 0.25);
+        font-size: clamp(1.7rem, 4vw, 2.2rem);
+    }
+
+    .markdown-content h2 {
+        padding-bottom: 0.35em;
+        border-bottom: 1px solid rgb(120 140 170 / 0.18);
+    }
+
+    .markdown-content p {
+        margin: 0.9em 0;
+    }
+
+    .markdown-content pre {
+        max-width: 100%;
+        overflow-x: auto;
+        padding: 14px;
+        margin: 14px 0;
+        border-radius: 8px;
+        background: rgb(225 232 242 / 0.65);
+    }
+
+    .markdown-content pre code {
+        padding: 0;
+        background: transparent;
+        white-space: pre;
+    }
+
+    .markdown-content :not(pre) > code {
+        padding: 2px 5px;
+        border-radius: 4px;
+        background: rgb(130 145 165 / 0.16);
+        font-family: "Cascadia Code", "Consolas", monospace;
+        font-size: 0.92em;
+    }
+
+    .markdown-content blockquote {
+        margin: 14px 0;
+        padding: 4px 14px;
+        border-left: 4px solid var(--primary);
+        border-radius: 0 6px 6px 0;
+        background: rgb(120 145 180 / 0.09);
+        color: rgb(50 60 75 / 0.9);
+    }
+
+    .markdown-content img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .markdown-content table {
+        display: block;
+        width: max-content;
+        max-width: 100%;
+        overflow-x: auto;
+        border-collapse: collapse;
+    }
+
+    .markdown-content th,
+    .markdown-content td {
+        min-width: 80px;
+        padding: 7px 11px;
+        border: 1px solid rgb(130 145 165 / 0.4);
+    }
+
+    .markdown-content th {
+        background: rgb(120 145 180 / 0.14);
+    }
+
+    .markdown-content tr:nth-child(even) {
+        background: rgb(120 145 180 / 0.06);
+    }
+
+    .markdown-content hr {
+        margin: 24px 0;
+        border: 0;
+        border-top: 1px solid rgb(120 140 170 / 0.3);
+    }
+
+    @media (max-width: 600px) {
+        .markdown-document {
+            width: calc(100% - 16px);
+            margin: 12px auto;
+            padding: 14px;
+        }
+
+        .document-toolbar {
+            align-items: flex-start;
+        }
+    }
+</style>
