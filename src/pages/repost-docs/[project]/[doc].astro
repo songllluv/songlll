@@ -32,14 +32,15 @@ const doc = Astro.params.doc!;
 const { projectName } = Astro.props;
 
 const fileName = doc === "README" ? "README.md" : "LICENSE";
-const filePath = path.join(
-    process.cwd(),
-    "public",
-    "repost",
-    project,
-    fileName
-);
+const isAppProject = project === "oier-gaokao-recovery-simulator";
+const filePath = isAppProject
+    ? path.join(process.cwd(), "apps", project, fileName)
+    : path.join(process.cwd(), "public", "repost", project, fileName);
 const source = await readFile(filePath, "utf-8");
+
+const sourceHref = isAppProject
+    ? `https://github.com/songllluv/songlll/blob/main/apps/${project}/${fileName}`
+    : `/repost/${project}/${fileName}`;
 
 const markdown = new MarkdownIt({
     html: false,
@@ -95,5 +96,5 @@ const renderedContent = markdown.render(source);
     title={`${projectName} · ${doc}`}
     content={renderedContent}
     backHref={`/repost/${project}/`}
-    sourceHref={`/repost/${project}/${fileName}`}
+    sourceHref={sourceHref}
 />
