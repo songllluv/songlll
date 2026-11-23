@@ -1,104 +1,99 @@
-
 ---
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { marked } from "marked";
+import MarkdownIt from "markdown-it";
+import MarkdownLayout from "../../../layouts/Markdown.astro";
+
+const projects = [
+    { slug: "oi-remake-game", name: "OI Remake Game", docs: ["README", "LICENSE"] },
+    { slug: "oier-gaokao-recovery-simulator", name: "Oier 高考复健模拟器", docs: ["README"] },
+    { slug: "oimoniqi", name: "OI 生涯模拟器", docs: ["README"] },
+    { slug: "OIRaceSimulation", name: "OI Race Simulation", docs: ["README", "LICENSE"] },
+    { slug: "OItrainer", name: "OItrainer", docs: ["README", "LICENSE"] },
+    { slug: "vr-oi-simulator", name: "VR OI Simulator", docs: ["README", "LICENSE"] },
+] as const;
 
 export async function getStaticPaths() {
-    const projects = [
-        "oi-remake-game",
-        "oier-gaokao-recovery-simulator",
-        "oimoniqi",
-        "OIRaceSimulation",
-        "OItrainer",
-        "vr-oi-simulator",
-    ];
-
-    const docs = [];
-
-    for (const project of projects) {
-        docs.push(
-            { params: { project, doc: "README" } }
-        );
-    }
-
-    for (const project of [
-        "oi-remake-game",
-        "OIRaceSimulation",
-        "OItrainer",
-        "vr-oi-simulator",
-    ]) {
-        docs.push(
-            { params: { project, doc: "LICENSE" } }
-        );
-    }
-
-    return docs;
+    return projects.flatMap((project) =>
+        project.docs.map((doc) => ({
+            params: {
+                project: project.slug,
+                doc,
+            },
+            props: {
+                projectName: project.name,
+            },
+        }))
+    );
 }
 
-const { project, doc } = Astro.params;
+const project = Astro.params.project!;
+const doc = Astro.params.doc!;
+const { projectName } = Astro.props;
 
+const fileName = doc === "README" ? "README.md" : "LICENSE";
 const filePath = path.join(
     process.cwd(),
     "public",
     "repost",
-    project!,
-    `${doc}.md`
+    project,
+    fileName
 );
+const source = await readFile(filePath, "utf-8");
 
-// README.md 或 LICENSE 文件名
-const actualPath = doc === "README"
-    ? path.join(path.dirname(filePath), "README.md")
-    : path.join(path.dirname(filePath), "LICENSE");
+const markdown = new MarkdownIt({
+    html: false,
+    linkify: true,
+    typographer: false,
+});
 
-const content = await readFile(actualPath, "utf-8");
-const html = await marked.parse(content);
+// README 中的相对链接和图片应以原项目目录为基准，而不是文档页面的 URL。
+function resolveProjectUrl(value: string): string {
+    if (
+        !value ||
+        value.startsWith("#") ||
+        value.startsWith("/") ||
+        /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(value)
+    ) {
+        return value;
+    }
+
+    const resolved = new URL(
+        value,
+        `https://songlll.invalid/repost/${encodeURIComponent(project)}/`
+    );
+    return `${resolved.pathname}${resolved.search}${resolved.hash}`;
+}
+
+markdown.core.ruler.after("inline", "resolve-repost-relative-urls", (state) => {
+    for (const block of state.tokens) {
+        if (block.type !== "inline" || !block.children) continue;
+
+        for (const token of block.children) {
+            if (token.type === "link_open") {
+                const href = token.attrGet("href");
+                if (!href) continue;
+
+                token.attrSet("href", resolveProjectUrl(href));
+
+                if (/^https?:\/\//i.test(href) || href.startsWith("//")) {
+                    token.attrSet("target", "_blank");
+                    token.attrSet("rel", "noopener noreferrer");
+                }
+            } else if (token.type === "image") {
+                const src = token.attrGet("src");
+                if (src) token.attrSet("src", resolveProjectUrl(src));
+            }
+        }
+    }
+});
+
+const renderedContent = markdown.render(source);
 ---
 
-<html lang="zh">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{project} - {doc}</title>
-</head>
-<body>
-    <main class="document">
-        <a href={`/repost/${project}/`}>返回项目</a>
-        <h1>{project} · {doc}</h1>
-        <article set:html={html} />
-    </main>
-</body>
-</html>
-
-<style>
-    .document {
-        max-width: 900px;
-        margin: 30px auto;
-        padding: 24px;
-        line-height: 1.7;
-        overflow-wrap: anywhere;
-    }
-
-    .document :global(pre) {
-        overflow-x: auto;
-        padding: 12px;
-        background: #f3f4f6;
-        border-radius: 8px;
-    }
-
-    .document :global(img) {
-        max-width: 100%;
-    }
-
-    .document :global(table) {
-        display: block;
-        overflow-x: auto;
-        border-collapse: collapse;
-    }
-
-    .document :global(th),
-    .document :global(td) {
-        border: 1px solid #ddd;
-        padding: 6px 12px;
-    }
-</style>
+<MarkdownLayout
+    title={`${projectName} · ${doc}`}
+    content={renderedContent}
+    backHref="/"
+    sourceHref={`/repost/${project}/${fileName}`}
+/>
