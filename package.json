@@ -7,7 +7,7 @@
     "build": "npm run build:game && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "build:game": "npm --prefix apps/oier-gaokao-recovery-simulator ci && npm --prefix apps/oier-gaokao-recovery-simulator run build"
+    "build:game": "npm --prefix apps/oier-gaokao-recovery-simulator install --no-audit --no-fund && npm --prefix apps/oier-gaokao-recovery-simulator run build"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
